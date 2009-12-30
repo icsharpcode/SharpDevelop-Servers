@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\Subversion\bin\svnsync.exe" sync svn://svnmirror.sharpdevelop.net/sharpdevelop --username svnsync --password <password here>
