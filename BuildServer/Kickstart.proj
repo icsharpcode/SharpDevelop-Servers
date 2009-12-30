@@ -1,0 +1,43 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="go">
+	<!-- Properties that might be passed to Kickstart.proj on the command line:
+		BuildArtefactsDir  : full path to the final publishing dir for build artefacts 
+                                    (optional, default is D:\Websites\ICSharpCode\build\BuildArtefacts\ or c:\temp\)
+		AutomatedBuildFile : path to the checked-out build file to run (required, may be relative to the directory containing Kickstart.proj)
+	-->
+	
+	<PropertyGroup>
+		<!-- to prevent including a newline in the property value, the '>' must be on the same line as the value -->
+		<BuildArtefactsDir Condition="Exists('D:\WebSites\build.sharpdevelop.net') and ('$(BuildArtefactsDir)' == '')"
+			>D:\WebSites\build.sharpdevelop.net\www\BuildArtefacts\</BuildArtefactsDir>
+		<BuildArtefactsDir Condition="('$(BuildArtefactsDir)' == '')"
+			>c:\temp\</BuildArtefactsDir>
+		
+		<AutomatedBuildFile Condition="'$(AutomatedBuildFile)' == ''">..\SharpDevelop\src\Automated.proj</AutomatedBuildFile>
+		
+		<TestReportsDir>$(MSBuildProjectDirectory)\TestReports\$(CCNetProject)</TestReportsDir>
+		<ArtefactsTempDir>$(MSBuildProjectDirectory)\ArtefactsTemp\$(CCNetProject)</ArtefactsTempDir>
+	</PropertyGroup>
+	
+	<Target Name="go">
+		<!-- clean up temp directories -->
+		<RemoveDir Directories="$(TestReportsDir)" Condition="  Exists('$(TestReportsDir)') "/>
+		<MakeDir Directories="$(TestReportsDir)"/>
+		
+		<RemoveDir Directories="$(ArtefactsTempDir)" Condition="  Exists('$(ArtefactsTempDir)') "/>
+		<MakeDir Directories="$(ArtefactsTempDir)"/>
+		
+		<!-- Properties expected by Automated.proj:
+			ArtefactsOutputDir : full path of directory to write the build artefacts to
+								 (this is a temp directory, copy to the final BuildArtefactsDir is only done when build was successful)
+			TestReportsDir     : full path of directory to write CC.net report files to
+		-->
+		<MSBuild Projects="$(AutomatedBuildFile)" Properties="ArtefactsOutputDir=$(ArtefactsTempDir); TestReportsDir=$(TestReportsDir)"/>
+		
+		<!-- get list of files in ArtefactsTempDir -->
+		<CreateItem Include="$(ArtefactsTempDir)\**">
+			<Output TaskParameter="Include" ItemName="FilesToPublish"/>
+		</CreateItem>
+		<!-- copy files to BuildArtefactsDir -->
+		<Copy SourceFiles="@(FilesToPublish)" DestinationFolder="$(BuildArtefactsDir)"/>
+	</Target>
+</Project>

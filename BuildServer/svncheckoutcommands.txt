@@ -1,0 +1,23 @@
+CC.NET pre-installation checkout commands
+
+----------------------------------------------------------
+
+**
+
+Montferrer CI (builds from main svn server)
+
+"C:\Program Files\Subversion\bin\svn.exe" co svn://sharpdevelop.net/sharpdevelop/branches/3.0/SharpDevelop MontferrerCI
+
+
+**
+
+Mirador CI (builds from main svn server)
+
+"C:\Program Files\Subversion\bin\svn.exe" co svn://sharpdevelop.net/sharpdevelop/trunk/SharpDevelop MiradorCI
+
+
+**
+
+SharpReport 
+
+"C:\Program Files\Subversion\bin\svn.exe" co svn://sharpdevelop.net/sharpreport/branches/designer3.0/ SDR_CI
