@@ -1,0 +1,132 @@
+html, body {
+  margin: 0;
+  font-family: Tahoma;
+  font-size: 1em;
+}
+h1 {
+  padding: 0.5em 0.5em;
+  font-size: 150%;
+  font-weight: bold;
+  background: #78e;
+  margin: 0;
+  color: #fff;
+  border-bottom: 1px solid #349;
+}
+
+p#message {
+  font-size: 75%;
+  margin: 0;
+  padding: 1em;
+  background: #eee;
+  border-bottom: 1px solid #bbb;
+}
+
+dl {
+  margin: 0;
+  padding: .25em 1em;
+  margin-bottom: 0;
+  background: #ccc;
+}
+
+dt {
+  display: none;
+}
+
+dd {
+  font-family: Tahoma;
+  font-size: 75%;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+
+div, h2, ul, li {
+  margin: 0;
+  padding: 0;
+}
+
+div h2 {
+  font-family: Tahoma;
+  font-size: 120%;
+  margin-left: 0.5em;
+  padding: .25em 0 .5em 0;
+}
+
+div li {
+  margin-left: 2em;
+  list-style: disc;
+  font-family: Lucida Console;
+  font-size: 80%;
+}
+
+div ul {
+  padding-bottom: 1em;
+  margin-left: 0.5em;
+}
+
+div#added h2 {
+  color: #2a2;
+}
+
+div#modified h2 {
+  color: orange;
+}
+
+div#deleted h2 {
+  color: red;
+}
+
+h5 {
+  font-family: Tahoma;
+  font-size: 70%;
+  font-weight: bold;
+  text-align: center;
+  border-top: 1px dashed #ddd;
+  margin-top: 2em;
+  padding-top: 2em;
+  color: #ccc;
+}
+
+.diff span {
+  padding: 0 3px;
+}
+
+.diff {
+  margin: 0 .5em 1em 0.5em;
+  padding: 0;
+  background: #eee;
+  font-family: Lucida Console, monospace;
+  font-size: 70%;
+  border: 1px solid #ccc;
+}
+
+.filename {
+  font-size: 125%;
+  background: #ddd;
+  border-bottom: 1px solid #999;
+  display: block;
+}
+
+.oldrevision, .delete {
+  color: red;
+}
+
+.newrevision, .add {
+  color: green;
+}
+
+.scope {
+  color: blue;
+}
+
+.unchanged {
+  color: #444;
+}
+
+.separator {
+  display: none;
+}
+.comment {
+  color: #aaa;
+}
+

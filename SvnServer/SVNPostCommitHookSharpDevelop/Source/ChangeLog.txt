@@ -1,0 +1,68 @@
+Change Log
+
+10/14/2005 - 1.8
+
+Changes by Christoph Wille
+
+ - SMTP authentication & SMTP server port options added
+
+8/8/2005 - 1.7
+
+Changes by Christoph Wille
+
+ - LookInfo getter logs when _lookinfo is null
+ - MailTextOnly & AppendDiffToMail properties added to .config file (text-only currently does not send diffs anyways)
+ - UU case added to svnlook parser
+ - Change SvnLookOutputParser.SkipBlanks method to return bool if StringCollection hasMoreLines
+
+5/14/2005 - 1.6
+
+Changes by Ben Lowery, ben AT blowery DOT org
+
+ - <pre> blocks for code#
+ - Updates CSS for new HTML
+ - Logic for finding CSS updated
+ - More logging
+ 
+5/13/2005 - 1.5
+
+Changes by Ben Lowery, ben AT blowery DOT org
+
+ - Colorized diff support 
+ - CSS uses an external CSS file.  No longer in the code.
+ - Added configuration setting for CSS file to use
+ - Added "svnlook changes" parsing support for _U (property updates) 
+ 
+5/2/2005 - 1.4
+
+Changes by Ben Lowery, ben AT blowery DOT org
+
+ - Added abstract base for mailing
+ - Moved System.Web.Mail based mailer to CdoMailer
+ - Added option to send mail with DotNetOpenMail
+ - Added MessageFormatter hierarchy for message formatting
+ - Added HtmlMessageFormatter for html change messages
+ - Moved text message formatting into TextMessageFormatter
+ - Added package batch script to rename exe to post-commit.exe
+ - Added Library directory for references
+ - Added log4net to the Library directory
+ - Made SilentCmdLineApplication::Execute simpler
+ - Moved parsing logic into SvnLookOutputParser
+
+4/11/2005 - 1.3
+
++ Added log4net 1.2.9
++ Split old functionality into CommitInformationRaw
+
+4/10/2005 - 1.2
+
++ Parsed commit log (A, U, D) and created Added, Modified and Deleted sections
+
+4/10/2005 - 1.1
+
++ Saved one call to svnlook (author information)
++ Formatted info text
+
+4/9/2005 1.0
+
++ Initial port of batch file to C# application
