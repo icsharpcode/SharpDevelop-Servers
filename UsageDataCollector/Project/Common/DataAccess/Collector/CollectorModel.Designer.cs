@@ -17,21 +17,21 @@ using System.Runtime.Serialization;
 
 [assembly: EdmSchemaAttribute()]
 
-namespace ICSharpCode.UDC.DataAccess.Collector
+namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
 {
     #region Contexts
     
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    public partial class UsageDatabase : ObjectContext
+    public partial class UDCContext : ObjectContext
     {
         #region Constructors
     
         /// <summary>
         /// Initializes a new UsageDatabase object using the connection string found in the 'UsageDatabase' section of the application configuration file.
         /// </summary>
-        public UsageDatabase() : base("name=UsageDatabase", "UsageDatabase")
+        public UDCContext() : base("name=UsageDatabase", "UsageDatabase")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
@@ -40,7 +40,7 @@ namespace ICSharpCode.UDC.DataAccess.Collector
         /// <summary>
         /// Initialize a new UsageDatabase object.
         /// </summary>
-        public UsageDatabase(string connectionString) : base(connectionString, "UsageDatabase")
+        public UDCContext(string connectionString) : base(connectionString, "UsageDatabase")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
@@ -49,7 +49,7 @@ namespace ICSharpCode.UDC.DataAccess.Collector
         /// <summary>
         /// Initialize a new UsageDatabase object.
         /// </summary>
-        public UsageDatabase(EntityConnection connection) : base(connection, "UsageDatabase")
+        public UDCContext(EntityConnection connection) : base(connection, "UsageDatabase")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();

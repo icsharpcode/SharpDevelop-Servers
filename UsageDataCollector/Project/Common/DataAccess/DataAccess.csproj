@@ -8,8 +8,8 @@
     <ProjectGuid>{3C72C5DF-EE0C-494A-8B28-F74DB14F7040}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ICSharpCode.UDC.DataAccess</RootNamespace>
-    <AssemblyName>ICSharpCode.UDC.DataAccess</AssemblyName>
+    <RootNamespace>ICSharpCode.UsageDataCollector.DataAccess</RootNamespace>
+    <AssemblyName>ICSharpCode.UsageDataCollector.DataAccess</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -48,6 +48,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CollectorModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Collector\CollectorRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

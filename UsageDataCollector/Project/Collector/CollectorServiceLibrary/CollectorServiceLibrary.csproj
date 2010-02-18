@@ -38,6 +38,7 @@
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml" />
@@ -59,6 +60,10 @@
     <ProjectReference Include="..\..\..\..\..\SharpDevelop\src\AddIns\Misc\UsageDataCollector\UsageDataCollector\UsageDataCollector.csproj">
       <Project>{6B1CFE35-DA17-4DEB-9C6E-227E5E251DA0}</Project>
       <Name>UsageDataCollector</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Common\DataAccess\DataAccess.csproj">
+      <Project>{3C72C5DF-EE0C-494A-8B28-F74DB14F7040}</Project>
+      <Name>DataAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
