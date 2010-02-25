@@ -29,27 +29,27 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         #region Constructors
     
         /// <summary>
-        /// Initializes a new UsageDatabase object using the connection string found in the 'UsageDatabase' section of the application configuration file.
+        /// Initializes a new UDCContext object using the connection string found in the 'UDCContext' section of the application configuration file.
         /// </summary>
-        public UDCContext() : base("name=UsageDatabase", "UsageDatabase")
+        public UDCContext() : base("name=UDCContext", "UDCContext")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
         }
     
         /// <summary>
-        /// Initialize a new UsageDatabase object.
+        /// Initialize a new UDCContext object.
         /// </summary>
-        public UDCContext(string connectionString) : base(connectionString, "UsageDatabase")
+        public UDCContext(string connectionString) : base(connectionString, "UDCContext")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
         }
     
         /// <summary>
-        /// Initialize a new UsageDatabase object.
+        /// Initialize a new UDCContext object.
         /// </summary>
-        public UDCContext(EntityConnection connection) : base(connection, "UsageDatabase")
+        public UDCContext(EntityConnection connection) : base(connection, "UDCContext")
         {
             this.ContextOptions.LazyLoadingEnabled = true;
             OnContextCreated();
@@ -116,38 +116,6 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<Exception> Exceptions
-        {
-            get
-            {
-                if ((_Exceptions == null))
-                {
-                    _Exceptions = base.CreateObjectSet<Exception>("Exceptions");
-                }
-                return _Exceptions;
-            }
-        }
-        private ObjectSet<Exception> _Exceptions;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
-        public ObjectSet<ExceptionType> ExceptionTypes
-        {
-            get
-            {
-                if ((_ExceptionTypes == null))
-                {
-                    _ExceptionTypes = base.CreateObjectSet<ExceptionType>("ExceptionTypes");
-                }
-                return _ExceptionTypes;
-            }
-        }
-        private ObjectSet<ExceptionType> _ExceptionTypes;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<Feature> Features
         {
             get
@@ -208,6 +176,38 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
             }
         }
         private ObjectSet<User> _Users;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<ExceptionGroup> ExceptionGroups
+        {
+            get
+            {
+                if ((_ExceptionGroups == null))
+                {
+                    _ExceptionGroups = base.CreateObjectSet<ExceptionGroup>("ExceptionGroups");
+                }
+                return _ExceptionGroups;
+            }
+        }
+        private ObjectSet<ExceptionGroup> _ExceptionGroups;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Exception> Exceptions
+        {
+            get
+            {
+                if ((_Exceptions == null))
+                {
+                    _Exceptions = base.CreateObjectSet<Exception>("Exceptions");
+                }
+                return _Exceptions;
+            }
+        }
+        private ObjectSet<Exception> _Exceptions;
 
         #endregion
         #region AddTo Methods
@@ -234,22 +234,6 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         public void AddToEnvironmentDataNames(EnvironmentDataName environmentDataName)
         {
             base.AddObject("EnvironmentDataNames", environmentDataName);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the Exceptions EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToExceptions(Exception exception)
-        {
-            base.AddObject("Exceptions", exception);
-        }
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the ExceptionTypes EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToExceptionTypes(ExceptionType exceptionType)
-        {
-            base.AddObject("ExceptionTypes", exceptionType);
         }
     
         /// <summary>
@@ -282,6 +266,22 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         public void AddToUsers(User user)
         {
             base.AddObject("Users", user);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the ExceptionGroups EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToExceptionGroups(ExceptionGroup exceptionGroup)
+        {
+            base.AddObject("ExceptionGroups", exceptionGroup);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Exceptions EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToExceptions(Exception exception)
+        {
+            base.AddObject("Exceptions", exception);
         }
 
         #endregion
@@ -600,19 +600,21 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// <summary>
         /// Create a new Exception object.
         /// </summary>
-        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="exceptionId">Initial value of the ExceptionId property.</param>
         /// <param name="sessionId">Initial value of the SessionId property.</param>
-        /// <param name="exceptionTypeId">Initial value of the ExceptionTypeId property.</param>
-        /// <param name="exceptionTime">Initial value of the ExceptionTime property.</param>
-        /// <param name="exceptionStacktrace">Initial value of the ExceptionStacktrace property.</param>
-        public static Exception CreateException(global::System.Int32 id, global::System.Int32 sessionId, global::System.Int32 exceptionTypeId, global::System.DateTime exceptionTime, global::System.String exceptionStacktrace)
+        /// <param name="exceptionGroupId">Initial value of the ExceptionGroupId property.</param>
+        /// <param name="thrownAt">Initial value of the ThrownAt property.</param>
+        /// <param name="stacktrace">Initial value of the Stacktrace property.</param>
+        /// <param name="isFirstInSession">Initial value of the IsFirstInSession property.</param>
+        public static Exception CreateException(global::System.Int32 exceptionId, global::System.Int32 sessionId, global::System.Int32 exceptionGroupId, global::System.DateTime thrownAt, global::System.String stacktrace, global::System.Boolean isFirstInSession)
         {
             Exception exception = new Exception();
-            exception.Id = id;
+            exception.ExceptionId = exceptionId;
             exception.SessionId = sessionId;
-            exception.ExceptionTypeId = exceptionTypeId;
-            exception.ExceptionTime = exceptionTime;
-            exception.ExceptionStacktrace = exceptionStacktrace;
+            exception.ExceptionGroupId = exceptionGroupId;
+            exception.ThrownAt = thrownAt;
+            exception.Stacktrace = stacktrace;
+            exception.IsFirstInSession = isFirstInSession;
             return exception;
         }
 
@@ -624,27 +626,27 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 Id
+        public global::System.Int32 ExceptionId
         {
             get
             {
-                return _Id;
+                return _ExceptionId;
             }
             set
             {
-                if (_Id != value)
+                if (_ExceptionId != value)
                 {
-                    OnIdChanging(value);
-                    ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("Id");
-                    OnIdChanged();
+                    OnExceptionIdChanging(value);
+                    ReportPropertyChanging("ExceptionId");
+                    _ExceptionId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("ExceptionId");
+                    OnExceptionIdChanged();
                 }
             }
         }
-        private global::System.Int32 _Id;
-        partial void OnIdChanging(global::System.Int32 value);
-        partial void OnIdChanged();
+        private global::System.Int32 _ExceptionId;
+        partial void OnExceptionIdChanging(global::System.Int32 value);
+        partial void OnExceptionIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -675,72 +677,96 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 ExceptionTypeId
+        public global::System.Int32 ExceptionGroupId
         {
             get
             {
-                return _ExceptionTypeId;
+                return _ExceptionGroupId;
             }
             set
             {
-                OnExceptionTypeIdChanging(value);
-                ReportPropertyChanging("ExceptionTypeId");
-                _ExceptionTypeId = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ExceptionTypeId");
-                OnExceptionTypeIdChanged();
+                OnExceptionGroupIdChanging(value);
+                ReportPropertyChanging("ExceptionGroupId");
+                _ExceptionGroupId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ExceptionGroupId");
+                OnExceptionGroupIdChanged();
             }
         }
-        private global::System.Int32 _ExceptionTypeId;
-        partial void OnExceptionTypeIdChanging(global::System.Int32 value);
-        partial void OnExceptionTypeIdChanged();
+        private global::System.Int32 _ExceptionGroupId;
+        partial void OnExceptionGroupIdChanging(global::System.Int32 value);
+        partial void OnExceptionGroupIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.DateTime ExceptionTime
+        public global::System.DateTime ThrownAt
         {
             get
             {
-                return _ExceptionTime;
+                return _ThrownAt;
             }
             set
             {
-                OnExceptionTimeChanging(value);
-                ReportPropertyChanging("ExceptionTime");
-                _ExceptionTime = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ExceptionTime");
-                OnExceptionTimeChanged();
+                OnThrownAtChanging(value);
+                ReportPropertyChanging("ThrownAt");
+                _ThrownAt = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ThrownAt");
+                OnThrownAtChanged();
             }
         }
-        private global::System.DateTime _ExceptionTime;
-        partial void OnExceptionTimeChanging(global::System.DateTime value);
-        partial void OnExceptionTimeChanged();
+        private global::System.DateTime _ThrownAt;
+        partial void OnThrownAtChanging(global::System.DateTime value);
+        partial void OnThrownAtChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String ExceptionStacktrace
+        public global::System.String Stacktrace
         {
             get
             {
-                return _ExceptionStacktrace;
+                return _Stacktrace;
             }
             set
             {
-                OnExceptionStacktraceChanging(value);
-                ReportPropertyChanging("ExceptionStacktrace");
-                _ExceptionStacktrace = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("ExceptionStacktrace");
-                OnExceptionStacktraceChanged();
+                OnStacktraceChanging(value);
+                ReportPropertyChanging("Stacktrace");
+                _Stacktrace = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Stacktrace");
+                OnStacktraceChanged();
             }
         }
-        private global::System.String _ExceptionStacktrace;
-        partial void OnExceptionStacktraceChanging(global::System.String value);
-        partial void OnExceptionStacktraceChanged();
+        private global::System.String _Stacktrace;
+        partial void OnStacktraceChanging(global::System.String value);
+        partial void OnStacktraceChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsFirstInSession
+        {
+            get
+            {
+                return _IsFirstInSession;
+            }
+            set
+            {
+                OnIsFirstInSessionChanging(value);
+                ReportPropertyChanging("IsFirstInSession");
+                _IsFirstInSession = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsFirstInSession");
+                OnIsFirstInSessionChanged();
+            }
+        }
+        private global::System.Boolean _IsFirstInSession;
+        partial void OnIsFirstInSessionChanging(global::System.Boolean value);
+        partial void OnIsFirstInSessionChanged();
 
         #endregion
     
@@ -749,24 +775,30 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="CollectorModel", Name="ExceptionType")]
+    [EdmEntityTypeAttribute(NamespaceName="CollectorModel", Name="ExceptionGroup")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
-    public partial class ExceptionType : EntityObject
+    public partial class ExceptionGroup : EntityObject
     {
         #region Factory Method
     
         /// <summary>
-        /// Create a new ExceptionType object.
+        /// Create a new ExceptionGroup object.
         /// </summary>
         /// <param name="id">Initial value of the Id property.</param>
-        /// <param name="name">Initial value of the Name property.</param>
-        public static ExceptionType CreateExceptionType(global::System.Int32 id, global::System.String name)
+        /// <param name="typeFingerprintSha256Hash">Initial value of the TypeFingerprintSha256Hash property.</param>
+        /// <param name="exceptionType">Initial value of the ExceptionType property.</param>
+        /// <param name="exceptionFingerprint">Initial value of the ExceptionFingerprint property.</param>
+        /// <param name="exceptionLocation">Initial value of the ExceptionLocation property.</param>
+        public static ExceptionGroup CreateExceptionGroup(global::System.Int32 id, global::System.String typeFingerprintSha256Hash, global::System.String exceptionType, global::System.String exceptionFingerprint, global::System.String exceptionLocation)
         {
-            ExceptionType exceptionType = new ExceptionType();
-            exceptionType.Id = id;
-            exceptionType.Name = name;
-            return exceptionType;
+            ExceptionGroup exceptionGroup = new ExceptionGroup();
+            exceptionGroup.Id = id;
+            exceptionGroup.TypeFingerprintSha256Hash = typeFingerprintSha256Hash;
+            exceptionGroup.ExceptionType = exceptionType;
+            exceptionGroup.ExceptionFingerprint = exceptionFingerprint;
+            exceptionGroup.ExceptionLocation = exceptionLocation;
+            return exceptionGroup;
         }
 
         #endregion
@@ -804,24 +836,144 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String Name
+        public global::System.String TypeFingerprintSha256Hash
         {
             get
             {
-                return _Name;
+                return _TypeFingerprintSha256Hash;
             }
             set
             {
-                OnNameChanging(value);
-                ReportPropertyChanging("Name");
-                _Name = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Name");
-                OnNameChanged();
+                OnTypeFingerprintSha256HashChanging(value);
+                ReportPropertyChanging("TypeFingerprintSha256Hash");
+                _TypeFingerprintSha256Hash = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("TypeFingerprintSha256Hash");
+                OnTypeFingerprintSha256HashChanged();
             }
         }
-        private global::System.String _Name;
-        partial void OnNameChanging(global::System.String value);
-        partial void OnNameChanged();
+        private global::System.String _TypeFingerprintSha256Hash;
+        partial void OnTypeFingerprintSha256HashChanging(global::System.String value);
+        partial void OnTypeFingerprintSha256HashChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ExceptionType
+        {
+            get
+            {
+                return _ExceptionType;
+            }
+            set
+            {
+                OnExceptionTypeChanging(value);
+                ReportPropertyChanging("ExceptionType");
+                _ExceptionType = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ExceptionType");
+                OnExceptionTypeChanged();
+            }
+        }
+        private global::System.String _ExceptionType;
+        partial void OnExceptionTypeChanging(global::System.String value);
+        partial void OnExceptionTypeChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ExceptionFingerprint
+        {
+            get
+            {
+                return _ExceptionFingerprint;
+            }
+            set
+            {
+                OnExceptionFingerprintChanging(value);
+                ReportPropertyChanging("ExceptionFingerprint");
+                _ExceptionFingerprint = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ExceptionFingerprint");
+                OnExceptionFingerprintChanged();
+            }
+        }
+        private global::System.String _ExceptionFingerprint;
+        partial void OnExceptionFingerprintChanging(global::System.String value);
+        partial void OnExceptionFingerprintChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String ExceptionLocation
+        {
+            get
+            {
+                return _ExceptionLocation;
+            }
+            set
+            {
+                OnExceptionLocationChanging(value);
+                ReportPropertyChanging("ExceptionLocation");
+                _ExceptionLocation = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("ExceptionLocation");
+                OnExceptionLocationChanged();
+            }
+        }
+        private global::System.String _ExceptionLocation;
+        partial void OnExceptionLocationChanging(global::System.String value);
+        partial void OnExceptionLocationChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String UserComment
+        {
+            get
+            {
+                return _UserComment;
+            }
+            set
+            {
+                OnUserCommentChanging(value);
+                ReportPropertyChanging("UserComment");
+                _UserComment = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("UserComment");
+                OnUserCommentChanged();
+            }
+        }
+        private global::System.String _UserComment;
+        partial void OnUserCommentChanging(global::System.String value);
+        partial void OnUserCommentChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> UserFixedInRevision
+        {
+            get
+            {
+                return _UserFixedInRevision;
+            }
+            set
+            {
+                OnUserFixedInRevisionChanging(value);
+                ReportPropertyChanging("UserFixedInRevision");
+                _UserFixedInRevision = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("UserFixedInRevision");
+                OnUserFixedInRevisionChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _UserFixedInRevision;
+        partial void OnUserFixedInRevisionChanging(Nullable<global::System.Int32> value);
+        partial void OnUserFixedInRevisionChanged();
 
         #endregion
     

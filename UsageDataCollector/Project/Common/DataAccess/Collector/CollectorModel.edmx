@@ -9,8 +9,8 @@
           <EntitySet Name="ActivationMethods" EntityType="CollectorModel.Store.ActivationMethods" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EnvironmentData" EntityType="CollectorModel.Store.EnvironmentData" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EnvironmentDataNames" EntityType="CollectorModel.Store.EnvironmentDataNames" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ExceptionGroups" EntityType="CollectorModel.Store.ExceptionGroups" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Exceptions" EntityType="CollectorModel.Store.Exceptions" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="ExceptionTypes" EntityType="CollectorModel.Store.ExceptionTypes" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Features" EntityType="CollectorModel.Store.Features" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FeatureUse" EntityType="CollectorModel.Store.FeatureUse" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Sessions" EntityType="CollectorModel.Store.Sessions" store:Type="Tables" Schema="dbo" />
@@ -39,22 +39,28 @@
           <Property Name="EnvironmentDataNameId" Type="int" Nullable="false" />
           <Property Name="EnvironmentDataName" Type="nvarchar" Nullable="false" MaxLength="255" />
         </EntityType>
+        <EntityType Name="ExceptionGroups">
+          <Key>
+            <PropertyRef Name="ExceptionGroupId" />
+          </Key>
+          <Property Name="ExceptionGroupId" Type="int" Nullable="false" />
+          <Property Name="TypeFingerprintSha256Hash" Type="nvarchar" Nullable="false" MaxLength="128" />
+          <Property Name="ExceptionType" Type="nvarchar" Nullable="false" MaxLength="255" />
+          <Property Name="ExceptionFingerprint" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ExceptionLocation" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="UserComment" Type="nvarchar(max)" />
+          <Property Name="UserFixedInRevision" Type="int" />
+        </EntityType>
         <EntityType Name="Exceptions">
           <Key>
             <PropertyRef Name="ExceptionId" />
           </Key>
           <Property Name="ExceptionId" Type="int" Nullable="false" />
           <Property Name="SessionId" Type="int" Nullable="false" />
-          <Property Name="ExceptionTypeId" Type="int" Nullable="false" />
-          <Property Name="ExceptionTime" Type="datetime" Nullable="false" />
-          <Property Name="ExceptionStacktrace" Type="nvarchar(max)" Nullable="false" />
-        </EntityType>
-        <EntityType Name="ExceptionTypes">
-          <Key>
-            <PropertyRef Name="ExceptionTypeId" />
-          </Key>
-          <Property Name="ExceptionTypeId" Type="int" Nullable="false" />
-          <Property Name="ExceptionTypeName" Type="nvarchar" Nullable="false" MaxLength="255" />
+          <Property Name="ExceptionGroupId" Type="int" Nullable="false" />
+          <Property Name="ThrownAt" Type="datetime" Nullable="false" />
+          <Property Name="Stacktrace" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="IsFirstInSession" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Features">
           <Key>
@@ -95,16 +101,16 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="CollectorModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
-        <EntityContainer Name="UsageDatabase" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="UDCContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ActivationMethods" EntityType="CollectorModel.ActivationMethod" />
           <EntitySet Name="EnvironmentDatas" EntityType="CollectorModel.EnvironmentData" />
           <EntitySet Name="EnvironmentDataNames" EntityType="CollectorModel.EnvironmentDataName" />
-          <EntitySet Name="Exceptions" EntityType="CollectorModel.Exception" />
-          <EntitySet Name="ExceptionTypes" EntityType="CollectorModel.ExceptionType" />
           <EntitySet Name="Features" EntityType="CollectorModel.Feature" />
           <EntitySet Name="FeatureUses" EntityType="CollectorModel.FeatureUse" />
           <EntitySet Name="Sessions" EntityType="CollectorModel.Session" />
           <EntitySet Name="Users" EntityType="CollectorModel.User" />
+          <EntitySet Name="ExceptionGroups" EntityType="CollectorModel.ExceptionGroup" />
+          <EntitySet Name="Exceptions" EntityType="CollectorModel.Exception" />
         </EntityContainer>
         <EntityType Name="ActivationMethod">
           <Key>
@@ -123,23 +129,6 @@
           <Property Type="String" Name="EnvironmentDataValue" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="EnvironmentDataName">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="String" Name="Name" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Exception">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="Int32" Name="SessionId" Nullable="false" />
-          <Property Type="Int32" Name="ExceptionTypeId" Nullable="false" />
-          <Property Type="DateTime" Name="ExceptionTime" Nullable="false" />
-          <Property Type="String" Name="ExceptionStacktrace" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="ExceptionType">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -181,12 +170,35 @@
           <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="String" Name="AssociatedGuid" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="ExceptionGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" />
+          <Property Type="String" Name="TypeFingerprintSha256Hash" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ExceptionType" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ExceptionFingerprint" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="ExceptionLocation" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="UserComment" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="UserFixedInRevision" />
+        </EntityType>
+        <EntityType Name="Exception">
+          <Key>
+            <PropertyRef Name="ExceptionId" />
+          </Key>
+          <Property Type="Int32" Name="ExceptionId" Nullable="false" />
+          <Property Type="Int32" Name="SessionId" Nullable="false" />
+          <Property Type="Int32" Name="ExceptionGroupId" Nullable="false" />
+          <Property Type="DateTime" Name="ThrownAt" Nullable="false" />
+          <Property Type="String" Name="Stacktrace" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Type="Boolean" Name="IsFirstInSession" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="CollectorModelStoreContainer" CdmEntityContainer="UsageDatabase">
+        <EntityContainerMapping StorageEntityContainer="CollectorModelStoreContainer" CdmEntityContainer="UDCContext">
           <EntitySetMapping Name="ActivationMethods">
             <EntityTypeMapping TypeName="CollectorModel.ActivationMethod">
               <MappingFragment StoreEntitySet="ActivationMethods">
@@ -210,25 +222,6 @@
               <MappingFragment StoreEntitySet="EnvironmentDataNames">
                 <ScalarProperty Name="Name" ColumnName="EnvironmentDataName" />
                 <ScalarProperty Name="Id" ColumnName="EnvironmentDataNameId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Exceptions">
-            <EntityTypeMapping TypeName="CollectorModel.Exception">
-              <MappingFragment StoreEntitySet="Exceptions">
-                <ScalarProperty Name="ExceptionStacktrace" ColumnName="ExceptionStacktrace" />
-                <ScalarProperty Name="ExceptionTime" ColumnName="ExceptionTime" />
-                <ScalarProperty Name="ExceptionTypeId" ColumnName="ExceptionTypeId" />
-                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
-                <ScalarProperty Name="Id" ColumnName="ExceptionId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ExceptionTypes">
-            <EntityTypeMapping TypeName="CollectorModel.ExceptionType">
-              <MappingFragment StoreEntitySet="ExceptionTypes">
-                <ScalarProperty Name="Name" ColumnName="ExceptionTypeName" />
-                <ScalarProperty Name="Id" ColumnName="ExceptionTypeId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -271,6 +264,31 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="ExceptionGroups">
+            <EntityTypeMapping TypeName="CollectorModel.ExceptionGroup">
+              <MappingFragment StoreEntitySet="ExceptionGroups">
+                <ScalarProperty Name="UserFixedInRevision" ColumnName="UserFixedInRevision" />
+                <ScalarProperty Name="UserComment" ColumnName="UserComment" />
+                <ScalarProperty Name="ExceptionLocation" ColumnName="ExceptionLocation" />
+                <ScalarProperty Name="ExceptionFingerprint" ColumnName="ExceptionFingerprint" />
+                <ScalarProperty Name="ExceptionType" ColumnName="ExceptionType" />
+                <ScalarProperty Name="TypeFingerprintSha256Hash" ColumnName="TypeFingerprintSha256Hash" />
+                <ScalarProperty Name="Id" ColumnName="ExceptionGroupId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Exceptions">
+            <EntityTypeMapping TypeName="CollectorModel.Exception">
+              <MappingFragment StoreEntitySet="Exceptions">
+                <ScalarProperty Name="IsFirstInSession" ColumnName="IsFirstInSession" />
+                <ScalarProperty Name="Stacktrace" ColumnName="Stacktrace" />
+                <ScalarProperty Name="ThrownAt" ColumnName="ThrownAt" />
+                <ScalarProperty Name="ExceptionGroupId" ColumnName="ExceptionGroupId" />
+                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
+                <ScalarProperty Name="ExceptionId" ColumnName="ExceptionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -292,15 +310,15 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="CollectorModel">
-        <EntityTypeShape EntityType="CollectorModel.ActivationMethod" Width="1.5" PointX="7.5" PointY="0.5" Height="1.4033821614583353" />
+        <EntityTypeShape EntityType="CollectorModel.ActivationMethod" Width="2.5" PointX="7.5" PointY="0.5" Height="1.4033821614583353" />
         <EntityTypeShape EntityType="CollectorModel.EnvironmentData" Width="2" PointX="4.5" PointY="3.75" Height="1.7879850260416674" />
-        <EntityTypeShape EntityType="CollectorModel.EnvironmentDataName" Width="1.5" PointX="7.5" PointY="2.125" Height="1.4033821614583388" />
-        <EntityTypeShape EntityType="CollectorModel.Exception" Width="1.5" PointX="2.75" PointY="3.75" Height="1.9802864583333388" />
-        <EntityTypeShape EntityType="CollectorModel.ExceptionType" Width="1.625" PointX="5.625" PointY="2.125" Height="1.4033821614583388" />
+        <EntityTypeShape EntityType="CollectorModel.EnvironmentDataName" Width="2.5" PointX="7.5" PointY="2" Height="1.4033821614583388" />
         <EntityTypeShape EntityType="CollectorModel.Feature" Width="1.625" PointX="5.625" PointY="0.5" Height="1.4033821614583388" />
         <EntityTypeShape EntityType="CollectorModel.FeatureUse" Width="1.5" PointX="1" PointY="3.75" Height="2.1725878906250031" />
-        <EntityTypeShape EntityType="CollectorModel.Session" Width="1.5" PointX="2.5" PointY="1.375" Height="1.9802864583333388" />
-        <EntityTypeShape EntityType="CollectorModel.User" Width="1.5" PointX="0.5" PointY="0.5" Height="1.4033821614583388" />
+        <EntityTypeShape EntityType="CollectorModel.Session" Width="1.5" PointX="2.625" PointY="1.25" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="CollectorModel.User" Width="1.5" PointX="0.875" PointY="0.5" Height="1.4033821614583388" />
+        <EntityTypeShape EntityType="CollectorModel.ExceptionGroup" Width="2.5" PointX="7.5" PointY="3.5" Height="2.3648893229166674" />
+        <EntityTypeShape EntityType="CollectorModel.Exception" Width="1.5" PointX="2.75" PointY="3.75" Height="2.1725878906250031" />
       </Diagram>
     </Diagrams>
   </Designer>
