@@ -5,14 +5,26 @@ using System.Text;
 
 namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 {
-    sealed class ExceptionGroupImport
+    public class ExceptionImport
     {
-        public string Fingerprint;
-
-        public string CrashID
+        public ExceptionImport(string extype)
         {
-            get { return unchecked((uint)this.Fingerprint.GetHashCode() % 10000u).ToString("d4"); }
         }
+
+        public string Fingerprint
+        {
+            get
+            {
+                return this.Type + Environment.NewLine +
+                    string.Join(
+                        Environment.NewLine,
+                        ExceptionHelpers.CleanStackTrace(
+                            ExceptionHelpers.SplitLines(this.StackTrace)
+                        ));
+            }
+        }
+
+        public string StackTrace { get; set; }
 
         public string Type
         {

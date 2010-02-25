@@ -47,9 +47,10 @@
   <ItemGroup>
     <Compile Include="Import\BulkImport.cs" />
     <Compile Include="Import\CrackAndStoreMessage.cs" />
-    <Compile Include="Import\ExceptionGroupImport.cs" />
+    <Compile Include="Import\ExceptionImport.cs" />
     <Compile Include="Import\ExceptionHelpers.cs" />
     <Compile Include="Import\FileImporter.cs" />
+    <Compile Include="Import\ImportCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceImplementations\StoreLocallyUploadService.cs" />
     <Compile Include="UsageDataCollectorService.cs" />
