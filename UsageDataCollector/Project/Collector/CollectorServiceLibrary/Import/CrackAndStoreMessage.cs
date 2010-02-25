@@ -217,10 +217,22 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
                                                 from e in s.Exceptions
                                                 select new ExceptionImport(e)
                                                 {
-                                                    ClientSessionId = s.SessionID
+                                                    ClientSessionId = s.SessionID,
+                                                    IsFirstInSession = false
                                                 }).ToList();
 
             if (0 == exceptions.Count) return; // no exceptions reported, denormalisedExceptions remains null
+
+            // mark first exception in session - note that above LINQ query does not mix up order of items
+            long clientSession = -1;
+            exceptions.ForEach(ex =>
+            {
+                if (ex.ClientSessionId != clientSession)
+                {
+                    ex.IsFirstInSession = true;
+                    clientSession = ex.ClientSessionId;
+                }
+            });
 
             List<string> distinctMsgExceptionGroups = (from e in exceptions
                                                        select e.FingerprintHash).Distinct().ToList();
