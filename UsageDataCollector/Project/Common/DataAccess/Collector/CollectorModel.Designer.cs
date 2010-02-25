@@ -598,16 +598,16 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// <summary>
         /// Create a new Exception object.
         /// </summary>
-        /// <param name="exceptionId">Initial value of the ExceptionId property.</param>
+        /// <param name="id">Initial value of the Id property.</param>
         /// <param name="sessionId">Initial value of the SessionId property.</param>
         /// <param name="exceptionGroupId">Initial value of the ExceptionGroupId property.</param>
         /// <param name="thrownAt">Initial value of the ThrownAt property.</param>
         /// <param name="stacktrace">Initial value of the Stacktrace property.</param>
         /// <param name="isFirstInSession">Initial value of the IsFirstInSession property.</param>
-        public static Exception CreateException(global::System.Int32 exceptionId, global::System.Int32 sessionId, global::System.Int32 exceptionGroupId, global::System.DateTime thrownAt, global::System.String stacktrace, global::System.Boolean isFirstInSession)
+        public static Exception CreateException(global::System.Int32 id, global::System.Int32 sessionId, global::System.Int32 exceptionGroupId, global::System.DateTime thrownAt, global::System.String stacktrace, global::System.Boolean isFirstInSession)
         {
             Exception exception = new Exception();
-            exception.ExceptionId = exceptionId;
+            exception.Id = id;
             exception.SessionId = sessionId;
             exception.ExceptionGroupId = exceptionGroupId;
             exception.ThrownAt = thrownAt;
@@ -624,27 +624,27 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 ExceptionId
+        public global::System.Int32 Id
         {
             get
             {
-                return _ExceptionId;
+                return _Id;
             }
             set
             {
-                if (_ExceptionId != value)
+                if (_Id != value)
                 {
-                    OnExceptionIdChanging(value);
-                    ReportPropertyChanging("ExceptionId");
-                    _ExceptionId = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("ExceptionId");
-                    OnExceptionIdChanged();
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
                 }
             }
         }
-        private global::System.Int32 _ExceptionId;
-        partial void OnExceptionIdChanging(global::System.Int32 value);
-        partial void OnExceptionIdChanged();
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
@@ -1254,14 +1254,14 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// <summary>
         /// Create a new Session object.
         /// </summary>
-        /// <param name="sessionId">Initial value of the SessionId property.</param>
+        /// <param name="id">Initial value of the Id property.</param>
         /// <param name="clientSessionId">Initial value of the ClientSessionId property.</param>
         /// <param name="startTime">Initial value of the StartTime property.</param>
         /// <param name="userId">Initial value of the UserId property.</param>
-        public static Session CreateSession(global::System.Int32 sessionId, global::System.Int64 clientSessionId, global::System.DateTime startTime, global::System.Int32 userId)
+        public static Session CreateSession(global::System.Int32 id, global::System.Int64 clientSessionId, global::System.DateTime startTime, global::System.Int32 userId)
         {
             Session session = new Session();
-            session.SessionId = sessionId;
+            session.Id = id;
             session.ClientSessionId = clientSessionId;
             session.StartTime = startTime;
             session.UserId = userId;
@@ -1276,27 +1276,27 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 SessionId
+        public global::System.Int32 Id
         {
             get
             {
-                return _SessionId;
+                return _Id;
             }
             set
             {
-                if (_SessionId != value)
+                if (_Id != value)
                 {
-                    OnSessionIdChanging(value);
-                    ReportPropertyChanging("SessionId");
-                    _SessionId = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("SessionId");
-                    OnSessionIdChanged();
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
                 }
             }
         }
-        private global::System.Int32 _SessionId;
-        partial void OnSessionIdChanging(global::System.Int32 value);
-        partial void OnSessionIdChanged();
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.

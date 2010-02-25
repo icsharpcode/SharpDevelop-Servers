@@ -5,6 +5,7 @@ using System.Text;
 
 using ICSharpCode.UsageDataCollector.Contracts;
 using ICSharpCode.UsageDataCollector.DataAccess.Collector;
+using System.IO;
 
 namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 {
@@ -37,6 +38,32 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
                 // features: a, b, c
                 // usage features: b, c, d --> find d
                 // List<string> knownFeatures = context.Features.Select(f => f.Name).ToList();
+            }
+        }
+
+        public static void ReadMessagesFromDirectory(string directory, bool KeepFile)
+        {
+            using (var context = CollectorRepository.CreateContext())
+            {
+                CollectorRepository repo = new CollectorRepository();
+                repo.Context = context;
+
+                foreach (string filename in Directory.EnumerateFiles(directory, "*.xml.gz", SearchOption.TopDirectoryOnly))
+                {
+                    UsageDataMessage message = null;
+                    try
+                    {
+                        message = FileImporter.ReadMessage(filename);
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Console.WriteLine("Failed to read file {0}, exception {1}", filename, ex.Message);
+                        continue;
+                    }
+
+                    CrackAndStoreMessage processor = new CrackAndStoreMessage(message, repo);
+                    processor.ProcessMessage();
+                }
             }
         }
     }

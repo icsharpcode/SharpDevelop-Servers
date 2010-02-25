@@ -167,9 +167,9 @@
         </EntityType>
         <EntityType Name="Exception">
           <Key>
-            <PropertyRef Name="ExceptionId" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Int32" Name="ExceptionId" Nullable="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="Int32" Name="SessionId" Nullable="false" />
           <Property Type="Int32" Name="ExceptionGroupId" Nullable="false" />
           <Property Type="DateTime" Name="ThrownAt" Nullable="false" />
@@ -178,9 +178,9 @@
         </EntityType>
         <EntityType Name="Session">
           <Key>
-            <PropertyRef Name="SessionId" />
+            <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Int32" Name="SessionId" Nullable="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" />
           <Property Type="Int64" Name="ClientSessionId" Nullable="false" />
           <Property Type="DateTime" Name="StartTime" Nullable="false" />
           <Property Type="DateTime" Name="EndTime" />
@@ -266,7 +266,7 @@
                 <ScalarProperty Name="ThrownAt" ColumnName="ThrownAt" />
                 <ScalarProperty Name="ExceptionGroupId" ColumnName="ExceptionGroupId" />
                 <ScalarProperty Name="SessionId" ColumnName="SessionId" />
-                <ScalarProperty Name="ExceptionId" ColumnName="ExceptionId" />
+                <ScalarProperty Name="Id" ColumnName="ExceptionId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -277,7 +277,7 @@
                 <ScalarProperty Name="EndTime" ColumnName="EndTime" />
                 <ScalarProperty Name="StartTime" ColumnName="StartTime" />
                 <ScalarProperty Name="ClientSessionId" ColumnName="ClientSessionId" />
-                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
+                <ScalarProperty Name="Id" ColumnName="SessionId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

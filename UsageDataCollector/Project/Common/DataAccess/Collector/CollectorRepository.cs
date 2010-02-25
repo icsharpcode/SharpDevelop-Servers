@@ -19,9 +19,14 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
             return Context.Users.FirstOrDefault(u => u.AssociatedGuid == guid);
         }
 
-        public IEnumerable<string> GetEnvironmentDataNames()
+        public IEnumerable<string> GetEnvironmentDataNameNames()
         {
             return Context.EnvironmentDataNames.Select(dn => dn.Name);
+        }
+
+        public IEnumerable<EnvironmentDataName> GetEnvironmentDataNames()
+        {
+            return Context.EnvironmentDataNames.Select(dn => dn);
         }
 
         public IEnumerable<string> GetActivationMethodNames()
@@ -29,9 +34,19 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
             return Context.ActivationMethods.Select(am => am.Name);
         }
 
+        public IEnumerable<ActivationMethod> GetActivationMethods()
+        {
+            return Context.ActivationMethods.Select(am => am);
+        }
+
         public IEnumerable<string> GetFeatureNames()
         {
             return Context.Features.Select(f => f.Name);
+        }
+
+        public IEnumerable<Feature> GetFeatures()
+        {
+            return Context.Features.Select(f => f);
         }
     }
 }

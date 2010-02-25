@@ -19,6 +19,8 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
             repository = repo;
         }
 
+        // we intentionally don't build the full model in memory first (user -> sessions -> data tables)
+        // avoiding concurrency issues (eg type tables) is more important than fewer database writes
         public void ProcessMessage()
         {
             string userGuid = message.UserID.ToString();
@@ -42,11 +44,59 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
                 };
 
                 repository.Context.Users.AddObject(modelUser);
-
-                // we intentionally don't build the full model in memory first (user -> sessions -> data tables)
-                // avoiding concurrency issues (eg type tables) is more important than fewer database writes
                 repository.Context.SaveChanges();
             }
+
+            foreach (UsageDataSession msgSession in message.Sessions)
+            {
+                Session modelSession = new Session()
+                {
+                    ClientSessionId = msgSession.SessionID,
+                    StartTime = msgSession.StartTime,
+                    EndTime = msgSession.EndTime,
+                    UserId = modelUser.Id
+                };
+
+                repository.Context.Sessions.AddObject(modelSession);
+                repository.Context.SaveChanges(); // TODO: temp solution only (causes too many db writes)
+
+                List<EnvironmentDataName> storedEnvNames = repository.GetEnvironmentDataNames().ToList(); // cacheable
+
+                var insertEnvProperties = (from prop in msgSession.EnvironmentProperties
+                                            join envName in storedEnvNames on prop.Name equals envName.Name
+                                            select new EnvironmentData()
+                                            {
+                                                SessionId = modelSession.Id,
+                                                EnvironmentDataNameId = envName.Id,
+                                                EnvironmentDataValue = prop.Value
+                                            });
+
+                foreach (var ede in insertEnvProperties)
+                    repository.Context.EnvironmentDatas.AddObject(ede);
+
+
+                List<ActivationMethod> storedActivationMethods = repository.GetActivationMethods().ToList(); // cacheable
+                List<Feature> storedFeatures = repository.GetFeatures().ToList(); // cacheable
+
+                var insertFeatureUse = (from fu in msgSession.FeatureUses
+                                        join f in storedFeatures on fu.FeatureName equals f.Name
+                                        join am in storedActivationMethods on fu.ActivationMethod equals am.Name
+                                        select new ICSharpCode.UsageDataCollector.DataAccess.Collector.FeatureUse()
+                             {
+                                 ActivationMethodId = am.Id,
+                                 FeatureId = f.Id,
+                                 SessionId = modelSession.Id,
+                                 UseTime = fu.Time,
+                                 EndTime = fu.EndTime
+                             });
+
+                foreach (var fue in insertFeatureUse)
+                    repository.Context.FeatureUses.AddObject(fue);
+
+                repository.Context.SaveChanges();
+                
+            }
+
         }
 
         protected void PreProcessEnvironmentDataNames()
@@ -58,7 +108,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
             // did we receive environment data at all?
             if (distinctMsgEnvProperties.Count > 0)
             {
-                List<string> knownDataNames = repository.GetEnvironmentDataNames().ToList(); // cacheable
+                List<string> knownDataNames = repository.GetEnvironmentDataNameNames().ToList(); // cacheable
                 List<string> missing = distinctMsgEnvProperties.Except(knownDataNames).ToList();
 
                 // this happens rarely for environment data names
