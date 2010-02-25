@@ -44,9 +44,10 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
                 };
 
                 repository.Context.Users.AddObject(modelUser);
-                repository.Context.SaveChanges();
+                repository.Context.SaveChanges(); // Save #1
             }
 
+            List<Session> newSessions = new List<Session>();
             foreach (UsageDataSession msgSession in message.Sessions)
             {
                 Session modelSession = new Session()
@@ -57,45 +58,49 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
                     UserId = modelUser.Id
                 };
 
+                newSessions.Add(modelSession);
                 repository.Context.Sessions.AddObject(modelSession);
-                repository.Context.SaveChanges(); // TODO: temp solution only (causes too many db writes)
-
-                List<EnvironmentDataName> storedEnvNames = repository.GetEnvironmentDataNames().ToList(); // cacheable
-
-                var insertEnvProperties = (from prop in msgSession.EnvironmentProperties
-                                            join envName in storedEnvNames on prop.Name equals envName.Name
-                                            select new EnvironmentData()
-                                            {
-                                                SessionId = modelSession.Id,
-                                                EnvironmentDataNameId = envName.Id,
-                                                EnvironmentDataValue = prop.Value
-                                            });
-
-                foreach (var ede in insertEnvProperties)
-                    repository.Context.EnvironmentDatas.AddObject(ede);
-
-
-                List<ActivationMethod> storedActivationMethods = repository.GetActivationMethods().ToList(); // cacheable
-                List<Feature> storedFeatures = repository.GetFeatures().ToList(); // cacheable
-
-                var insertFeatureUse = (from fu in msgSession.FeatureUses
-                                        join f in storedFeatures on fu.FeatureName equals f.Name
-                                        join am in storedActivationMethods on fu.ActivationMethod equals am.Name
-                                        select new ICSharpCode.UsageDataCollector.DataAccess.Collector.FeatureUse()
-                             {
-                                 ActivationMethodId = am.Id,
-                                 FeatureId = f.Id,
-                                 SessionId = modelSession.Id,
-                                 UseTime = fu.Time,
-                                 EndTime = fu.EndTime
-                             });
-
-                foreach (var fue in insertFeatureUse)
-                    repository.Context.FeatureUses.AddObject(fue);
-
-                repository.Context.SaveChanges();
-                
             }
+
+            repository.Context.SaveChanges(); // Save #2
+
+            List<EnvironmentDataName> storedEnvNames = repository.GetEnvironmentDataNames().ToList(); // cacheable
+
+            var insertEnvProperties = (from s in message.Sessions
+                                       from prop in s.EnvironmentProperties
+                                       join envName in storedEnvNames on prop.Name equals envName.Name
+                                       join storedSession in newSessions on s.SessionID equals storedSession.ClientSessionId
+                                       select new EnvironmentData()
+                                       {
+                                           SessionId = storedSession.Id,
+                                           EnvironmentDataNameId = envName.Id,
+                                           EnvironmentDataValue = prop.Value
+                                       });
+
+            foreach (var ede in insertEnvProperties)
+                repository.Context.EnvironmentDatas.AddObject(ede);
+
+            List<ActivationMethod> storedActivationMethods = repository.GetActivationMethods().ToList(); // cacheable
+            List<Feature> storedFeatures = repository.GetFeatures().ToList(); // cacheable
+
+            var insertFeatureUse = (from s in message.Sessions
+                                    from fu in s.FeatureUses
+                                    join f in storedFeatures on fu.FeatureName equals f.Name
+                                    join am in storedActivationMethods on fu.ActivationMethod equals am.Name
+                                    join storedSession in newSessions on s.SessionID equals storedSession.ClientSessionId
+                                    select new ICSharpCode.UsageDataCollector.DataAccess.Collector.FeatureUse()
+                         {
+                             ActivationMethodId = am.Id,
+                             FeatureId = f.Id,
+                             SessionId = storedSession.Id,
+                             UseTime = fu.Time,
+                             EndTime = fu.EndTime
+                         });
+
+            foreach (var fue in insertFeatureUse)
+                repository.Context.FeatureUses.AddObject(fue);
+
+            repository.Context.SaveChanges(); // Save #3
 
         }
 
@@ -159,9 +164,9 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 
         protected void PreProcessFeatures()
         {
-            List<string> distinctMsgFeatures =  (from s in message.Sessions
-                                                 from fu in s.FeatureUses
-                                                 select fu.FeatureName).Distinct().ToList();
+            List<string> distinctMsgFeatures = (from s in message.Sessions
+                                                from fu in s.FeatureUses
+                                                select fu.FeatureName).Distinct().ToList();
 
             if (distinctMsgFeatures.Count > 0)
             {
@@ -184,6 +189,6 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
                 }
             }
         }
- 
+
     }
 }
