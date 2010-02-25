@@ -20,26 +20,23 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
         public static void SketchOut()
         {
             // wrong schema errors by moving contracts to /contracts namespace
-            // UsageDataMessage currentMessage = FileImporter.ReadMessage(@"D:\Daten\SharpDevelop\trunk\SharpDevelopServers\UsageDataCollector\Project\Collector\CollectorServiceTestClient\SharpDevelopUsageData.xml.gz");
+            UsageDataMessage message =
+                FileImporter.ReadMessage(@"D:\Daten\SharpDevelop\trunk\SharpDevelopServers\UsageDataCollector\SampleData\_Debugger_Exception_ab7a92f4-3d0e-44ac-afc9-a4d6090603b0.xml.gz");
 
             using (var context = CollectorRepository.CreateContext())
             {
+                CollectorRepository repo = new CollectorRepository();
+                repo.Context = context;
+
+                CrackAndStoreMessage processor = new CrackAndStoreMessage(message, repo);
+                processor.ProcessMessage();
+
+
                 // Dictionary<string,int> features = context.Features.ToDictionary(f => f.Name, f => f.Id);
                 // var features = context.Features.ToList().AsReadOnly();
                 // features: a, b, c
                 // usage features: b, c, d --> find d
-                List<string> knownFeatures = context.Features.Select(f => f.Name).ToList();
-
-                /*
-                var activationMethod = new ActivationMethod()
-                {
-                    Name = "test"
-                };
-
-                context.ActivationMethods.AddObject(activationMethod);
-                context.SaveChanges();
-                */
-
+                // List<string> knownFeatures = context.Features.Select(f => f.Name).ToList();
             }
         }
     }

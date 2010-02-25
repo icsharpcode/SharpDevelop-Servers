@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Import\BulkImport.cs" />
+    <Compile Include="Import\CrackAndStoreMessage.cs" />
+    <Compile Include="Import\ExceptionGroupImport.cs" />
     <Compile Include="Import\ExceptionHelpers.cs" />
     <Compile Include="Import\FileImporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

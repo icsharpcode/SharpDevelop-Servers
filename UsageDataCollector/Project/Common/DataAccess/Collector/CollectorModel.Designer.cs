@@ -68,22 +68,6 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<ActivationMethod> ActivationMethods
-        {
-            get
-            {
-                if ((_ActivationMethods == null))
-                {
-                    _ActivationMethods = base.CreateObjectSet<ActivationMethod>("ActivationMethods");
-                }
-                return _ActivationMethods;
-            }
-        }
-        private ObjectSet<ActivationMethod> _ActivationMethods;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<EnvironmentData> EnvironmentDatas
         {
             get
@@ -148,22 +132,6 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<Session> Sessions
-        {
-            get
-            {
-                if ((_Sessions == null))
-                {
-                    _Sessions = base.CreateObjectSet<Session>("Sessions");
-                }
-                return _Sessions;
-            }
-        }
-        private ObjectSet<Session> _Sessions;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<User> Users
         {
             get
@@ -208,17 +176,41 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
             }
         }
         private ObjectSet<Exception> _Exceptions;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Session> Sessions
+        {
+            get
+            {
+                if ((_Sessions == null))
+                {
+                    _Sessions = base.CreateObjectSet<Session>("Sessions");
+                }
+                return _Sessions;
+            }
+        }
+        private ObjectSet<Session> _Sessions;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<ActivationMethod> ActivationMethods
+        {
+            get
+            {
+                if ((_ActivationMethods == null))
+                {
+                    _ActivationMethods = base.CreateObjectSet<ActivationMethod>("ActivationMethods");
+                }
+                return _ActivationMethods;
+            }
+        }
+        private ObjectSet<ActivationMethod> _ActivationMethods;
 
         #endregion
         #region AddTo Methods
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the ActivationMethods EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToActivationMethods(ActivationMethod activationMethod)
-        {
-            base.AddObject("ActivationMethods", activationMethod);
-        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the EnvironmentDatas EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -253,14 +245,6 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the Sessions EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToSessions(Session session)
-        {
-            base.AddObject("Sessions", session);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the Users EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToUsers(User user)
@@ -282,6 +266,22 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         public void AddToExceptions(Exception exception)
         {
             base.AddObject("Exceptions", exception);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Sessions EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSessions(Session session)
+        {
+            base.AddObject("Sessions", session);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the ActivationMethods EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToActivationMethods(ActivationMethod activationMethod)
+        {
+            base.AddObject("ActivationMethods", activationMethod);
         }
 
         #endregion
@@ -306,12 +306,10 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// Create a new ActivationMethod object.
         /// </summary>
         /// <param name="id">Initial value of the Id property.</param>
-        /// <param name="name">Initial value of the Name property.</param>
-        public static ActivationMethod CreateActivationMethod(global::System.Int32 id, global::System.String name)
+        public static ActivationMethod CreateActivationMethod(global::System.Int32 id)
         {
             ActivationMethod activationMethod = new ActivationMethod();
             activationMethod.Id = id;
-            activationMethod.Name = name;
             return activationMethod;
         }
 
@@ -348,7 +346,7 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
         public global::System.String Name
         {
@@ -360,7 +358,7 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
             {
                 OnNameChanging(value);
                 ReportPropertyChanging("Name");
-                _Name = StructuralObject.SetValidValue(value, false);
+                _Name = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("Name");
                 OnNameChanged();
             }
@@ -1256,14 +1254,14 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// <summary>
         /// Create a new Session object.
         /// </summary>
-        /// <param name="id">Initial value of the Id property.</param>
+        /// <param name="sessionId">Initial value of the SessionId property.</param>
         /// <param name="clientSessionId">Initial value of the ClientSessionId property.</param>
         /// <param name="startTime">Initial value of the StartTime property.</param>
         /// <param name="userId">Initial value of the UserId property.</param>
-        public static Session CreateSession(global::System.Int32 id, global::System.Int32 clientSessionId, global::System.DateTime startTime, global::System.Int32 userId)
+        public static Session CreateSession(global::System.Int32 sessionId, global::System.Int64 clientSessionId, global::System.DateTime startTime, global::System.Int32 userId)
         {
             Session session = new Session();
-            session.Id = id;
+            session.SessionId = sessionId;
             session.ClientSessionId = clientSessionId;
             session.StartTime = startTime;
             session.UserId = userId;
@@ -1278,34 +1276,34 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 Id
+        public global::System.Int32 SessionId
         {
             get
             {
-                return _Id;
+                return _SessionId;
             }
             set
             {
-                if (_Id != value)
+                if (_SessionId != value)
                 {
-                    OnIdChanging(value);
-                    ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("Id");
-                    OnIdChanged();
+                    OnSessionIdChanging(value);
+                    ReportPropertyChanging("SessionId");
+                    _SessionId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("SessionId");
+                    OnSessionIdChanged();
                 }
             }
         }
-        private global::System.Int32 _Id;
-        partial void OnIdChanging(global::System.Int32 value);
-        partial void OnIdChanged();
+        private global::System.Int32 _SessionId;
+        partial void OnSessionIdChanging(global::System.Int32 value);
+        partial void OnSessionIdChanged();
     
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.Int32 ClientSessionId
+        public global::System.Int64 ClientSessionId
         {
             get
             {
@@ -1320,8 +1318,8 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
                 OnClientSessionIdChanged();
             }
         }
-        private global::System.Int32 _ClientSessionId;
-        partial void OnClientSessionIdChanging(global::System.Int32 value);
+        private global::System.Int64 _ClientSessionId;
+        partial void OnClientSessionIdChanging(global::System.Int64 value);
         partial void OnClientSessionIdChanged();
     
         /// <summary>

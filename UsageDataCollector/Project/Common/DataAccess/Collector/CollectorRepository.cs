@@ -19,6 +19,19 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
             return Context.Users.FirstOrDefault(u => u.AssociatedGuid == guid);
         }
 
+        public IEnumerable<string> GetEnvironmentDataNames()
+        {
+            return Context.EnvironmentDataNames.Select(dn => dn.Name);
+        }
 
+        public IEnumerable<string> GetActivationMethodNames()
+        {
+            return Context.ActivationMethods.Select(am => am.Name);
+        }
+
+        public IEnumerable<string> GetFeatureNames()
+        {
+            return Context.Features.Select(f => f.Name);
+        }
     }
 }
