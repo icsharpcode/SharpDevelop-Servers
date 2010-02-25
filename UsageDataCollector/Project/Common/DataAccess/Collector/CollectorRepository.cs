@@ -48,5 +48,15 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         {
             return Context.Features.Select(f => f);
         }
+
+        public IEnumerable<string> GetExceptionGroupFingerprintHashes()
+        {
+            return Context.ExceptionGroups.Select(eg => eg.TypeFingerprintSha256Hash);
+        }
+
+        public IEnumerable<ExceptionGroup> GetExceptionGroups()
+        {
+            return Context.ExceptionGroups.Select(g => g);
+        }
     }
 }

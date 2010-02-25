@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 {
@@ -61,6 +62,26 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
                 while ((line = r.ReadLine()) != null)
                     yield return line;
             }
+        }
+
+        public static string GetFunctionName(string stackTraceLine)
+        {
+            int pos = stackTraceLine.IndexOf('(');
+            if (pos > 0)
+                return stackTraceLine.Substring(0, pos);
+            else
+                return stackTraceLine;
+        }
+
+        public static string CalculateFingerprintHash(string fingerprint)
+        {
+            SHA256Managed sh = new SHA256Managed();
+            byte[] request = UTF8Encoding.UTF8.GetBytes(fingerprint);
+            
+            sh.Initialize();
+            byte[] hash = sh.ComputeHash(request, 0, request.Length);
+
+            return Convert.ToBase64String(hash);
         }
     }
 }

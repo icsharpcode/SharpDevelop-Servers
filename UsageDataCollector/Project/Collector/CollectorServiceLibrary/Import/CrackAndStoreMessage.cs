@@ -12,6 +12,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
     {
         UsageDataMessage message = null;
         CollectorRepository repository = null;
+        List<ExceptionImport> denormalisedExceptions = null;
 
         public CrackAndStoreMessage(UsageDataMessage msg, CollectorRepository repo)
         {
@@ -33,7 +34,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
             PreProcessEnvironmentDataNames();
             PreProcessActivationMethods();
             PreProcessFeatures();
-            // TODO: Exceptions
+            PreProcessExceptions();
 
             User modelUser = repository.FindUserByGuid(userGuid);
             if (null == modelUser)
@@ -99,6 +100,26 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 
             foreach (var fue in insertFeatureUse)
                 repository.Context.FeatureUses.AddObject(fue);
+
+            if (null != denormalisedExceptions)
+            {
+                List<ExceptionGroup> storedExGroups = repository.GetExceptionGroups().ToList(); // cacheable
+
+                var insertExceptions = (from e in denormalisedExceptions
+                                        join g in storedExGroups on e.FingerprintHash equals g.TypeFingerprintSha256Hash
+                                        join storedSession in newSessions on e.ClientSessionId equals storedSession.ClientSessionId
+                                        select new ICSharpCode.UsageDataCollector.DataAccess.Collector.Exception()
+                                        {
+                                            ExceptionGroupId = g.Id,
+                                            SessionId = storedSession.Id,
+                                            Stacktrace = e.StackTrace,
+                                            ThrownAt = e.Time,
+                                            IsFirstInSession = e.IsFirstInSession
+                                        });
+
+                foreach (var e in insertExceptions)
+                    repository.Context.Exceptions.AddObject(e);
+            }
 
             repository.Context.SaveChanges(); // Save #3
 
@@ -190,5 +211,46 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
             }
         }
 
+        protected void PreProcessExceptions()
+        {
+            List<ExceptionImport> exceptions = (from s in message.Sessions
+                                                from e in s.Exceptions
+                                                select new ExceptionImport(e)
+                                                {
+                                                    ClientSessionId = s.SessionID
+                                                }).ToList();
+
+            if (0 == exceptions.Count) return; // no exceptions reported, denormalisedExceptions remains null
+
+            List<string> distinctMsgExceptionGroups = (from e in exceptions
+                                                       select e.FingerprintHash).Distinct().ToList();
+
+            List<string> knownExceptionGroups = repository.GetExceptionGroupFingerprintHashes().ToList(); // cacheable
+            List<string> missing = distinctMsgExceptionGroups.Except(knownExceptionGroups).ToList();
+
+            if (missing.Count > 0)
+            {
+                List<ExceptionImport> groupsToAdd = (from e in exceptions
+                                                     join m in missing on e.FingerprintHash equals m
+                                                     select e).Distinct(new ExceptionImportGroupEqualityComparer()).ToList();
+
+                foreach (ExceptionImport imp in groupsToAdd)
+                {
+                    ExceptionGroup modelGroup = new ExceptionGroup()
+                    {
+                        ExceptionFingerprint = imp.Fingerprint,
+                        ExceptionLocation = imp.Location,
+                        ExceptionType = imp.Type,
+                        TypeFingerprintSha256Hash = imp.FingerprintHash
+                    };
+
+                    repository.Context.ExceptionGroups.AddObject(modelGroup);
+                }
+
+                repository.Context.SaveChanges();
+            }
+
+            this.denormalisedExceptions = exceptions;
+        }
     }
 }
