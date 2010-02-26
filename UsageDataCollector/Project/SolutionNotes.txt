@@ -1,0 +1,37 @@
+
+
+** TODO (unordered)
+
+
+db: Indexes for foreign key columns
+
+imp: Concurrency for type tables, user table (preparation for parallelization)
+
+imp: Logging (log4net, MEF?)
+
+imp: Caching (HttpContext.Cache w ICache interface [for later change to AppFabric])
+
+imp: Bulk Import cmd line parameters, parameter help
+
+imp: On message import failure, save message to the side for later inspection
+
+svc: IDisposable wrapper for transferred stream (make it easier for processor implementors)
+
+svc: Check for application key via app.config
+
+server: Copy logic (new messages to import location, store to side for import tests)
+
+
+
+** nice to have, low priority
+
+svc, imp: Check for duplicate messages
+
+imp: Windows Service
+
+imp: "Pipeline" based on WF with queueing
+
+imp: Windows Azure implementation of service
+
+
+
