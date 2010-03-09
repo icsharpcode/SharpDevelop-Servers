@@ -56,7 +56,9 @@
     <Compile Include="Import\ImportCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceImplementations\DisposableUploadStream.cs" />
+    <Compile Include="ServiceImplementations\NilUploadService.cs" />
     <Compile Include="ServiceImplementations\StoreLocallyUploadService.cs" />
+    <Compile Include="ServiceImplementations\UploadServiceConstants.cs" />
     <Compile Include="UsageDataCollectorService.cs" />
     <Compile Include="Utility\FileHelpers.cs" />
   </ItemGroup>

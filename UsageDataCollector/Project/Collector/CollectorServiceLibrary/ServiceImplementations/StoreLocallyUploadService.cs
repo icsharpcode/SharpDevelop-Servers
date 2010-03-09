@@ -16,12 +16,17 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.ServiceImplementations
 
         public void UploadUsageData(UDCUploadRequest request)
         {
-            string fileName = request.ApplicationKey;
-            // TODO: verify application key
+            string sentAppKey = request.ApplicationKey;
+            string storedAppKey = ConfigurationManager.AppSettings[UploadServiceConstants.AppSettings_ApplicationKey];
+
+            if (0 != String.Compare(sentAppKey, storedAppKey, true))
+            {
+                // Invalid application key was sent, do not store message
+                return;
+            }
 
             string filePath = ConfigurationManager.AppSettings[appSettingsDropDirectoryKey] +
                                         Guid.NewGuid().ToString() + fileExtension;
-
 
             using (DisposableUploadStream us = new DisposableUploadStream(request.UsageData))
             {
