@@ -8,4 +8,5 @@
 
     <h2>Usage Data Analysis Website</h2>
 
+	<%=Html.ActionLink("Sessions", "Index", "Session") %>
 </asp:Content>
