@@ -11,9 +11,9 @@ namespace BulkImporter
     {
         static void Main(string[] args)
         {
-            // BulkImport.SketchOut();
+            BulkImport.SketchOut();
 
-            BulkImport.ReadMessagesFromDirectory(@"D:\Daten\SharpDevelop\trunk\SharpDevelopServers\UsageDataCollector\SampleData\", true);
+            // BulkImport.ReadMessagesFromDirectory(@"D:\Daten\SharpDevelop\trunk\SharpDevelopServers\UsageDataCollector\SampleData\", true);
         }
     }
 }

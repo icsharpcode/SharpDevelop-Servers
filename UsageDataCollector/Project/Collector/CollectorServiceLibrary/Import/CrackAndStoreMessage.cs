@@ -30,23 +30,9 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
                 return;
             }
 
-            // Preprocessing of type tables (don't insert any usage data unless type updates went through properly)
-            PreProcessEnvironmentDataNames();
-            PreProcessActivationMethods();
-            PreProcessFeatures();
-            PreProcessExceptions();
+            PreProcessTypes();
 
-            User modelUser = repository.FindUserByGuid(userGuid);
-            if (null == modelUser)
-            {
-                modelUser = new User()
-                {
-                    AssociatedGuid = userGuid
-                };
-
-                repository.Context.Users.AddObject(modelUser);
-                repository.Context.SaveChanges(); // Save #1
-            }
+            int userId = repository.FindOrInsertUserByGuid(userGuid);
 
             List<Session> newSessions = new List<Session>();
             foreach (UsageDataSession msgSession in message.Sessions)
@@ -56,7 +42,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
                     ClientSessionId = msgSession.SessionID,
                     StartTime = msgSession.StartTime,
                     EndTime = msgSession.EndTime,
-                    UserId = modelUser.Id
+                    UserId = userId
                 };
 
                 newSessions.Add(modelSession);
@@ -125,6 +111,15 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 
         }
 
+        private void PreProcessTypes()
+        {
+            // Preprocessing of type tables (don't insert any usage data unless type updates went through properly)
+            PreProcessEnvironmentDataNames();
+            PreProcessActivationMethods();
+            PreProcessFeatures();
+            PreProcessExceptions();
+        }
+
         protected void PreProcessEnvironmentDataNames()
         {
             List<string> distinctMsgEnvProperties = (from s in message.Sessions
@@ -150,10 +145,12 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
                         repository.Context.EnvironmentDataNames.AddObject(modelEdn);
                     }
 
-                    repository.Context.SaveChanges();
+                    repository.IgnoreDuplicateKeysOnSaveChanges<EnvironmentDataName>();
                 }
             }
         }
+
+
 
         protected void PreProcessActivationMethods()
         {
@@ -178,7 +175,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
                         repository.Context.ActivationMethods.AddObject(modelAM);
                     }
 
-                    repository.Context.SaveChanges();
+                    repository.IgnoreDuplicateKeysOnSaveChanges<ActivationMethod>();
                 }
             }
         }
@@ -206,7 +203,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
                         repository.Context.Features.AddObject(modelFeature);
                     }
 
-                    repository.Context.SaveChanges();
+                    repository.IgnoreDuplicateKeysOnSaveChanges<Feature>();
                 }
             }
         }
@@ -259,7 +256,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
                     repository.Context.ExceptionGroups.AddObject(modelGroup);
                 }
 
-                repository.Context.SaveChanges();
+                repository.IgnoreDuplicateKeysOnSaveChanges<ExceptionGroup>();
             }
 
             this.denormalisedExceptions = exceptions;
