@@ -22,9 +22,13 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.ServiceImplementations
             string filePath = ConfigurationManager.AppSettings[appSettingsDropDirectoryKey] +
                                         Guid.NewGuid().ToString() + fileExtension;
 
-            if (!FileHelpers.StoreUploadedStream(filePath, request.UsageData))
+
+            using (DisposableUploadStream us = new DisposableUploadStream(request.UsageData))
             {
-                throw new Exception("An error occured");
+                if (!FileHelpers.StoreUploadedStream(filePath, us.Stream))
+                {
+                    throw new Exception("An error occured");
+                }
             }
         }
     }

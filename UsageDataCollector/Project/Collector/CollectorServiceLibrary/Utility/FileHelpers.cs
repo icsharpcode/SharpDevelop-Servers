@@ -38,11 +38,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Utility
                     fs.Dispose();
                 }
 
-                if (null != usageData)
-                {
-                    usageData.Close();
-                    usageData.Dispose();
-                }
+                // usageData stream is closed by using-idisposable pattern outside this method
             }
 
             return bUploadSucceeded;
