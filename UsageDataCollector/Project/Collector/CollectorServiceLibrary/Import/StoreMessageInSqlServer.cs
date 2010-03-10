@@ -8,13 +8,13 @@ using ICSharpCode.UsageDataCollector.DataAccess.Collector;
 
 namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 {
-    public class CrackAndStoreMessage
+    public class StoreMessageInSqlServer
     {
         UsageDataMessage message = null;
         CollectorRepository repository = null;
         List<ExceptionImport> denormalisedExceptions = null;
 
-        public CrackAndStoreMessage(UsageDataMessage msg, CollectorRepository repo)
+        public StoreMessageInSqlServer(UsageDataMessage msg, CollectorRepository repo)
         {
             message = msg;
             repository = repo;

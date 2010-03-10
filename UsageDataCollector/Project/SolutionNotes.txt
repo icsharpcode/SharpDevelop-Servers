@@ -27,3 +27,8 @@ imp: Windows Azure implementation of service
 
 
 
+// Dictionary<string,int> features = context.Features.ToDictionary(f => f.Name, f => f.Id);
+// var features = context.Features.ToList().AsReadOnly();
+// features: a, b, c
+// usage features: b, c, d --> find d
+// List<string> knownFeatures = context.Features.Select(f => f.Name).ToList();

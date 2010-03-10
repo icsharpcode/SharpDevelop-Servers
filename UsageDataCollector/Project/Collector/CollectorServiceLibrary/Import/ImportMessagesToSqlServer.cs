@@ -9,39 +9,30 @@ using System.IO;
 
 namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 {
-    public class BulkImport
+    public class ImportMessagesToSqlServer
     {
-        // list directory
-        // etl each file separately
-            // load file
-            // match all four types & insert (if necessary); match in memory (performance)
-            // match user & insert (if necessary); via sproc (Cache issue)
-            // load session and values into database
-        // delete file when done & no exceptions
-        public static void SketchOut()
+        public static void ImportSingleMessage(string filename)
         {
-            // wrong schema errors by moving contracts to /contracts namespace
-            UsageDataMessage message =
-                FileImporter.ReadMessage(@"D:\Daten\SharpDevelop\trunk\SharpDevelopServers\UsageDataCollector\SampleData\_Debugger_Exception_ab7a92f4-3d0e-44ac-afc9-a4d6090603b0.xml.gz");
+            UsageDataMessage message = FileImporter.ReadMessage(filename);
 
             using (var context = CollectorRepository.CreateContext())
             {
                 CollectorRepository repo = new CollectorRepository();
                 repo.Context = context;
 
-                CrackAndStoreMessage processor = new CrackAndStoreMessage(message, repo);
+                StoreMessageInSqlServer processor = new StoreMessageInSqlServer(message, repo);
                 processor.ProcessMessage();
-
-
-                // Dictionary<string,int> features = context.Features.ToDictionary(f => f.Name, f => f.Id);
-                // var features = context.Features.ToList().AsReadOnly();
-                // features: a, b, c
-                // usage features: b, c, d --> find d
-                // List<string> knownFeatures = context.Features.Select(f => f.Name).ToList();
             }
         }
 
-        public static void ReadMessagesFromDirectory(string directory, bool KeepFile)
+        // list directory
+        // etl each file separately
+        // load file
+        // match all four types & insert (if necessary); match in memory (performance)
+        // match user & insert (if necessary); via sproc (Cache issue)
+        // load session and values into database
+        // delete file when done & no exceptions
+        public static void ImportMessagesFromDirectory(string directory, bool KeepFile)
         {
             using (var context = CollectorRepository.CreateContext())
             {
@@ -61,7 +52,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
                         continue;
                     }
 
-                    CrackAndStoreMessage processor = new CrackAndStoreMessage(message, repo);
+                    StoreMessageInSqlServer processor = new StoreMessageInSqlServer(message, repo);
                     processor.ProcessMessage();
                 }
             }

@@ -27,9 +27,9 @@ namespace BulkImporter
             }
 
             // -- uncomment following line for simple testing purposes only
-            // BulkImport.SketchOut(); 
+            // ImportMessagesToSqlServer.ImportSingleMessage(@"D:\Daten\SharpDevelop\trunk\SharpDevelopServers\UsageDataCollector\SampleData\_Debugger_Exception_ab7a92f4-3d0e-44ac-afc9-a4d6090603b0.xml.gz");
 
-            BulkImport.ReadMessagesFromDirectory(messageDirectory, true);
+            ImportMessagesToSqlServer.ImportMessagesFromDirectory(messageDirectory, true);
         }
 
         private static void ShowUsage()

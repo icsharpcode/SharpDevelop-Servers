@@ -50,8 +50,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Import\BulkImport.cs" />
-    <Compile Include="Import\CrackAndStoreMessage.cs" />
+    <Compile Include="Import\ImportMessagesToSqlServer.cs" />
+    <Compile Include="Import\StoreMessageInSqlServer.cs" />
     <Compile Include="Import\ExceptionImport.cs" />
     <Compile Include="Import\ExceptionHelpers.cs" />
     <Compile Include="Import\ExceptionImportGroupEqualityComparer.cs" />
