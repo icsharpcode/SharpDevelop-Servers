@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Import Project="ICSharpCode.UDC.Tasks.targets"/>
+
+	<PropertyGroup>
+		<DirectoryToReadMessagesFrom>d:\Test</DirectoryToReadMessagesFrom>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<MessageFiles Include="$(DirectoryToReadMessagesFrom)\*.xml.gz" />
+	</ItemGroup>
+
+</Project>

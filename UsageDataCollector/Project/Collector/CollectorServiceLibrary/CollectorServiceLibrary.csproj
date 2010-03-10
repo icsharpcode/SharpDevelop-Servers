@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Tasks.v4.0" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -59,11 +62,14 @@
     <Compile Include="ServiceImplementations\NilUploadService.cs" />
     <Compile Include="ServiceImplementations\StoreLocallyUploadService.cs" />
     <Compile Include="ServiceImplementations\UploadServiceConstants.cs" />
+    <Compile Include="Tasks\ImportMessageFiles.cs" />
     <Compile Include="UsageDataCollectorService.cs" />
     <Compile Include="Utility\FileHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Tasks\ICSharpCode.UDC.Tasks.targets" />
+    <None Include="Tasks\Import.proj" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\SharpDevelop\src\AddIns\Misc\UsageDataCollector\UsageDataCollector\UsageDataCollector.csproj">

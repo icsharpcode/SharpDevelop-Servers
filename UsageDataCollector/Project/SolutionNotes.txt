@@ -13,8 +13,6 @@ imp: Bulk Import cmd line parameters, parameter help
 
 imp: On message import failure, save message to the side for later inspection
 
-svc: Check for application key via app.config
-
 server: Copy logic (new messages to import location, store to side for import tests)
 
 
