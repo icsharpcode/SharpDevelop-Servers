@@ -51,7 +51,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 
             repository.Context.SaveChanges(); // Save #2
 
-            List<EnvironmentDataName> storedEnvNames = ImportCache.GetEnvironmentDataNames(repository).ToList();
+            List<EnvironmentDataName> storedEnvNames = ImportCache.GetEnvironmentDataNames(repository);
 
             var insertEnvProperties = (from s in message.Sessions
                                        from prop in s.EnvironmentProperties
@@ -67,8 +67,8 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
             foreach (var ede in insertEnvProperties)
                 repository.Context.EnvironmentDatas.AddObject(ede);
 
-            List<ActivationMethod> storedActivationMethods = ImportCache.GetActivationMethods(repository).ToList();
-            List<Feature> storedFeatures = ImportCache.GetFeatures(repository).ToList();
+            List<ActivationMethod> storedActivationMethods = ImportCache.GetActivationMethods(repository);
+            List<Feature> storedFeatures = ImportCache.GetFeatures(repository);
 
             var insertFeatureUse = (from s in message.Sessions
                                     from fu in s.FeatureUses
@@ -89,7 +89,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 
             if (null != denormalisedExceptions)
             {
-                List<ExceptionGroup> storedExGroups = ImportCache.GetExceptionGroups(repository).ToList();
+                List<ExceptionGroup> storedExGroups = ImportCache.GetExceptionGroups(repository);
 
                 var insertExceptions = (from e in denormalisedExceptions
                                         join g in storedExGroups on e.FingerprintHash equals g.TypeFingerprintSha256Hash
@@ -129,7 +129,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
             // did we receive environment data at all?
             if (distinctMsgEnvProperties.Count > 0)
             {
-                List<string> knownDataNames = ImportCache.GetEnvironmentDataNameNames(repository).ToList();
+                List<string> knownDataNames = ImportCache.GetEnvironmentDataNameNames(repository);
                 List<string> missing = distinctMsgEnvProperties.Except(knownDataNames).ToList();
 
                 // this happens rarely for environment data names
@@ -159,7 +159,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 
             if (distinctMsgActivationMethods.Count > 0)
             {
-                List<string> knownActivationMethods = ImportCache.GetActivationMethodNames(repository).ToList();
+                List<string> knownActivationMethods = ImportCache.GetActivationMethodNames(repository);
                 List<string> missing = distinctMsgActivationMethods.Except(knownActivationMethods).ToList();
 
                 if (missing.Count > 0)
@@ -188,7 +188,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 
             if (distinctMsgFeatures.Count > 0)
             {
-                List<string> knownFeatures = ImportCache.GetFeatureNames(repository).ToList();
+                List<string> knownFeatures = ImportCache.GetFeatureNames(repository);
                 List<string> missing = distinctMsgFeatures.Except(knownFeatures).ToList();
 
                 if (missing.Count > 0)
@@ -235,7 +235,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
             List<string> distinctMsgExceptionGroups = (from e in exceptions
                                                        select e.FingerprintHash).Distinct().ToList();
 
-            List<string> knownExceptionGroups = ImportCache.GetExceptionGroupFingerprintHashes(repository).ToList();
+            List<string> knownExceptionGroups = ImportCache.GetExceptionGroupFingerprintHashes(repository);
             List<string> missing = distinctMsgExceptionGroups.Except(knownExceptionGroups).ToList();
 
             if (missing.Count > 0)

@@ -21,26 +21,26 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
         private static string cacheGetExceptionGroupFingerprintHashes = "GetExceptionGroupFingerprintHashes";
         private static string cacheGetExceptionGroups = "GetExceptionGroups";
 
-        public static IEnumerable<string> GetEnvironmentDataNameNames(CollectorRepository repository)
+        public static List<string> GetEnvironmentDataNameNames(CollectorRepository repository)
         {
-            IEnumerable<string> cached = HttpRuntime.Cache[cacheGetEnvironmentDataNameNames] as IEnumerable<string>;
+            List<string> cached = HttpRuntime.Cache[cacheGetEnvironmentDataNameNames] as List<string>;
 
             if (null == cached)
             {
-                cached = repository.GetEnvironmentDataNameNames();
+                cached = repository.GetEnvironmentDataNameNames().ToList();
                 HttpRuntime.Cache.Insert(cacheGetEnvironmentDataNameNames, cached);
             }
 
             return cached;
         }
 
-        public static IEnumerable<EnvironmentDataName> GetEnvironmentDataNames(CollectorRepository repository)
+        public static List<EnvironmentDataName> GetEnvironmentDataNames(CollectorRepository repository)
         {
-            IEnumerable<EnvironmentDataName> cached = HttpRuntime.Cache[cacheGetEnvironmentDataNames] as IEnumerable<EnvironmentDataName>;
+            List<EnvironmentDataName> cached = HttpRuntime.Cache[cacheGetEnvironmentDataNames] as List<EnvironmentDataName>;
 
             if (null == cached)
             {
-                cached = repository.GetEnvironmentDataNames();
+                cached = repository.GetEnvironmentDataNames().ToList();
                 HttpRuntime.Cache.Insert(cacheGetEnvironmentDataNames, cached);
             }
 
@@ -53,26 +53,26 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
             HttpRuntime.Cache.Remove(cacheGetEnvironmentDataNames);
         }
 
-        public static IEnumerable<string> GetActivationMethodNames(CollectorRepository repository)
+        public static List<string> GetActivationMethodNames(CollectorRepository repository)
         {
-            IEnumerable<string> cached = HttpRuntime.Cache[cacheGetActivationMethodNames] as IEnumerable<string>;
+            List<string> cached = HttpRuntime.Cache[cacheGetActivationMethodNames] as List<string>;
 
             if (null == cached)
             {
-                cached = repository.GetActivationMethodNames();
+                cached = repository.GetActivationMethodNames().ToList();
                 HttpRuntime.Cache.Insert(cacheGetActivationMethodNames, cached);
             }
 
             return cached;
         }
 
-        public static IEnumerable<ActivationMethod> GetActivationMethods(CollectorRepository repository)
+        public static List<ActivationMethod> GetActivationMethods(CollectorRepository repository)
         {
-            IEnumerable<ActivationMethod> cached = HttpRuntime.Cache[cacheGetActivationMethods] as IEnumerable<ActivationMethod>;
+            List<ActivationMethod> cached = HttpRuntime.Cache[cacheGetActivationMethods] as List<ActivationMethod>;
 
             if (null == cached)
             {
-                cached = repository.GetActivationMethods();
+                cached = repository.GetActivationMethods().ToList();
                 HttpRuntime.Cache.Insert(cacheGetActivationMethods, cached);
             }
 
@@ -85,26 +85,26 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
             HttpRuntime.Cache.Remove(cacheGetActivationMethods);
         }
 
-        public static IEnumerable<string> GetFeatureNames(CollectorRepository repository)
+        public static List<string> GetFeatureNames(CollectorRepository repository)
         {
-            IEnumerable<string> cached = HttpRuntime.Cache[cacheGetFeatureNames] as IEnumerable<string>;
+            List<string> cached = HttpRuntime.Cache[cacheGetFeatureNames] as List<string>;
 
             if (null == cached)
             {
-                cached = repository.GetFeatureNames();
+                cached = repository.GetFeatureNames().ToList();
                 HttpRuntime.Cache.Insert(cacheGetFeatureNames, cached);
             }
 
             return cached;
         }
 
-        public static IEnumerable<Feature> GetFeatures(CollectorRepository repository)
+        public static List<Feature> GetFeatures(CollectorRepository repository)
         {
-            IEnumerable<Feature> cached = HttpRuntime.Cache[cacheGetFeatures] as IEnumerable<Feature>;
+            List<Feature> cached = HttpRuntime.Cache[cacheGetFeatures] as List<Feature>;
 
             if (null == cached)
             {
-                cached = repository.GetFeatures();
+                cached = repository.GetFeatures().ToList();
                 HttpRuntime.Cache.Insert(cacheGetFeatures, cached);
             }
 
@@ -117,26 +117,26 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
             HttpRuntime.Cache.Remove(cacheGetFeatures);
         }
 
-        public static IEnumerable<string> GetExceptionGroupFingerprintHashes(CollectorRepository repository)
+        public static List<string> GetExceptionGroupFingerprintHashes(CollectorRepository repository)
         {
-            IEnumerable<string> cached = HttpRuntime.Cache[cacheGetExceptionGroupFingerprintHashes] as IEnumerable<string>;
+            List<string> cached = HttpRuntime.Cache[cacheGetExceptionGroupFingerprintHashes] as List<string>;
 
             if (null == cached)
             {
-                cached = repository.GetExceptionGroupFingerprintHashes();
+                cached = repository.GetExceptionGroupFingerprintHashes().ToList();
                 HttpRuntime.Cache.Insert(cacheGetExceptionGroupFingerprintHashes, cached);
             }
 
             return cached;
         }
 
-        public static IEnumerable<ExceptionGroup> GetExceptionGroups(CollectorRepository repository)
+        public static List<ExceptionGroup> GetExceptionGroups(CollectorRepository repository)
         {
-            IEnumerable<ExceptionGroup> cached = HttpRuntime.Cache[cacheGetExceptionGroups] as IEnumerable<ExceptionGroup>;
+            List<ExceptionGroup> cached = HttpRuntime.Cache[cacheGetExceptionGroups] as List<ExceptionGroup>;
 
             if (null == cached)
             {
-                cached = repository.GetExceptionGroups();
+                cached = repository.GetExceptionGroups().ToList();
                 HttpRuntime.Cache.Insert(cacheGetExceptionGroups, cached);
             }
 
