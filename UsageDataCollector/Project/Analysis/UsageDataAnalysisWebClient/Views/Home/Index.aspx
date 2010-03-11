@@ -9,4 +9,5 @@
     <h2>Usage Data Analysis Website</h2>
 
 	<%=Html.ActionLink("Sessions", "Index", "Session") %>
+	<%=Html.ActionLink("ExceptionGroups","Index", "ExceptionGroup") %>
 </asp:Content>
