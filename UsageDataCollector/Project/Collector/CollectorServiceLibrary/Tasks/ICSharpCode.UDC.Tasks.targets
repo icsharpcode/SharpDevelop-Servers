@@ -7,4 +7,28 @@
 
   <UsingTask AssemblyFile="$(MSBuildUDCTasksLib)" TaskName="ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks.ImportMessageFiles" />
 
+  <ItemGroup>
+    <MessageFiles Include="$(SourceMessageLocation)\*.xml.gz" />
+  </ItemGroup>
+
+  <Target Name="ImportTarget">
+    <Copy SourceFiles="@(MessageFiles)" DestinationFolder="$(ImportMessageLocation)">
+      <Output TaskParameter="CopiedFiles" ItemName="MessagesToImport"/>
+    </Copy>
+
+    <Copy SourceFiles="@(MessageFiles)" 
+          DestinationFolder="$(AllImportedMessagesLocation)" 
+          Condition="'$(AllImportedMessagesLocation)'!=''" />
+
+    <Delete Files="@(MessageFiles)" />
+
+    <ImportMessageFiles MessagesToImport="@(MessagesToImport)" ConnectionString="$(ConnectionString)">
+      <Output TaskParameter="FailedToImport" ItemName="MessagesFailedToImport"/>
+    </ImportMessageFiles>
+
+    <Copy SourceFiles="@(MessagesFailedToImport)" DestinationFolder="$(FailedMessageLocation)" />
+
+    <Delete Files="@(MessagesToImport)" />
+  </Target>
+
 </Project>

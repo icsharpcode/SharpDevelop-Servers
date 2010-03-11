@@ -68,8 +68,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Tasks\ICSharpCode.UDC.Tasks.targets" />
-    <None Include="Tasks\Import.proj" />
+    <None Include="Tasks\ICSharpCode.UDC.Tasks.targets">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Tasks\Import.proj">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Tasks\Run.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\..\SharpDevelop\src\AddIns\Misc\UsageDataCollector\UsageDataCollector\UsageDataCollector.csproj">

@@ -5,6 +5,9 @@ using System.Text;
 
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
+using ICSharpCode.UsageDataCollector.DataAccess.Collector;
+using ICSharpCode.UsageDataCollector.Contracts;
+using ICSharpCode.UsageDataCollector.ServiceLibrary.Import;
 
 namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 {
@@ -50,7 +53,40 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
                 return false;
             }
 
-            // TODO: Implement actual logic
+            // Import logic built for MSBuild
+            using (var context = CollectorRepository.CreateContext(connectionString.ItemSpec))
+            {
+                CollectorRepository repo = new CollectorRepository();
+                repo.Context = context;
+
+                foreach (ITaskItem msgFilename in messagesToImport)
+                {
+                    UsageDataMessage message = null;
+
+                    try
+                    {
+                        message = FileImporter.ReadMessage(msgFilename.ItemSpec);
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Log.LogErrorFromException(ex);
+                        messagesFailedToImport.Add(new TaskItem(msgFilename.ItemSpec));
+
+                        continue;
+                    }
+
+                    try
+                    {
+                        StoreMessageInSqlServer processor = new StoreMessageInSqlServer(message, repo);
+                        processor.ProcessMessage();
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Log.LogErrorFromException(ex);
+                        messagesFailedToImport.Add(new TaskItem(msgFilename.ItemSpec));
+                    }
+                }
+            }
 
             return result;
         }

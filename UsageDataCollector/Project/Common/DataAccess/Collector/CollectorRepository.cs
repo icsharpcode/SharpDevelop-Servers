@@ -14,6 +14,11 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
             return new UDCContext();
         }
 
+        public static UDCContext CreateContext(string connectionString)
+        {
+            return new UDCContext(connectionString);
+        }
+
         public User FindUserByGuid(string guid)
         {
             return Context.Users.FirstOrDefault(u => u.AssociatedGuid == guid);
