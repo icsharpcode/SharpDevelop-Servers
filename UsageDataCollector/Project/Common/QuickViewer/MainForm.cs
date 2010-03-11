@@ -10,6 +10,7 @@ using ICSharpCode.UsageDataCollector.ServiceLibrary.Import;
 using ICSharpCode.UsageDataCollector.Contracts;
 using System.Runtime.Serialization;
 using System.IO;
+using System.Xml;
 
 namespace QuickViewer
 {
@@ -32,15 +33,15 @@ namespace QuickViewer
 
                     UsageDataMessage currentMessage = FileImporter.ReadMessage(filename);
 
-                    DataContractSerializer dataContractSerializer = new DataContractSerializer(typeof(UsageDataMessage));
-                    using (MemoryStream memoryStream = new MemoryStream())
+                    using (StringWriter w = new StringWriter())
                     {
-                        dataContractSerializer.WriteObject(memoryStream, currentMessage);
-                        byte[] data = new byte[memoryStream.Length];
-                        Array.Copy(memoryStream.GetBuffer(), data, data.Length);
-                        string message = Encoding.UTF8.GetString(data);
-
-                        FileContents.Text = message;
+                        using (XmlTextWriter xmlWriter = new XmlTextWriter(w))
+                        {
+                            xmlWriter.Formatting = Formatting.Indented;
+                            DataContractSerializer serializer = new DataContractSerializer(typeof(UsageDataMessage));
+                            serializer.WriteObject(xmlWriter, currentMessage);
+                        }
+                        FileContents.Text = w.ToString();
                     }
                 }
             }
