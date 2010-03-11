@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <UsingTask AssemblyFile="$(MSBuildUDCTasksLib)" TaskName="ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks.ImportMessageFiles" />
+  <UsingTask AssemblyFile="$(MSBuildUDCTasksLib)" TaskName="ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks.ScrubMessageFiles" />
 
   <ItemGroup>
     <MessageFiles Include="$(SourceMessageLocation)\*.xml.gz" />

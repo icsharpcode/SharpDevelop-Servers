@@ -63,6 +63,7 @@
     <Compile Include="ServiceImplementations\StoreLocallyUploadService.cs" />
     <Compile Include="ServiceImplementations\UploadServiceConstants.cs" />
     <Compile Include="Tasks\ImportMessageFiles.cs" />
+    <Compile Include="Tasks\ScrubMessageFiles.cs" />
     <Compile Include="UsageDataCollectorService.cs" />
     <Compile Include="Utility\FileHelpers.cs" />
   </ItemGroup>
