@@ -6,6 +6,7 @@ using System.Text;
 using ICSharpCode.UsageDataCollector.Contracts;
 using ICSharpCode.UsageDataCollector.ServiceLibrary.Utility;
 using System.Configuration;
+using System.IO;
 
 namespace ICSharpCode.UsageDataCollector.ServiceLibrary.ServiceImplementations
 {
@@ -13,6 +14,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.ServiceImplementations
     {
         private static string appSettingsDropDirectoryKey = "StoreLocallyUploadService_DropDirectory";
         private static string fileExtension = ".xml.gz";
+        private static string uploadingFileExtension = ".xml.gz.uploading";
 
         public void UploadUsageData(UDCUploadRequest request)
         {
@@ -25,12 +27,20 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.ServiceImplementations
                 return;
             }
 
-            string filePath = ConfigurationManager.AppSettings[appSettingsDropDirectoryKey] +
-                                        Guid.NewGuid().ToString() + fileExtension;
+            string dropDirectory = ConfigurationManager.AppSettings[appSettingsDropDirectoryKey];
+            string fileGuidPart = Guid.NewGuid().ToString();
+            string uploadingFilePath = dropDirectory +  fileGuidPart + uploadingFileExtension;
+
+            string finalFilePath = dropDirectory + fileGuidPart + fileExtension;
 
             using (DisposableUploadStream us = new DisposableUploadStream(request.UsageData))
             {
-                if (!FileHelpers.StoreUploadedStream(filePath, us.Stream))
+                if (FileHelpers.StoreUploadedStream(uploadingFilePath, us.Stream))
+                {
+                    // mark it as uploaded successfully by giving it the final file extension
+                    File.Move(uploadingFileExtension, finalFilePath);
+                }
+                else
                 {
                     throw new Exception("An error occured");
                 }

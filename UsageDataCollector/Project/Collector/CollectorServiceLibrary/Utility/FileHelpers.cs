@@ -36,6 +36,11 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Utility
                 {
                     fs.Close();
                     fs.Dispose();
+
+                    if (!bUploadSucceeded)
+                    {
+                        File.Delete(localFileFullPath);
+                    }
                 }
 
                 // usageData stream is closed by using-idisposable pattern outside this method

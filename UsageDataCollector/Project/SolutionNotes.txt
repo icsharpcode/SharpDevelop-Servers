@@ -8,6 +8,8 @@ imp: Logging (log4net, MEF?)
 
 imp: Caching (HttpContext.Cache w ICache interface [for later change to AppFabric])
 
+imp: msbuild task for fixing schema & path (Regex.Replace(text, @" in \w[:].*$", ""))
+
 
 ** nice to have, low priority
 
