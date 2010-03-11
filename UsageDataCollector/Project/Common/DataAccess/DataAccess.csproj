@@ -43,6 +43,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analysis\AnalysisModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AnalysisModel.edmx</DependentUpon>
+    </Compile>
     <Compile Include="Collector\CollectorModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -51,9 +56,7 @@
     <Compile Include="Collector\CollectorRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Analysis\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EntityDeploy Include="Collector\CollectorModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -61,7 +64,13 @@
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
+    <EntityDeploy Include="Analysis\AnalysisModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>AnalysisModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
     <None Include="App.Config" />
+    <None Include="Properties\DataSources\ICSharpCode.UsageDataCollector.DataAccess.Analysis.UDCContext.datasource" />
+    <None Include="Properties\DataSources\ICSharpCode.UsageDataCollector.DataAccess.Collector.UDCContext.datasource" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

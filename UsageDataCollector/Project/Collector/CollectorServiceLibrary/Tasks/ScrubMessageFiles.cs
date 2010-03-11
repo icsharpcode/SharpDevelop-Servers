@@ -9,6 +9,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Xml;
 using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
 
 namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 {
@@ -22,6 +23,9 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
             get { return messagesToScrub; }
             set { messagesToScrub = value; }
         }
+
+        // finds full paths ("in " drive letter ":\" ...)
+        static readonly Regex stacktraceRegex = new Regex(@" in \w:\\.+$", RegexOptions.Multiline | RegexOptions.Compiled);
 
         public override bool Execute()
         {
@@ -41,11 +45,23 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 
                 if (null == message)
                 {
-                    Log.LogError("Error reading {}", filename);
+                    Log.LogError("Error reading {0}", filename);
                     continue;
                 }
 
-                // TODO: scrub the message
+                bool hasShownMessageForThisFile = false;
+                foreach (UsageDataException exception in message.Sessions.SelectMany(s => s.Exceptions))
+                {
+                    // Old SharpDevelop versions could upload stack trace information including full paths, which might
+                    // contain private data (e.g. C:\Users\USERNAME). We'll remove full paths from stack traces.
+                    // Newer UDC versions do not transmit paths anymore.
+                    exception.StackTrace = stacktraceRegex.Replace(exception.StackTrace, "");
+                    if (!hasShownMessageForThisFile)
+                    {
+                        Log.LogMessage("Removing potentially private information from " + filename);
+                        hasShownMessageForThisFile = true;
+                    }
+                }
 
                 SaveMessage(filename, message);
             }

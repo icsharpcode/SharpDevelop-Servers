@@ -23,6 +23,7 @@
 
     <Delete Files="@(MessageFiles)" />
 
+    <ScrubMessageFiles MessagesToScrub="@(MessagesToImport)"/>
     <ImportMessageFiles MessagesToImport="@(MessagesToImport)" ConnectionString="$(ConnectionString)">
       <Output TaskParameter="FailedToImport" ItemName="MessagesFailedToImport"/>
     </ImportMessageFiles>
