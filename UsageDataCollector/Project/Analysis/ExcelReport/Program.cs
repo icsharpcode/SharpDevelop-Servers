@@ -107,8 +107,8 @@ namespace ExcelReport
             
             // take one session per day from each user
             var sessionsQuery = from s in repository.Sessions
-                                group s by new { UserID = s.UserId, s.StartTime.Date } into g
-                                select g.First();
+                                group s by new { UserID = s.UserId, s.StartTime.Day, s.StartTime.Month, s.StartTime.Year } into g
+                                select g.FirstOrDefault();
             
             ChartObjects chartObjects = ws.ChartObjects();
 
