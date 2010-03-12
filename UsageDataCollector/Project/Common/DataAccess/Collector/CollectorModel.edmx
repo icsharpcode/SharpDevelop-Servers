@@ -9,6 +9,7 @@
           <EntitySet Name="ActivationMethods" EntityType="CollectorModel.Store.ActivationMethods" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EnvironmentData" EntityType="CollectorModel.Store.EnvironmentData" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EnvironmentDataNames" EntityType="CollectorModel.Store.EnvironmentDataNames" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="EnvironmentDataValues" EntityType="CollectorModel.Store.EnvironmentDataValues" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ExceptionGroups" EntityType="CollectorModel.Store.ExceptionGroups" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Exceptions" EntityType="CollectorModel.Store.Exceptions" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Features" EntityType="CollectorModel.Store.Features" store:Type="Tables" Schema="dbo" />
@@ -30,7 +31,7 @@
           <Property Name="EnvironmentDataId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="SessionId" Type="int" Nullable="false" />
           <Property Name="EnvironmentDataNameId" Type="int" Nullable="false" />
-          <Property Name="EnvironmentDataValue" Type="nvarchar" Nullable="false" MaxLength="255" />
+          <Property Name="EnvironmentDataValueId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="EnvironmentDataNames">
           <Key>
@@ -38,6 +39,13 @@
           </Key>
           <Property Name="EnvironmentDataNameId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="EnvironmentDataName" Type="nvarchar" Nullable="false" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="EnvironmentDataValues">
+          <Key>
+            <PropertyRef Name="EnvironmentDataValueId" />
+          </Key>
+          <Property Name="EnvironmentDataValueId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="EnvironmentDataValue" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="ExceptionGroups">
           <Key>
@@ -89,6 +97,10 @@
           <Property Name="StartTime" Type="datetime" Nullable="false" />
           <Property Name="EndTime" Type="datetime" />
           <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="AppVersionMajor" Type="int" />
+          <Property Name="AppVersionMinor" Type="int" />
+          <Property Name="AppVersionBuild" Type="int" />
+          <Property Name="AppVersionRevision" Type="int" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -102,25 +114,17 @@
     <edmx:ConceptualModels>
       <Schema Namespace="CollectorModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="UDCContext" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="EnvironmentDatas" EntityType="CollectorModel.EnvironmentData" />
           <EntitySet Name="EnvironmentDataNames" EntityType="CollectorModel.EnvironmentDataName" />
           <EntitySet Name="Features" EntityType="CollectorModel.Feature" />
           <EntitySet Name="FeatureUses" EntityType="CollectorModel.FeatureUse" />
           <EntitySet Name="Users" EntityType="CollectorModel.User" />
           <EntitySet Name="ExceptionGroups" EntityType="CollectorModel.ExceptionGroup" />
           <EntitySet Name="Exceptions" EntityType="CollectorModel.Exception" />
-          <EntitySet Name="Sessions" EntityType="CollectorModel.Session" />
           <EntitySet Name="ActivationMethods" EntityType="CollectorModel.ActivationMethod" />
+          <EntitySet Name="EnvironmentDatas" EntityType="CollectorModel.EnvironmentData" />
+          <EntitySet Name="EnvironmentDataValues" EntityType="CollectorModel.EnvironmentDataValue" />
+          <EntitySet Name="Sessions" EntityType="CollectorModel.Session" />
         </EntityContainer>
-        <EntityType Name="EnvironmentData">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="Int32" Name="SessionId" Nullable="false" />
-          <Property Type="Int32" Name="EnvironmentDataNameId" Nullable="false" />
-          <Property Type="String" Name="EnvironmentDataValue" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="EnvironmentDataName">
           <Key>
             <PropertyRef Name="Id" />
@@ -176,16 +180,6 @@
           <Property Type="String" Name="Stacktrace" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="Boolean" Name="IsFirstInSession" Nullable="false" />
         </EntityType>
-        <EntityType Name="Session">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" />
-          <Property Type="Int64" Name="ClientSessionId" Nullable="false" />
-          <Property Type="DateTime" Name="StartTime" Nullable="false" />
-          <Property Type="DateTime" Name="EndTime" />
-          <Property Type="Int32" Name="UserId" Nullable="false" />
-        </EntityType>
         <EntityType Name="ActivationMethod">
           <Key>
             <PropertyRef Name="Id" />
@@ -193,22 +187,42 @@
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Name" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="EnvironmentData">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="SessionId" Nullable="false" />
+          <Property Type="Int32" Name="EnvironmentDataNameId" Nullable="false" />
+          <Property Type="Int32" Name="EnvironmentDataValueId" Nullable="false" />
+        </EntityType>
+        <EntityType Name="EnvironmentDataValue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Session">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int64" Name="ClientSessionId" Nullable="false" />
+          <Property Type="DateTime" Name="StartTime" Nullable="false" />
+          <Property Type="DateTime" Name="EndTime" />
+          <Property Type="Int32" Name="UserId" Nullable="false" />
+          <Property Type="Int32" Name="AppVersionMajor" />
+          <Property Type="Int32" Name="AppVersionMinor" />
+          <Property Type="Int32" Name="AppVersionBuild" />
+          <Property Type="Int32" Name="AppVersionRevision" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="CollectorModelStoreContainer" CdmEntityContainer="UDCContext">
-          <EntitySetMapping Name="EnvironmentDatas">
-            <EntityTypeMapping TypeName="CollectorModel.EnvironmentData">
-              <MappingFragment StoreEntitySet="EnvironmentData">
-                <ScalarProperty Name="EnvironmentDataValue" ColumnName="EnvironmentDataValue" />
-                <ScalarProperty Name="EnvironmentDataNameId" ColumnName="EnvironmentDataNameId" />
-                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
-                <ScalarProperty Name="Id" ColumnName="EnvironmentDataId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="EnvironmentDataNames">
             <EntityTypeMapping TypeName="CollectorModel.EnvironmentDataName">
               <MappingFragment StoreEntitySet="EnvironmentDataNames">
@@ -270,22 +284,44 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Sessions">
-            <EntityTypeMapping TypeName="CollectorModel.Session">
-              <MappingFragment StoreEntitySet="Sessions">
-                <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
-                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
-                <ScalarProperty Name="ClientSessionId" ColumnName="ClientSessionId" />
-                <ScalarProperty Name="Id" ColumnName="SessionId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ActivationMethods">
             <EntityTypeMapping TypeName="CollectorModel.ActivationMethod">
               <MappingFragment StoreEntitySet="ActivationMethods">
                 <ScalarProperty Name="Name" ColumnName="ActivationMethodName" />
                 <ScalarProperty Name="Id" ColumnName="ActivationMethodId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EnvironmentDatas">
+            <EntityTypeMapping TypeName="CollectorModel.EnvironmentData">
+              <MappingFragment StoreEntitySet="EnvironmentData">
+                <ScalarProperty Name="EnvironmentDataValueId" ColumnName="EnvironmentDataValueId" />
+                <ScalarProperty Name="EnvironmentDataNameId" ColumnName="EnvironmentDataNameId" />
+                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
+                <ScalarProperty Name="Id" ColumnName="EnvironmentDataId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EnvironmentDataValues">
+            <EntityTypeMapping TypeName="CollectorModel.EnvironmentDataValue">
+              <MappingFragment StoreEntitySet="EnvironmentDataValues">
+                <ScalarProperty Name="Name" ColumnName="EnvironmentDataValue" />
+                <ScalarProperty Name="Id" ColumnName="EnvironmentDataValueId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sessions">
+            <EntityTypeMapping TypeName="CollectorModel.Session">
+              <MappingFragment StoreEntitySet="Sessions">
+                <ScalarProperty Name="AppVersionRevision" ColumnName="AppVersionRevision" />
+                <ScalarProperty Name="AppVersionBuild" ColumnName="AppVersionBuild" />
+                <ScalarProperty Name="AppVersionMinor" ColumnName="AppVersionMinor" />
+                <ScalarProperty Name="AppVersionMajor" ColumnName="AppVersionMajor" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="ClientSessionId" ColumnName="ClientSessionId" />
+                <ScalarProperty Name="Id" ColumnName="SessionId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -310,15 +346,16 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="CollectorModel">
-        <EntityTypeShape EntityType="CollectorModel.EnvironmentData" Width="2" PointX="4.5" PointY="3.75" Height="1.7879850260416674" />
         <EntityTypeShape EntityType="CollectorModel.EnvironmentDataName" Width="2.5" PointX="7.5" PointY="2" Height="1.4033821614583388" />
         <EntityTypeShape EntityType="CollectorModel.Feature" Width="1.625" PointX="5.625" PointY="0.5" Height="1.4033821614583388" />
         <EntityTypeShape EntityType="CollectorModel.FeatureUse" Width="1.5" PointX="1" PointY="3.75" Height="2.1725878906250031" />
         <EntityTypeShape EntityType="CollectorModel.User" Width="1.5" PointX="0.875" PointY="0.5" Height="1.4033821614583388" />
         <EntityTypeShape EntityType="CollectorModel.ExceptionGroup" Width="2.5" PointX="7.5" PointY="3.5" Height="2.3648893229166674" />
         <EntityTypeShape EntityType="CollectorModel.Exception" Width="1.5" PointX="2.75" PointY="3.75" Height="2.1725878906250031" />
-        <EntityTypeShape EntityType="CollectorModel.Session" Width="1.5" PointX="3.375" PointY="0.75" Height="1.9802864583333317" />
         <EntityTypeShape EntityType="CollectorModel.ActivationMethod" Width="2.5" PointX="7.5" PointY="0.5" Height="1.4033821614583353" />
+        <EntityTypeShape EntityType="CollectorModel.EnvironmentData" Width="2.25" PointX="4.5" PointY="3.75" Height="1.7879850260416674" />
+        <EntityTypeShape EntityType="CollectorModel.EnvironmentDataValue" Width="2.5" PointX="7.5" PointY="6" Height="1.4033821614583353" />
+        <EntityTypeShape EntityType="CollectorModel.Session" Width="1.875" PointX="3.25" PointY="0.5" Height="2.7494921875000031" />
       </Diagram>
     </Diagrams>
   </Designer>

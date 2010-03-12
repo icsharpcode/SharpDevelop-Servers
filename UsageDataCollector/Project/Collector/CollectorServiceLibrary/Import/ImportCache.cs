@@ -20,6 +20,9 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
         private static string cacheGetFeatures = "GetFeatures";
         private static string cacheGetExceptionGroupFingerprintHashes = "GetExceptionGroupFingerprintHashes";
         private static string cacheGetExceptionGroups = "GetExceptionGroups";
+        private static string cacheGetEnvironmentDataValueNames = "GetEnvironmentDataValueNames";
+        private static string cacheGetEnvironmentDataValues = "GetEnvironmentDataValues";
+        
 
         public static List<string> GetEnvironmentDataNameNames(CollectorRepository repository)
         {
@@ -147,6 +150,38 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
         {
             HttpRuntime.Cache.Remove(cacheGetExceptionGroupFingerprintHashes);
             HttpRuntime.Cache.Remove(cacheGetExceptionGroups);
+        }
+
+        public static List<string> GetEnvironmentDataValueNames(CollectorRepository repository)
+        {
+            List<string> cached = HttpRuntime.Cache[cacheGetEnvironmentDataValueNames] as List<string>;
+
+            if (null == cached)
+            {
+                cached = repository.GetEnvironmentDataValueNames().ToList();
+                HttpRuntime.Cache.Insert(cacheGetEnvironmentDataValueNames, cached);
+            }
+
+            return cached;
+        }
+
+        public static List<EnvironmentDataValue> GetEnvironmentDataValues(CollectorRepository repository)
+        {
+            List<EnvironmentDataValue> cached = HttpRuntime.Cache[cacheGetEnvironmentDataValues] as List<EnvironmentDataValue>;
+
+            if (null == cached)
+            {
+                cached = repository.GetEnvironmentDataValues().ToList();
+                HttpRuntime.Cache.Insert(cacheGetEnvironmentDataValues, cached);
+            }
+
+            return cached;
+        }
+
+        public static void InvalidateEnvironmentDataValueCaches()
+        {
+            HttpRuntime.Cache.Remove(cacheGetEnvironmentDataValueNames);
+            HttpRuntime.Cache.Remove(cacheGetEnvironmentDataValues);
         }
     }
 }

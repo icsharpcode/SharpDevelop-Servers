@@ -37,12 +37,34 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
             List<Session> newSessions = new List<Session>();
             foreach (UsageDataSession msgSession in message.Sessions)
             {
+                UsageDataEnvironmentProperty appVersion = msgSession.EnvironmentProperties.FirstOrDefault(ep => ep.Name == "appVersion");
+                int appVersionMajor = 0, appVersionMinor = 0, appVersionBuild = 0, appVersionRevision = 0;
+
+                if (null != appVersion && !String.IsNullOrEmpty(appVersion.Value))
+                {
+                    try
+                    {
+                        Version v = new Version(appVersion.Value);  // this can throw a couple of exceptions, but we don't care if it does
+                        appVersionMajor = v.Major;
+                        appVersionMinor = v.Minor;
+                        appVersionBuild = v.Build;
+                        appVersionRevision = v.Revision;
+                    }
+                    catch(System.Exception)
+                    {
+                    }
+                }
+
                 Session modelSession = new Session()
                 {
                     ClientSessionId = msgSession.SessionID,
                     StartTime = msgSession.StartTime,
                     EndTime = msgSession.EndTime,
-                    UserId = userId
+                    UserId = userId,
+                    AppVersionMajor = appVersionMajor,
+                    AppVersionMinor = appVersionMinor,
+                    AppVersionBuild = appVersionBuild,
+                    AppVersionRevision = appVersionRevision
                 };
 
                 newSessions.Add(modelSession);
@@ -52,16 +74,18 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
             repository.Context.SaveChanges(); // Save #2
 
             List<EnvironmentDataName> storedEnvNames = ImportCache.GetEnvironmentDataNames(repository);
+            List<EnvironmentDataValue> storedEnvValues = ImportCache.GetEnvironmentDataValues(repository);
 
             var insertEnvProperties = (from s in message.Sessions
                                        from prop in s.EnvironmentProperties
                                        join envName in storedEnvNames on prop.Name equals envName.Name
+                                       join envValue in storedEnvValues on prop.Value equals envValue.Name
                                        join storedSession in newSessions on s.SessionID equals storedSession.ClientSessionId
                                        select new EnvironmentData()
                                        {
                                            SessionId = storedSession.Id,
                                            EnvironmentDataNameId = envName.Id,
-                                           EnvironmentDataValue = prop.Value
+                                           EnvironmentDataValueId = envValue.Id
                                        });
 
             foreach (var ede in insertEnvProperties)
@@ -115,6 +139,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
         {
             // Preprocessing of type tables (don't insert any usage data unless type updates went through properly)
             PreProcessEnvironmentDataNames();
+            PreProcessEnvironmentDataValues();
             PreProcessActivationMethods();
             PreProcessFeatures();
             PreProcessExceptions();
@@ -147,6 +172,35 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 
                     repository.IgnoreDuplicateKeysOnSaveChanges<EnvironmentDataName>();
                     ImportCache.InvalidateEnvironmentDataNamesCaches();
+                }
+            }
+        }
+
+        protected void PreProcessEnvironmentDataValues()
+        {
+            List<string> distinctMsgEnvValues = (from s in message.Sessions
+                                                   from p in s.EnvironmentProperties
+                                                   select p.Value).Distinct().ToList();
+
+            if (distinctMsgEnvValues.Count > 0)
+            {
+                List<string> knownDataValueNames = ImportCache.GetEnvironmentDataValueNames(repository);
+                List<string> missing = distinctMsgEnvValues.Except(knownDataValueNames).ToList();
+
+                if (missing.Count > 0)
+                {
+                    foreach (string vn in missing)
+                    {
+                        EnvironmentDataValue modelValue = new EnvironmentDataValue()
+                        {
+                            Name = vn
+                        };
+
+                        repository.Context.EnvironmentDataValues.AddObject(modelValue);
+                    }
+
+                    repository.IgnoreDuplicateKeysOnSaveChanges<EnvironmentDataValue>();
+                    ImportCache.InvalidateEnvironmentDataValueCaches();
                 }
             }
         }

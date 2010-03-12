@@ -68,22 +68,6 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<EnvironmentData> EnvironmentDatas
-        {
-            get
-            {
-                if ((_EnvironmentDatas == null))
-                {
-                    _EnvironmentDatas = base.CreateObjectSet<EnvironmentData>("EnvironmentDatas");
-                }
-                return _EnvironmentDatas;
-            }
-        }
-        private ObjectSet<EnvironmentData> _EnvironmentDatas;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<EnvironmentDataName> EnvironmentDataNames
         {
             get
@@ -180,22 +164,6 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// <summary>
         /// No Metadata Documentation available.
         /// </summary>
-        public ObjectSet<Session> Sessions
-        {
-            get
-            {
-                if ((_Sessions == null))
-                {
-                    _Sessions = base.CreateObjectSet<Session>("Sessions");
-                }
-                return _Sessions;
-            }
-        }
-        private ObjectSet<Session> _Sessions;
-    
-        /// <summary>
-        /// No Metadata Documentation available.
-        /// </summary>
         public ObjectSet<ActivationMethod> ActivationMethods
         {
             get
@@ -208,17 +176,57 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
             }
         }
         private ObjectSet<ActivationMethod> _ActivationMethods;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<EnvironmentData> EnvironmentDatas
+        {
+            get
+            {
+                if ((_EnvironmentDatas == null))
+                {
+                    _EnvironmentDatas = base.CreateObjectSet<EnvironmentData>("EnvironmentDatas");
+                }
+                return _EnvironmentDatas;
+            }
+        }
+        private ObjectSet<EnvironmentData> _EnvironmentDatas;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<EnvironmentDataValue> EnvironmentDataValues
+        {
+            get
+            {
+                if ((_EnvironmentDataValues == null))
+                {
+                    _EnvironmentDataValues = base.CreateObjectSet<EnvironmentDataValue>("EnvironmentDataValues");
+                }
+                return _EnvironmentDataValues;
+            }
+        }
+        private ObjectSet<EnvironmentDataValue> _EnvironmentDataValues;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<Session> Sessions
+        {
+            get
+            {
+                if ((_Sessions == null))
+                {
+                    _Sessions = base.CreateObjectSet<Session>("Sessions");
+                }
+                return _Sessions;
+            }
+        }
+        private ObjectSet<Session> _Sessions;
 
         #endregion
         #region AddTo Methods
-    
-        /// <summary>
-        /// Deprecated Method for adding a new object to the EnvironmentDatas EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToEnvironmentDatas(EnvironmentData environmentData)
-        {
-            base.AddObject("EnvironmentDatas", environmentData);
-        }
     
         /// <summary>
         /// Deprecated Method for adding a new object to the EnvironmentDataNames EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
@@ -269,19 +277,35 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         }
     
         /// <summary>
-        /// Deprecated Method for adding a new object to the Sessions EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
-        /// </summary>
-        public void AddToSessions(Session session)
-        {
-            base.AddObject("Sessions", session);
-        }
-    
-        /// <summary>
         /// Deprecated Method for adding a new object to the ActivationMethods EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
         /// </summary>
         public void AddToActivationMethods(ActivationMethod activationMethod)
         {
             base.AddObject("ActivationMethods", activationMethod);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the EnvironmentDatas EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToEnvironmentDatas(EnvironmentData environmentData)
+        {
+            base.AddObject("EnvironmentDatas", environmentData);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the EnvironmentDataValues EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToEnvironmentDataValues(EnvironmentDataValue environmentDataValue)
+        {
+            base.AddObject("EnvironmentDataValues", environmentDataValue);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the Sessions EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToSessions(Session session)
+        {
+            base.AddObject("Sessions", session);
         }
 
         #endregion
@@ -387,14 +411,14 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// <param name="id">Initial value of the Id property.</param>
         /// <param name="sessionId">Initial value of the SessionId property.</param>
         /// <param name="environmentDataNameId">Initial value of the EnvironmentDataNameId property.</param>
-        /// <param name="environmentDataValue">Initial value of the EnvironmentDataValue property.</param>
-        public static EnvironmentData CreateEnvironmentData(global::System.Int32 id, global::System.Int32 sessionId, global::System.Int32 environmentDataNameId, global::System.String environmentDataValue)
+        /// <param name="environmentDataValueId">Initial value of the EnvironmentDataValueId property.</param>
+        public static EnvironmentData CreateEnvironmentData(global::System.Int32 id, global::System.Int32 sessionId, global::System.Int32 environmentDataNameId, global::System.Int32 environmentDataValueId)
         {
             EnvironmentData environmentData = new EnvironmentData();
             environmentData.Id = id;
             environmentData.SessionId = sessionId;
             environmentData.EnvironmentDataNameId = environmentDataNameId;
-            environmentData.EnvironmentDataValue = environmentDataValue;
+            environmentData.EnvironmentDataValueId = environmentDataValueId;
             return environmentData;
         }
 
@@ -481,24 +505,24 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String EnvironmentDataValue
+        public global::System.Int32 EnvironmentDataValueId
         {
             get
             {
-                return _EnvironmentDataValue;
+                return _EnvironmentDataValueId;
             }
             set
             {
-                OnEnvironmentDataValueChanging(value);
-                ReportPropertyChanging("EnvironmentDataValue");
-                _EnvironmentDataValue = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("EnvironmentDataValue");
-                OnEnvironmentDataValueChanged();
+                OnEnvironmentDataValueIdChanging(value);
+                ReportPropertyChanging("EnvironmentDataValueId");
+                _EnvironmentDataValueId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("EnvironmentDataValueId");
+                OnEnvironmentDataValueIdChanged();
             }
         }
-        private global::System.String _EnvironmentDataValue;
-        partial void OnEnvironmentDataValueChanging(global::System.String value);
-        partial void OnEnvironmentDataValueChanged();
+        private global::System.Int32 _EnvironmentDataValueId;
+        partial void OnEnvironmentDataValueIdChanging(global::System.Int32 value);
+        partial void OnEnvironmentDataValueIdChanged();
 
         #endregion
     
@@ -573,6 +597,85 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
                 OnNameChanging(value);
                 ReportPropertyChanging("Name");
                 _Name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="CollectorModel", Name="EnvironmentDataValue")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class EnvironmentDataValue : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new EnvironmentDataValue object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        public static EnvironmentDataValue CreateEnvironmentDataValue(global::System.Int32 id)
+        {
+            EnvironmentDataValue environmentDataValue = new EnvironmentDataValue();
+            environmentDataValue.Id = id;
+            return environmentDataValue;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, true);
                 ReportPropertyChanged("Name");
                 OnNameChanged();
             }
@@ -1393,6 +1496,102 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         private global::System.Int32 _UserId;
         partial void OnUserIdChanging(global::System.Int32 value);
         partial void OnUserIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> AppVersionMajor
+        {
+            get
+            {
+                return _AppVersionMajor;
+            }
+            set
+            {
+                OnAppVersionMajorChanging(value);
+                ReportPropertyChanging("AppVersionMajor");
+                _AppVersionMajor = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AppVersionMajor");
+                OnAppVersionMajorChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _AppVersionMajor;
+        partial void OnAppVersionMajorChanging(Nullable<global::System.Int32> value);
+        partial void OnAppVersionMajorChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> AppVersionMinor
+        {
+            get
+            {
+                return _AppVersionMinor;
+            }
+            set
+            {
+                OnAppVersionMinorChanging(value);
+                ReportPropertyChanging("AppVersionMinor");
+                _AppVersionMinor = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AppVersionMinor");
+                OnAppVersionMinorChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _AppVersionMinor;
+        partial void OnAppVersionMinorChanging(Nullable<global::System.Int32> value);
+        partial void OnAppVersionMinorChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> AppVersionBuild
+        {
+            get
+            {
+                return _AppVersionBuild;
+            }
+            set
+            {
+                OnAppVersionBuildChanging(value);
+                ReportPropertyChanging("AppVersionBuild");
+                _AppVersionBuild = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AppVersionBuild");
+                OnAppVersionBuildChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _AppVersionBuild;
+        partial void OnAppVersionBuildChanging(Nullable<global::System.Int32> value);
+        partial void OnAppVersionBuildChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> AppVersionRevision
+        {
+            get
+            {
+                return _AppVersionRevision;
+            }
+            set
+            {
+                OnAppVersionRevisionChanging(value);
+                ReportPropertyChanging("AppVersionRevision");
+                _AppVersionRevision = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AppVersionRevision");
+                OnAppVersionRevisionChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _AppVersionRevision;
+        partial void OnAppVersionRevisionChanging(Nullable<global::System.Int32> value);
+        partial void OnAppVersionRevisionChanged();
 
         #endregion
     

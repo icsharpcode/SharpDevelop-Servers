@@ -95,6 +95,16 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
             return Context.ExceptionGroups.Select(g => g);
         }
 
+        public IEnumerable<string> GetEnvironmentDataValueNames()
+        {
+            return Context.EnvironmentDataValues.Select(d => d.Name);
+        }
+
+        public IEnumerable<EnvironmentDataValue> GetEnvironmentDataValues()
+        {
+            return Context.EnvironmentDataValues.Select(d => d);
+        }
+
         //        System.Data.UpdateException was unhandled
         //  Message=An error occurred while updating the entries. See the inner exception for details.
         //  Source=System.Data.Entity
