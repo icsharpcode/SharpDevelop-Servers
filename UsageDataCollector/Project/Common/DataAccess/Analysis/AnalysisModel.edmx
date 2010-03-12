@@ -4,11 +4,12 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="AnalysisModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="AnalysisModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="AnalysisModelStoreContainer">
           <EntitySet Name="ActivationMethods" EntityType="AnalysisModel.Store.ActivationMethods" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EnvironmentData" EntityType="AnalysisModel.Store.EnvironmentData" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EnvironmentDataNames" EntityType="AnalysisModel.Store.EnvironmentDataNames" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="EnvironmentDataValues" EntityType="AnalysisModel.Store.EnvironmentDataValues" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="ExceptionGroups" EntityType="AnalysisModel.Store.ExceptionGroups" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Exceptions" EntityType="AnalysisModel.Store.Exceptions" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Features" EntityType="AnalysisModel.Store.Features" store:Type="Tables" Schema="dbo" />
@@ -30,7 +31,7 @@
           <Property Name="EnvironmentDataId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="SessionId" Type="int" Nullable="false" />
           <Property Name="EnvironmentDataNameId" Type="int" Nullable="false" />
-          <Property Name="EnvironmentDataValue" Type="nvarchar" Nullable="false" MaxLength="255" />
+          <Property Name="EnvironmentDataValueId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="EnvironmentDataNames">
           <Key>
@@ -38,6 +39,13 @@
           </Key>
           <Property Name="EnvironmentDataNameId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="EnvironmentDataName" Type="nvarchar" Nullable="false" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="EnvironmentDataValues">
+          <Key>
+            <PropertyRef Name="EnvironmentDataValueId" />
+          </Key>
+          <Property Name="EnvironmentDataValueId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="EnvironmentDataValue" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="ExceptionGroups">
           <Key>
@@ -89,6 +97,10 @@
           <Property Name="StartTime" Type="datetime" Nullable="false" />
           <Property Name="EndTime" Type="datetime" />
           <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="AppVersionMajor" Type="int" />
+          <Property Name="AppVersionMinor" Type="int" />
+          <Property Name="AppVersionBuild" Type="int" />
+          <Property Name="AppVersionRevision" Type="int" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -97,8 +109,7 @@
           <Property Name="UserId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="AssociatedGuid" Type="nvarchar" Nullable="false" MaxLength="50" />
         </EntityType>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AnalysisModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
@@ -144,6 +155,11 @@
             <End Role="ActivationMethod" EntitySet="ActivationMethods" />
             <End Role="FeatureUse" EntitySet="FeatureUse" />
           </AssociationSet>
+          <EntitySet Name="EnvironmentDataValues" EntityType="AnalysisModel.EnvironmentDataValue" />
+          <AssociationSet Name="EnvironmentDataValueEnvironmentData" Association="AnalysisModel.EnvironmentDataValueEnvironmentData">
+            <End Role="EnvironmentDataValue" EntitySet="EnvironmentDataValues" />
+            <End Role="EnvironmentData" EntitySet="EnvironmentData" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ActivationMethod">
           <Key>
@@ -160,9 +176,10 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SessionId" Type="Int32" Nullable="false" />
           <Property Name="NameId" Type="Int32" Nullable="false" />
-          <Property Name="Value" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="Session" Relationship="AnalysisModel.SessionEnvironmentData" FromRole="EnvironmentData" ToRole="Session" />
           <NavigationProperty Name="EnvironmentDataName" Relationship="AnalysisModel.EnvironmentDataNameEnvironmentData" FromRole="EnvironmentData" ToRole="EnvironmentDataName" />
+          <Property Type="Int32" Name="ValueId" Nullable="false" />
+          <NavigationProperty Name="EnvironmentDataValue" Relationship="AnalysisModel.EnvironmentDataValueEnvironmentData" FromRole="EnvironmentData" ToRole="EnvironmentDataValue" />
         </EntityType>
         <EntityType Name="EnvironmentDataName">
           <Key>
@@ -233,6 +250,10 @@
           <NavigationProperty Name="EnvironmentDatas" Relationship="AnalysisModel.SessionEnvironmentData" FromRole="Session" ToRole="EnvironmentData" />
           <NavigationProperty Name="Exceptions" Relationship="AnalysisModel.SessionException" FromRole="Session" ToRole="Exception" />
           <NavigationProperty Name="FeatureUses" Relationship="AnalysisModel.SessionFeatureUse" FromRole="Session" ToRole="FeatureUse" />
+          <Property Type="Int32" Name="AppVersionMajor" />
+          <Property Type="Int32" Name="AppVersionMinor" />
+          <Property Type="Int32" Name="AppVersionBuild" />
+          <Property Type="Int32" Name="AppVersionRevision" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -338,6 +359,26 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="EnvironmentDataValue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Value" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="EnvironmentDatas" Relationship="AnalysisModel.EnvironmentDataValueEnvironmentData" FromRole="EnvironmentDataValue" ToRole="EnvironmentData" />
+        </EntityType>
+        <Association Name="EnvironmentDataValueEnvironmentData">
+          <End Type="AnalysisModel.EnvironmentDataValue" Role="EnvironmentDataValue" Multiplicity="1" />
+          <End Type="AnalysisModel.EnvironmentData" Role="EnvironmentData" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="EnvironmentDataValue">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="EnvironmentData">
+              <PropertyRef Name="ValueId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -349,10 +390,10 @@
             <ScalarProperty Name="Name" ColumnName="ActivationMethodName" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="EnvironmentData"><EntityTypeMapping TypeName="AnalysisModel.EnvironmentData"><MappingFragment StoreEntitySet="EnvironmentData">
-            <ScalarProperty Name="Id" ColumnName="EnvironmentDataId" />
+            <ScalarProperty Name="ValueId" ColumnName="EnvironmentDataValueId" />
+                <ScalarProperty Name="Id" ColumnName="EnvironmentDataId" />
             <ScalarProperty Name="SessionId" ColumnName="SessionId" />
             <ScalarProperty Name="NameId" ColumnName="EnvironmentDataNameId" />
-            <ScalarProperty Name="Value" ColumnName="EnvironmentDataValue" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="EnvironmentDataNames"><EntityTypeMapping TypeName="AnalysisModel.EnvironmentDataName"><MappingFragment StoreEntitySet="EnvironmentDataNames">
             <ScalarProperty Name="Id" ColumnName="EnvironmentDataNameId" />
@@ -388,7 +429,11 @@
             <ScalarProperty Name="ActivationMethodId" ColumnName="ActivationMethodId" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Sessions"><EntityTypeMapping TypeName="AnalysisModel.Session"><MappingFragment StoreEntitySet="Sessions">
-            <ScalarProperty Name="SessionId" ColumnName="SessionId" />
+            <ScalarProperty Name="AppVersionRevision" ColumnName="AppVersionRevision" />
+                <ScalarProperty Name="AppVersionBuild" ColumnName="AppVersionBuild" />
+                <ScalarProperty Name="AppVersionMinor" ColumnName="AppVersionMinor" />
+                <ScalarProperty Name="AppVersionMajor" ColumnName="AppVersionMajor" />
+                <ScalarProperty Name="SessionId" ColumnName="SessionId" />
             <ScalarProperty Name="ClientSessionId" ColumnName="ClientSessionId" />
             <ScalarProperty Name="StartTime" ColumnName="StartTime" />
             <ScalarProperty Name="EndTime" ColumnName="EndTime" />
@@ -398,6 +443,14 @@
             <ScalarProperty Name="UserId" ColumnName="UserId" />
             <ScalarProperty Name="AssociatedGuid" ColumnName="AssociatedGuid" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
+          <EntitySetMapping Name="EnvironmentDataValues">
+            <EntityTypeMapping TypeName="AnalysisModel.EnvironmentDataValue">
+              <MappingFragment StoreEntitySet="EnvironmentDataValues">
+                <ScalarProperty Name="Value" ColumnName="EnvironmentDataValue" />
+                <ScalarProperty Name="Id" ColumnName="EnvironmentDataValueId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -412,53 +465,58 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="AnalysisModel">
-        <EntityTypeShape EntityType="AnalysisModel.ActivationMethod" Width="1.5" PointX="4.875" PointY="6.5" Height="1.4033821614583331" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.EnvironmentData" Width="1.5" PointX="2.75" PointY="0.5" Height="1.7879850260416674" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.EnvironmentDataName" Width="2.25" PointX="5" PointY="0.5" Height="1.59568359375" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.ExceptionGroup" Width="1.5" PointX="7.25" PointY="2.875" Height="2.3648893229166656" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.Exception" Width="1.5" PointX="5.25" PointY="2.875" Height="2.1725878906249996" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.Feature" Width="1.5" PointX="0.875" PointY="6.375" Height="1.5956835937499996" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.FeatureUse" Width="1.5" PointX="2.875" PointY="6.25" Height="2.3648893229166656" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.Session" Width="1.5" PointX="2.625" PointY="3" Height="2.3648893229166656" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.User" Width="1.5" PointX="0.5" PointY="3" Height="1.4033821614583317" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnalysisModel.ActivationMethod" Width="1.5" PointX="4.875" PointY="7.5" Height="1.5956835937499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnalysisModel.EnvironmentData" Width="1.5" PointX="3.5" PointY="0.5" Height="2.172587890625" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnalysisModel.EnvironmentDataName" Width="2.25" PointX="0.5" PointY="0.625" Height="1.59568359375" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnalysisModel.ExceptionGroup" Width="1.5" PointX="7.25" PointY="3.875" Height="2.5571907552083317" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnalysisModel.Exception" Width="1.5" PointX="5.25" PointY="3.875" Height="2.5571907552083326" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnalysisModel.Feature" Width="1.5" PointX="0.875" PointY="7.375" Height="1.5956835937499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnalysisModel.FeatureUse" Width="1.5" PointX="2.875" PointY="7.5" Height="2.7494921874999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnalysisModel.Session" Width="1.5" PointX="2.75" PointY="3.5" Height="3.5186979166666665" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnalysisModel.User" Width="1.5" PointX="0.5" PointY="4" Height="1.5956835937499996" IsExpanded="true" />
         <AssociationConnector Association="AnalysisModel.UserSession">
-          <ConnectorPoint PointX="2" PointY="3.797841796875" />
-          <ConnectorPoint PointX="2.625" PointY="3.797841796875" />
+          <ConnectorPoint PointX="2" PointY="4.797841796875" />
+          <ConnectorPoint PointX="2.75" PointY="4.797841796875" />
         </AssociationConnector>
         <AssociationConnector Association="AnalysisModel.SessionEnvironmentData">
-          <ConnectorPoint PointX="3.4375" PointY="3" />
-          <ConnectorPoint PointX="3.4375" PointY="2.4802864583333335" />
+          <ConnectorPoint PointX="3.875" PointY="3.5" />
+          <ConnectorPoint PointX="3.875" PointY="2.672587890625" />
         </AssociationConnector>
         <AssociationConnector Association="AnalysisModel.EnvironmentDataNameEnvironmentData">
-          <ConnectorPoint PointX="5" PointY="1.297841796875" />
-          <ConnectorPoint PointX="4.25" PointY="1.297841796875" />
+          <ConnectorPoint PointX="2.75" PointY="1.4228417968750002" />
+          <ConnectorPoint PointX="3.5" PointY="1.4228417968750002" />
         </AssociationConnector>
         <AssociationConnector Association="AnalysisModel.ExceptionGroupException">
-          <ConnectorPoint PointX="7.25" PointY="4.0574446614583337" />
-          <ConnectorPoint PointX="6.75" PointY="4.0574446614583337" />
+          <ConnectorPoint PointX="7.25" PointY="5.1535953776041659" />
+          <ConnectorPoint PointX="6.75" PointY="5.1535953776041659" />
         </AssociationConnector>
         <AssociationConnector Association="AnalysisModel.SessionException">
-          <ConnectorPoint PointX="4.125" PointY="4.15625" />
-          <ConnectorPoint PointX="5.25" PointY="4.15625" />
+          <ConnectorPoint PointX="4.25" PointY="5.1535953776041659" />
+          <ConnectorPoint PointX="5.25" PointY="5.1535953776041659" />
         </AssociationConnector>
         <AssociationConnector Association="AnalysisModel.SessionFeatureUse">
-          <ConnectorPoint PointX="3.5" PointY="5.7494921875" />
-          <ConnectorPoint PointX="3.5" PointY="6.25" />
+          <ConnectorPoint PointX="3.5625" PointY="7.0186979166666665" />
+          <ConnectorPoint PointX="3.5625" PointY="7.5" />
         </AssociationConnector>
         <AssociationConnector Association="AnalysisModel.FeatureUseFeature">
-          <ConnectorPoint PointX="2.875" PointY="7.172841796875" />
-          <ConnectorPoint PointX="2.375" PointY="7.172841796875" />
+          <ConnectorPoint PointX="2.875" PointY="8.235341796875" />
+          <ConnectorPoint PointX="2.375" PointY="8.235341796875" />
         </AssociationConnector>
         <AssociationConnector Association="AnalysisModel.ActivationMethodFeatureUse">
-          <ConnectorPoint PointX="4.875" PointY="7.297841796875" />
-          <ConnectorPoint PointX="4.375" PointY="7.297841796875" />
+          <ConnectorPoint PointX="4.875" PointY="8.297841796875" />
+          <ConnectorPoint PointX="4.375" PointY="8.297841796875" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="AnalysisModel.EnvironmentDataValue" Width="1.5" PointX="5.75" PointY="0.75" Height="1.4033821614583317" />
+        <AssociationConnector Association="AnalysisModel.EnvironmentDataValueEnvironmentData">
+          <ConnectorPoint PointX="5.75" PointY="1.5478417968750002" />
+          <ConnectorPoint PointX="5" PointY="1.5478417968750002" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

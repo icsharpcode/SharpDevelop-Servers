@@ -26,33 +26,21 @@ namespace ExcelReport
         public DateTime? MinimumDate, MaximumDate;
         public Version MinimumVersion, MaximumVersion;
 
-        List<SessionWithVersionNumber> cachedSessions;
-
-        public IEnumerable<SessionWithVersionNumber> Sessions
+        public IQueryable<Session> Sessions
         {
             get
             {
-                if (cachedSessions == null)
-                {
-                    IQueryable<Session> sessions = context.Sessions;
-                    if (MinimumDate != null)
-                        sessions = sessions.Where(s => s.StartTime >= MinimumDate.Value);
-                    if (MaximumDate != null)
-                        sessions = sessions.Where(s => s.StartTime <= MaximumDate.Value);
+                IQueryable<Session> sessions = context.Sessions;
+                if (MinimumDate != null)
+                    sessions = sessions.Where(s => s.StartTime >= MinimumDate.Value);
+                if (MaximumDate != null)
+                    sessions = sessions.Where(s => s.StartTime <= MaximumDate.Value);
 
-                    var q = from session in sessions
-                            let version = (from data in session.EnvironmentDatas where data.EnvironmentDataName.Name == "appVersion" select data.Value).FirstOrDefault()
-                            where version != null
-                            select new { session, version };
-
-                    var sessionsWithVersion = q.AsEnumerable().Select(p => new SessionWithVersionNumber(p.session, new Version(p.version)));
-                    if (MinimumVersion != null)
-                        sessionsWithVersion = sessionsWithVersion.Where(s => s.AppVersion >= MinimumVersion);
-                    if (MaximumVersion != null)
-                        sessionsWithVersion = sessionsWithVersion.Where(s => s.AppVersion <= MaximumVersion);
-                    cachedSessions = sessionsWithVersion.ToList();
-                }
-                return cachedSessions;
+                if (MinimumVersion != null)
+                    sessions = sessions.Where(s => s.AppVersionMajor > MinimumVersion.Major || s.AppVersionMajor == MinimumVersion.Major && (s.AppVersionMinor > MinimumVersion.Minor || s.AppVersionMinor == MinimumVersion.Minor && (s.AppVersionBuild > MinimumVersion.Build || s.AppVersionBuild == MinimumVersion.Build && s.AppVersionRevision >= MinimumVersion.Revision)));
+                if (MaximumVersion != null)
+                    sessions = sessions.Where(s => s.AppVersionMajor < MaximumVersion.Major || s.AppVersionMajor == MaximumVersion.Major && (s.AppVersionMinor < MaximumVersion.Minor || s.AppVersionMinor == MaximumVersion.Minor && (s.AppVersionBuild < MaximumVersion.Build || s.AppVersionBuild == MaximumVersion.Build && s.AppVersionRevision <= MaximumVersion.Revision)));
+                return sessions;
             }
         }
 

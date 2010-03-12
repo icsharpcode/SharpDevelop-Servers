@@ -10,15 +10,23 @@ namespace ExcelReport
     class UsageTable
     {
         DateTime start, end;
-        List<SessionWithVersionNumber> sessions;
+        List<Session> sessions;
         Version[] knownVersions;
 
-        public UsageTable(IEnumerable<SessionWithVersionNumber> sessions, Version[] knownVersions)
+        public UsageTable(IEnumerable<Session> sessions, Version[] knownVersions)
         {
             this.sessions = sessions.ToList();
             this.knownVersions = knownVersions;
-            start = this.sessions.Min(s => s.StartTime);
-            end = this.sessions.Max(s => s.StartTime);
+            if (this.sessions.Count == 0)
+            {
+                start = DateTime.Now;
+                end = DateTime.Now;
+            }
+            else
+            {
+                start = this.sessions.Min(s => s.StartTime);
+                end = this.sessions.Max(s => s.StartTime);
+            }
         }
 
         public class Row {
@@ -45,14 +53,14 @@ namespace ExcelReport
         {
             List<Row> rows = new List<Row>();
             DateTime date = roundToTimeUnit(start);
-            var dictByDate = ToMultiDictionary(sessions.GroupBy(s => new { s.Session.UserId, Date = roundToTimeUnit(s.StartTime) }), g => g.Key.Date);
+            var dictByDate = ToMultiDictionary(sessions.GroupBy(s => new { s.UserId, Date = roundToTimeUnit(s.StartTime) }), g => g.Key.Date);
             while (date <= end)
             {
-                IEnumerable<IEnumerable<SessionWithVersionNumber>> sessionsGroupedByUser;
+                IEnumerable<IEnumerable<Session>> sessionsGroupedByUser;
                 if (dictByDate.ContainsKey(date))
                     sessionsGroupedByUser = dictByDate[date];
                 else
-                    sessionsGroupedByUser = Enumerable.Empty<IEnumerable<SessionWithVersionNumber>>();
+                    sessionsGroupedByUser = Enumerable.Empty<IEnumerable<Session>>();
 
                 Row newRow = new Row();
                 newRow.Date = date;

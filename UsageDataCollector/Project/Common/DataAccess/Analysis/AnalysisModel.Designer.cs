@@ -26,6 +26,7 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("AnalysisModel", "SessionFeatureUse", "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.Session), "FeatureUse", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.FeatureUse), true)]
 [assembly: EdmRelationshipAttribute("AnalysisModel", "FeatureUseFeature", "FeatureUse", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.FeatureUse), "Feature", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.Feature), true)]
 [assembly: EdmRelationshipAttribute("AnalysisModel", "ActivationMethodFeatureUse", "ActivationMethod", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.ActivationMethod), "FeatureUse", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.FeatureUse), true)]
+[assembly: EdmRelationshipAttribute("AnalysisModel", "EnvironmentDataValueEnvironmentData", "EnvironmentDataValue", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.EnvironmentDataValue), "EnvironmentData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.EnvironmentData), true)]
 
 #endregion
 
@@ -220,6 +221,22 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
             }
         }
         private ObjectSet<User> _Users;
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        public ObjectSet<EnvironmentDataValue> EnvironmentDataValues
+        {
+            get
+            {
+                if ((_EnvironmentDataValues == null))
+                {
+                    _EnvironmentDataValues = base.CreateObjectSet<EnvironmentDataValue>("EnvironmentDataValues");
+                }
+                return _EnvironmentDataValues;
+            }
+        }
+        private ObjectSet<EnvironmentDataValue> _EnvironmentDataValues;
 
         #endregion
         #region AddTo Methods
@@ -294,6 +311,14 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         public void AddToUsers(User user)
         {
             base.AddObject("Users", user);
+        }
+    
+        /// <summary>
+        /// Deprecated Method for adding a new object to the EnvironmentDataValues EntitySet. Consider using the .Add method of the associated ObjectSet&lt;T&gt; property instead.
+        /// </summary>
+        public void AddToEnvironmentDataValues(EnvironmentDataValue environmentDataValue)
+        {
+            base.AddObject("EnvironmentDataValues", environmentDataValue);
         }
 
         #endregion
@@ -424,14 +449,14 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         /// <param name="id">Initial value of the Id property.</param>
         /// <param name="sessionId">Initial value of the SessionId property.</param>
         /// <param name="nameId">Initial value of the NameId property.</param>
-        /// <param name="value">Initial value of the Value property.</param>
-        public static EnvironmentData CreateEnvironmentData(global::System.Int32 id, global::System.Int32 sessionId, global::System.Int32 nameId, global::System.String value)
+        /// <param name="valueId">Initial value of the ValueId property.</param>
+        public static EnvironmentData CreateEnvironmentData(global::System.Int32 id, global::System.Int32 sessionId, global::System.Int32 nameId, global::System.Int32 valueId)
         {
             EnvironmentData environmentData = new EnvironmentData();
             environmentData.Id = id;
             environmentData.SessionId = sessionId;
             environmentData.NameId = nameId;
-            environmentData.Value = value;
+            environmentData.ValueId = valueId;
             return environmentData;
         }
 
@@ -518,24 +543,24 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
         [DataMemberAttribute()]
-        public global::System.String Value
+        public global::System.Int32 ValueId
         {
             get
             {
-                return _Value;
+                return _ValueId;
             }
             set
             {
-                OnValueChanging(value);
-                ReportPropertyChanging("Value");
-                _Value = StructuralObject.SetValidValue(value, false);
-                ReportPropertyChanged("Value");
-                OnValueChanged();
+                OnValueIdChanging(value);
+                ReportPropertyChanging("ValueId");
+                _ValueId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("ValueId");
+                OnValueIdChanged();
             }
         }
-        private global::System.String _Value;
-        partial void OnValueChanging(global::System.String value);
-        partial void OnValueChanged();
+        private global::System.Int32 _ValueId;
+        partial void OnValueIdChanging(global::System.Int32 value);
+        partial void OnValueIdChanged();
 
         #endregion
     
@@ -613,6 +638,44 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<EnvironmentDataName>("AnalysisModel.EnvironmentDataNameEnvironmentData", "EnvironmentDataName", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "EnvironmentDataValueEnvironmentData", "EnvironmentDataValue")]
+        public EnvironmentDataValue EnvironmentDataValue
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EnvironmentDataValue>("AnalysisModel.EnvironmentDataValueEnvironmentData", "EnvironmentDataValue").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EnvironmentDataValue>("AnalysisModel.EnvironmentDataValueEnvironmentData", "EnvironmentDataValue").Value = value;
+            }
+        }
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<EnvironmentDataValue> EnvironmentDataValueReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EnvironmentDataValue>("AnalysisModel.EnvironmentDataValueEnvironmentData", "EnvironmentDataValue");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<EnvironmentDataValue>("AnalysisModel.EnvironmentDataValueEnvironmentData", "EnvironmentDataValue", value);
                 }
             }
         }
@@ -719,6 +782,110 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<EnvironmentData>("AnalysisModel.EnvironmentDataNameEnvironmentData", "EnvironmentData", value);
+                }
+            }
+        }
+
+        #endregion
+    }
+    
+    /// <summary>
+    /// No Metadata Documentation available.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="AnalysisModel", Name="EnvironmentDataValue")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class EnvironmentDataValue : EntityObject
+    {
+        #region Factory Method
+    
+        /// <summary>
+        /// Create a new EnvironmentDataValue object.
+        /// </summary>
+        /// <param name="id">Initial value of the Id property.</param>
+        public static EnvironmentDataValue CreateEnvironmentDataValue(global::System.Int32 id)
+        {
+            EnvironmentDataValue environmentDataValue = new EnvironmentDataValue();
+            environmentDataValue.Id = id;
+            return environmentDataValue;
+        }
+
+        #endregion
+        #region Primitive Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public global::System.String Value
+        {
+            get
+            {
+                return _Value;
+            }
+            set
+            {
+                OnValueChanging(value);
+                ReportPropertyChanging("Value");
+                _Value = StructuralObject.SetValidValue(value, true);
+                ReportPropertyChanged("Value");
+                OnValueChanged();
+            }
+        }
+        private global::System.String _Value;
+        partial void OnValueChanging(global::System.String value);
+        partial void OnValueChanged();
+
+        #endregion
+    
+        #region Navigation Properties
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "EnvironmentDataValueEnvironmentData", "EnvironmentData")]
+        public EntityCollection<EnvironmentData> EnvironmentDatas
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<EnvironmentData>("AnalysisModel.EnvironmentDataValueEnvironmentData", "EnvironmentData");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<EnvironmentData>("AnalysisModel.EnvironmentDataValueEnvironmentData", "EnvironmentData", value);
                 }
             }
         }
@@ -1780,6 +1947,102 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         private global::System.Int32 _UserId;
         partial void OnUserIdChanging(global::System.Int32 value);
         partial void OnUserIdChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> AppVersionMajor
+        {
+            get
+            {
+                return _AppVersionMajor;
+            }
+            set
+            {
+                OnAppVersionMajorChanging(value);
+                ReportPropertyChanging("AppVersionMajor");
+                _AppVersionMajor = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AppVersionMajor");
+                OnAppVersionMajorChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _AppVersionMajor;
+        partial void OnAppVersionMajorChanging(Nullable<global::System.Int32> value);
+        partial void OnAppVersionMajorChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> AppVersionMinor
+        {
+            get
+            {
+                return _AppVersionMinor;
+            }
+            set
+            {
+                OnAppVersionMinorChanging(value);
+                ReportPropertyChanging("AppVersionMinor");
+                _AppVersionMinor = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AppVersionMinor");
+                OnAppVersionMinorChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _AppVersionMinor;
+        partial void OnAppVersionMinorChanging(Nullable<global::System.Int32> value);
+        partial void OnAppVersionMinorChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> AppVersionBuild
+        {
+            get
+            {
+                return _AppVersionBuild;
+            }
+            set
+            {
+                OnAppVersionBuildChanging(value);
+                ReportPropertyChanging("AppVersionBuild");
+                _AppVersionBuild = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AppVersionBuild");
+                OnAppVersionBuildChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _AppVersionBuild;
+        partial void OnAppVersionBuildChanging(Nullable<global::System.Int32> value);
+        partial void OnAppVersionBuildChanged();
+    
+        /// <summary>
+        /// No Metadata Documentation available.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> AppVersionRevision
+        {
+            get
+            {
+                return _AppVersionRevision;
+            }
+            set
+            {
+                OnAppVersionRevisionChanging(value);
+                ReportPropertyChanging("AppVersionRevision");
+                _AppVersionRevision = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("AppVersionRevision");
+                OnAppVersionRevisionChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _AppVersionRevision;
+        partial void OnAppVersionRevisionChanging(Nullable<global::System.Int32> value);
+        partial void OnAppVersionRevisionChanged();
 
         #endregion
     

@@ -109,8 +109,7 @@ namespace ExcelReport
             var sessionsQuery = from s in repository.Sessions
                                 group s by new { UserID = s.UserId, s.StartTime.Date } into g
                                 select g.First();
-            sessionsQuery = sessionsQuery.ToList(); // we're using LINQ-to-Objects anyways, so don't perform above group-by multiple times
-
+            
             ChartObjects chartObjects = ws.ChartObjects();
 
             int pos = 1;
@@ -124,8 +123,8 @@ namespace ExcelReport
 
                 var q = (
                     from s in sessionsQuery
-                    let p = s.Session.EnvironmentDatas.FirstOrDefault(p => p.NameId == property.Id)
-                    group p by (p != null ? p.Value : "unknown") into g
+                    let p = s.EnvironmentDatas.FirstOrDefault(p => p.NameId == property.Id)
+                    group p by (p != null ? p.EnvironmentDataValue.Value : "unknown") into g
                     select new { Value = g.Key, Count = g.Count() }
                 ).ToList();
 
@@ -179,21 +178,20 @@ namespace ExcelReport
             ws.Columns[2].VerticalAlignment = Constants.xlTop;
 
             var query = from session in repository.Sessions
-                        from exception in session.Session.Exceptions
+                        from exception in session.Exceptions
                         where exception.IsFirstInSession
                         group new
                         {
                             Time = exception.ThrownAt,
-                            UserId = session.UserId,
+                            Session = session,
                             Stacktrace = exception.Stacktrace,
-                            Version = session.AppVersion
                         } by exception.ExceptionGroup into g
                         select new
                         {
                             ExceptionGroup = g.Key,
                             Occurrences = g.Count(),
                             Instances = g.OrderByDescending(e => e.Time).Take(maximumInstancesPerException),
-                            AffectedUserCount = g.Select(e => e.UserId).Distinct().Count()
+                            AffectedUserCount = g.Select(e => e.Session.UserId).Distinct().Count()
                         } into row
                         where row.AffectedUserCount >= minimumNumberOfAffectedUsersForReportedExceptions
                         orderby row.ExceptionGroup.ExceptionGroupId
@@ -219,9 +217,9 @@ namespace ExcelReport
                     ws.Cells[pos, 1] = "Date";
                     ws.Cells[pos++, 2] = instance.Time;
                     ws.Cells[pos, 1] = "User";
-                    ws.Cells[pos++, 2] = instance.UserId.ToString();
+                    ws.Cells[pos++, 2] = instance.Session.UserId.ToString();
                     ws.Cells[pos, 1] = "Version";
-                    ws.Cells[pos++, 2] = instance.Version;
+                    ws.Cells[pos++, 2] = instance.Session.AppVersion;
                     ws.Cells[pos, 1] = "Stacktrace";
                     ws.Cells[pos, 2] = instance.Stacktrace;
                     ((Range)ws.Cells[pos, 2]).Font.Size = 9;
@@ -261,21 +259,20 @@ namespace ExcelReport
             ws.Columns[commentCol].ColumnWidth = 30;
 
             var query = from session in repository.Sessions
-                        from exception in session.Session.Exceptions
+                        from exception in session.Exceptions
                         where exception.IsFirstInSession
                         group new
                         {
                             Time = exception.ThrownAt,
-                            UserId = session.UserId,
-                            Version = session.AppVersion
+                            Session = session
                         } by exception.ExceptionGroup into g
                         select new
                         {
                             ExceptionGroup = g.Key,
                             Occurrences = g.Count(),
-                            AffectedUserCount = g.Select(e => e.UserId).Distinct().Count(),
-                            FirstSeen = g.Min(e => e.Version),
-                            LastSeen = g.Max(e => e.Version)
+                            AffectedUserCount = g.Select(e => e.Session.UserId).Distinct().Count(),
+                            FirstSeen = g.Min(e => e.Session.AppVersionRevision),
+                            LastSeen = g.Max(e => e.Session.AppVersionRevision)
                         } into row
                         orderby row.AffectedUserCount descending, row.Occurrences descending
                         select row;
@@ -296,15 +293,15 @@ namespace ExcelReport
                 ws.Cells[pos, 3] = row.ExceptionGroup.ExceptionLocation;
                 ws.Cells[pos, 4] = row.AffectedUserCount;
                 ws.Cells[pos, 5] = row.Occurrences;
-                ws.Cells[pos, 6] = row.FirstSeen.ToString();
-                ws.Cells[pos, 7] = row.LastSeen.ToString();
+                ws.Cells[pos, 6] = row.FirstSeen;
+                ws.Cells[pos, 7] = row.LastSeen;
 
                 if (row.ExceptionGroup.UserFixedInRevision != null)
                 {
                     int r = (int)row.ExceptionGroup.UserFixedInRevision;
                     ws.Cells[pos, 8] = r;
 
-                    if (row.LastSeen.Revision >= r)
+                    if (row.LastSeen >= r)
                         ws.Rows[pos].Style = "Bad";
                     else
                         ws.Rows[pos].Style = "Good";

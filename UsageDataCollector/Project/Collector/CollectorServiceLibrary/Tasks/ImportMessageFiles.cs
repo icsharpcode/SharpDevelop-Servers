@@ -8,6 +8,7 @@ using Microsoft.Build.Framework;
 using ICSharpCode.UsageDataCollector.DataAccess.Collector;
 using ICSharpCode.UsageDataCollector.Contracts;
 using ICSharpCode.UsageDataCollector.ServiceLibrary.Import;
+using System.Diagnostics;
 
 namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 {
@@ -54,6 +55,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
             }
 
             // Import logic built for MSBuild
+            Stopwatch watch = Stopwatch.StartNew();
             using (var context = CollectorRepository.CreateContext(connectionString.ItemSpec))
             {
                 CollectorRepository repo = new CollectorRepository();
@@ -87,6 +89,8 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
                     }
                 }
             }
+            watch.Stop();
+            Log.LogMessage("Imported " + (messagesToImport.Length - messagesFailedToImport.Count) + " messages in " + watch.Elapsed);
 
             return result;
         }
