@@ -4,8 +4,6 @@
 
 db: Indexes for foreign key columns
 
-imp: Logging (log4net, MEF?)
-
 
 ** nice to have, low priority
 

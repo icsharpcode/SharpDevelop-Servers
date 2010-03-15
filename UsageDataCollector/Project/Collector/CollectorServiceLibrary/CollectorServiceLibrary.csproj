@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\..\..\..\SharpDevelop\src\Libraries\log4net\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Tasks.v4.0" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
@@ -59,13 +62,12 @@
     <Compile Include="Import\ImportCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceImplementations\DisposableUploadStream.cs" />
+    <Compile Include="ServiceImplementations\UDCServiceBase.cs" />
     <Compile Include="ServiceImplementations\NilUploadService.cs" />
     <Compile Include="ServiceImplementations\StoreLocallyUploadService.cs" />
-    <Compile Include="ServiceImplementations\UploadServiceConstants.cs" />
     <Compile Include="Tasks\ImportMessageFiles.cs" />
     <Compile Include="Tasks\ScrubMessageFiles.cs" />
     <Compile Include="UsageDataCollectorService.cs" />
-    <Compile Include="Utility\FileHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -93,6 +95,9 @@
   <ItemGroup>
     <Content Include="Import\DeleteImportTables.sql" />
     <Content Include="Readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utility\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

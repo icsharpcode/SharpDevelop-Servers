@@ -2,15 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using log4net;
 using System.IO;
 
-namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Utility
+namespace ICSharpCode.UsageDataCollector.ServiceLibrary.ServiceImplementations
 {
-    public class FileHelpers
+    public class UDCServiceBase
     {
-        public static bool StoreUploadedStream(string localFileFullPath, Stream usageData)
+        public static string AppSettings_ApplicationKey = "UploadService_ApplicationKey";
+
+        protected ILog log = null;
+
+        public ILog Logger
         {
-            if (null == usageData) return false;
+            set
+            {
+                log = value;
+            }
+        }
+
+        public bool StoreUploadedStream(string localFileFullPath, Stream usageData)
+        {
+            if (null == usageData)
+            {
+                if (log.IsErrorEnabled)
+                    log.ErrorFormat("Usage Data stream was empty");
+
+                return false;
+            }
 
             bool bUploadSucceeded = true;
             FileStream fs = null;
@@ -25,9 +44,11 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Utility
                     fs.Write(buffer, 0, read);
                 }
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
-                // TODO: log the error
+                if (log.IsErrorEnabled)
+                    log.Error("Saving the uploaded stream failed", ex);
+
                 bUploadSucceeded = false;
             }
             finally
@@ -45,7 +66,6 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Utility
 
                 // usageData stream is closed by using-idisposable pattern outside this method
             }
-
             return bUploadSucceeded;
         }
     }
