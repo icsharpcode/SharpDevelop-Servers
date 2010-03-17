@@ -34,6 +34,31 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 
             int userId = repository.FindOrInsertUserByGuid(userGuid);
 
+            /* Session duplicate detection */
+            List<long> clientSessionIdList = message.Sessions.Select(s => s.SessionID).ToList();
+            if (clientSessionIdList.Count > 0)
+            {
+                // Match on Id only to execute a T-SQL IN statement
+                var potentialDuplicates = (from s in repository.Context.Sessions
+                                    where s.UserId == userId && clientSessionIdList.Contains(s.ClientSessionId)
+                                    select new { s.ClientSessionId, s.StartTime }).ToList();
+
+                if (potentialDuplicates.Count > 0)
+                {
+                    // Match on time, but this time in-memory, with the potential duplicates only
+                    List<UsageDataSession> matches = (from s in message.Sessions
+                                                      join dup in potentialDuplicates on s.SessionID equals dup.ClientSessionId
+                                                      where s.StartTime == dup.StartTime
+                                                      select s).ToList();
+
+                    // Remove all duplicates that were detected from this message
+                    foreach (UsageDataSession s in matches)
+                    {
+                        bool bRemoved = message.Sessions.Remove(s);
+                    }
+                }
+            }
+            
             List<Session> newSessions = new List<Session>();
             foreach (UsageDataSession msgSession in message.Sessions)
             {
