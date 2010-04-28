@@ -69,9 +69,9 @@
 
     </table>
 
-    <p>
+   <%-- <p>
         <%: Html.ActionLink("Create New", "Create") %>
-    </p>
+    </p>--%>
 
 </asp:Content>
 
