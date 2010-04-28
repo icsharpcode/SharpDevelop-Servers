@@ -1,23 +1,41 @@
 ﻿<%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" >
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /></title>
-
-<style type="text/css">
-.editor-label 
-{
-	font-weight:bold;
-}
-</style>
+	<title>
+		<asp:ContentPlaceHolder ID="TitleContent" runat="server" />
+	</title>
+	<style type="text/css">
+		.editor-label
+		{
+			font-weight: bold;
+		}
+	</style>
 </head>
 <body>
-    <div>
-        <asp:ContentPlaceHolder ID="MainContent" runat="server">
-        
-        </asp:ContentPlaceHolder>
-    </div>
+	<div style="text-align: center">
+		<%
+			if (Request.IsAuthenticated) {
+		%>
+		Welcome <b>
+			<%: Page.User.Identity.Name %></b>! [
+		<%: Html.ActionLink("Log Off", "LogOff", "Account") %>
+		]
+		<%
+			}
+	else {
+		%>
+		[
+		<%: Html.ActionLink("Log On", "LogOn", "Account") %>
+		]
+		<%
+			}
+		%>
+	</div>
+	<div>
+		<asp:ContentPlaceHolder ID="MainContent" runat="server">
+		</asp:ContentPlaceHolder>
+	</div>
 </body>
 </html>
