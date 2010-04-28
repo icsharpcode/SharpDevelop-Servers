@@ -4,11 +4,12 @@ using UsageDataAnalysisWebClient.Models;
 
 namespace UsageDataAnalysisWebClient.Controllers
 {
+	[Authorize]
     public class ExceptionGroupController : Controller
     {
 		private udcEntities _db;
 
-
+		
         public ActionResult Index()
         {
 			_db = new udcEntities();

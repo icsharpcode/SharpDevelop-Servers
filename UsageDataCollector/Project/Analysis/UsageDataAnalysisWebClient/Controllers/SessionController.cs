@@ -7,6 +7,7 @@ using UsageDataAnalysisWebClient.Models;
 
 namespace UsageDataAnalysisWebClient.Controllers
 {
+	[Authorize]
     public class SessionController : Controller
     {
     	private udcEntities _db;
