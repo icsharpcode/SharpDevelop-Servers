@@ -54,8 +54,11 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
             if (stackTrace.Count > 0 && ExceptionHelpers.GetFunctionName(stackTrace[0]).Contains("Throw"))
                 stackTrace.RemoveAt(0);
 
-            if (stackTrace.Count == 0)
+            if (0 == stackTrace.Count)
+            {
                 this.Location = "unknown";
+                return;
+            }
 
             string type = this.Type;
             if (argumentExceptions.Any(e => e.FullName == type) && ExceptionHelpers.IsUserCode(stackTrace[0]))

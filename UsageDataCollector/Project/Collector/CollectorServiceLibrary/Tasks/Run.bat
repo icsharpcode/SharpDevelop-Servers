@@ -1,2 +1,2 @@
-%windir%\microsoft.net\framework\v4.0.30128\msbuild Import.proj /t:ImportTarget
+%windir%\microsoft.net\framework\v4.0.30319\msbuild Import.proj /t:ImportTarget
 pause

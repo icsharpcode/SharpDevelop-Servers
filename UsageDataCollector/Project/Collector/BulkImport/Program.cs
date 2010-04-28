@@ -27,7 +27,7 @@ namespace BulkImporter
             }
 
             // -- uncomment following line for simple testing purposes only
-            // ImportMessagesToSqlServer.ImportSingleMessage(@"D:\Daten\SharpDevelop\trunk\SharpDevelopServers\UsageDataCollector\SampleData\_Debugger_Exception_ab7a92f4-3d0e-44ac-afc9-a4d6090603b0.xml.gz");
+            // ImportMessagesToSqlServer.ImportSingleMessage(@"D:\Temp\UDC_ImportTest\failed\c49e9493-c941-4cdd-996d-8596540fb0a7.xml.gz");
 
             ImportMessagesToSqlServer.ImportMessagesFromDirectory(messageDirectory, true);
         }
