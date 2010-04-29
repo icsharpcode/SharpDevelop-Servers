@@ -60,16 +60,20 @@ namespace UsageDataAnalysisWebClient.Controllers
 			return View();
 		}
 
-		[AcceptVerbs(HttpVerbs.Post)]
-		public ActionResult Edit(int id, FormCollection collection) {
-			_db = new udcEntities();
-			ExceptionGroup selectedExceptionGroup = _db.ExceptionGroups.First(exceptionGroup => exceptionGroup.ExceptionGroupId == id);
-			ViewData.Model = selectedExceptionGroup;
-			selectedExceptionGroup.UserComment = collection["UserComment"];
-			selectedExceptionGroup.UserFixedInRevision = int.Parse(collection["UserFixedInRevision"]);
-			_db.SaveChanges();
-			return RedirectToAction("Index");
-		}
+        [AcceptVerbs(HttpVerbs.Post)]
+        public ActionResult Edit(int id, FormCollection collection)
+        {
+            _db = new udcEntities();
+            ExceptionGroup selectedExceptionGroup = _db.ExceptionGroups.First(exceptionGroup => exceptionGroup.ExceptionGroupId == id);
+            ViewData.Model = selectedExceptionGroup;
+            selectedExceptionGroup.UserComment = collection["UserComment"];
+            if (string.IsNullOrWhiteSpace(collection["UserFixedInRevision"]))
+                selectedExceptionGroup.UserFixedInRevision = null;
+            else
+                selectedExceptionGroup.UserFixedInRevision = int.Parse(collection["UserFixedInRevision"]);
+            _db.SaveChanges();
+            return RedirectToAction("Index");
+        }
 
     }
 }
