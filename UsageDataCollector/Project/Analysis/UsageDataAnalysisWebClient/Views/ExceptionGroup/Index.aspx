@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/UsageDataAnalysis.Master" Inherits="System.Web.Mvc.ViewPage<IEnumerable<UsageDataAnalysisWebClient.Models.ExceptionGroup>>" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/UsageDataAnalysis.Master" Inherits="System.Web.Mvc.ViewPage<IEnumerable<UsageDataAnalysisWebClient.Models.ExceptionGroupViewModel>>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	Index
@@ -10,58 +10,50 @@
 
     <table>
         <tr>
-            <th></th>
-            <th>
-                ExceptionGroupId
-            </th>
-            <th>
-                TypeFingerprintSha256Hash
-            </th>
-            <th>
-                ExceptionType
-            </th>
-            <th>
-                ExceptionFingerprint
-            </th>
-            <th>
-                ExceptionLocation
-            </th>
-            <th>
-                UserComment
-            </th>
-            <th>
-                UserFixedInRevision
-            </th>
+            <th>ID</th>
+            <th>Type</th>
+            <th>Location</th>
+            <th>Users affected</th>
+            <th>Occurrences</th>
+            <th>First Seen</th>
+            <th>Last Seen</th>
+            <th>Comment</th>
         </tr>
 
     <% foreach (var item in Model) { %>
     
-        <tr>
-            <td>
-                <%: Html.ActionLink("Edit", "Edit", new { id=item.ExceptionGroupId }) %> |
+        <tr class='<%: item.UserFixedInRevision != null ? (item.UserFixedInRevision > item.LastSeenRevision ? "goodRow" : "badRow") : "normalRow" %>'>
+           <%--  <td>
                 <%: Html.ActionLink("Details", "Details", new { id=item.ExceptionGroupId })%> |
                 <%: Html.ActionLink("Delete", "Delete", new { id=item.ExceptionGroupId })%>
-            </td>
+            </td> --%>
             <td>
-                <%: item.ExceptionGroupId %>
+                <%: Html.ActionLink(item.ExceptionGroupId.ToString(), "Edit", new { id = item.ExceptionGroupId })%>
             </td>
-            <td>
-                <%: item.TypeFingerprintSha256Hash %>
+            <td class="exceptionType">
+                <%: item.ShortExceptionType %>
             </td>
-            <td>
-                <%: item.ExceptionType %>
-            </td>
-            <td>
-                <%: item.ExceptionFingerprint %>
-            </td>
-            <td>
+            <td class="exceptionLocation">
                 <%: item.ExceptionLocation %>
             </td>
             <td>
-                <%: item.UserComment %>
+                <%: item.AffectedUsers %>
             </td>
             <td>
-                <%: item.UserFixedInRevision %>
+                <%: item.Occurrences %>
+            </td>
+            <td>
+                <%: item.FirstSeenVersion %>
+            </td>
+            <td>
+                <%: item.LastSeenVersion %>
+            </td>
+            <td>
+                <%: item.RichUserComment %>
+                <% if (item.UserFixedInRevision != null)
+                   { %>
+                   fixed in <a href="http://fisheye2.atlassian.com/changelog/sharpdevelop/?cs=<%: item.UserFixedInRevision %>">r<%: item.UserFixedInRevision %></a>
+                <% } %>
             </td>
         </tr>
     

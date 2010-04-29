@@ -11,6 +11,27 @@
 		{
 			font-weight: bold;
 		}
+		.exceptionType
+		{
+			max-width: 200px;
+			overflow: hidden;
+		}
+		.exceptionLocation
+		{
+			max-width: 450px;
+			overflow: hidden;
+		}
+		.normalRow 
+		{
+		}
+		.goodRow
+		{
+			background-color: rgb(198,239,206);
+		}
+		.badRow
+		{
+			background-color: rgb(255,199,206);
+		}
 	</style>
 </head>
 <body>

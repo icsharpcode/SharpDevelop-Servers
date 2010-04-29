@@ -17,37 +17,36 @@
                 <%= Html.LabelFor(model => model.ExceptionGroupId) %>
             </div>
             <div class="editor-field">
-                <%= Html.Label(Model.ExceptionGroupId.ToString()) %>
+                <%: Model.ExceptionGroupId %>
             </div>
             
             <div class="editor-label">
                 <%= Html.LabelFor(model => model.TypeFingerprintSha256Hash) %>
             </div>
             <div class="editor-field">
-                <%= Html.Label(Model.TypeFingerprintSha256Hash) %>
-model.TypeFingerprintSha256Hash) %>
+                <%: Model.TypeFingerprintSha256Hash %>
             </div>
             
             <div class="editor-label">
                 <%= Html.LabelFor(model => model.ExceptionType) %>
             </div>
             <div class="editor-field">
-                <%=Html.Label(Model.ExceptionType) %>
+                <%: Model.ExceptionType %>
             </div>
-            
-            <div class="editor-label">
-                <%= Html.LabelFor(model => model.ExceptionFingerprint) %>
-            </div>
-            <div class="editor-field">
-                <%=Html.Label(Model.ExceptionFingerprint) %>
-            </div>
-            
+           
             <div class="editor-label">
                 <%= Html.LabelFor(model => model.ExceptionLocation) %>
             </div>
             <div class="editor-field">
-                <%= Html.Label(Model.ExceptionLocation) %>
+                <%: Model.ExceptionLocation %>
             </div>
+             
+            <div class="editor-label">
+                <%= Html.LabelFor(model => model.ExceptionFingerprint) %>
+            </div>
+            <pre>
+                <%: Model.ExceptionFingerprint %>
+            </pre>
             
             <div class="editor-label">
                 <%= Html.LabelFor(model => model.UserComment) %>
@@ -71,6 +70,50 @@ model.TypeFingerprintSha256Hash) %>
         </fieldset>
 
     <% } %>
+    
+    <div>
+        <%=Html.ActionLink("Back to List", "Index") %>
+    </div>
+
+    <div>
+    <%
+        var instancesQuery = from ex in Model.Exceptions
+                             where ex.IsFirstInSession
+                             orderby ex.ThrownAt descending
+                             select ex;
+        foreach (var instance in instancesQuery.Take(10))
+        { %>
+            <hr />
+            <table>
+            <tr>
+                <th>Date</th>
+                <td><%: instance.ThrownAt%></td>
+            </tr>
+            <tr>
+                <th>UserID</th>
+                <td><%: instance.Session.UserId%></td>
+            </tr>
+            <% 
+                var environmentDataQuery = from env in instance.Session.EnvironmentDatas
+                                           select new
+                                           {
+                                               Name = env.EnvironmentDataName.EnvironmentDataName1,
+                                               Value = env.EnvironmentDataValue.EnvironmentDataValue1
+                                           };
+                foreach (var environmentData in environmentDataQuery.OrderBy(e => e.Name))
+                {
+                    %>
+                    <tr>
+                        <th><%: environmentData.Name %></th>
+                        <td><%: environmentData.Value %></td>
+                    </tr>
+                    <%
+                }
+            %>
+            </table>
+            <pre><%: instance.Stacktrace %></pre>
+    <% } %>
+    </div>
 
     <div>
         <%=Html.ActionLink("Back to List", "Index") %>

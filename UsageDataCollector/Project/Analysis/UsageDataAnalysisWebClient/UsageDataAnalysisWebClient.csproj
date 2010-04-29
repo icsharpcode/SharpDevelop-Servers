@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="Membership\WebConfigMembershipProvider.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\ExceptionGroupViewModel.cs" />
     <Compile Include="Models\UsageDataAnalysis.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
