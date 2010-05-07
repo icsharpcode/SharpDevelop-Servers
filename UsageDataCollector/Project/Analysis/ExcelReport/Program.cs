@@ -10,9 +10,6 @@ namespace ExcelReport
 {
     class Program
     {
-        // Known versions are highlighted in the usage tab.
-        static readonly Version[] knownVersions = { new Version("4.0.0.5570"), new Version("4.0.0.5571") };
-
         const int minimumNumberOfAffectedUsersForReportedExceptions = 2;
         const int maximumInstancesPerException = 10;
 
@@ -45,20 +42,49 @@ namespace ExcelReport
             return 0;
         }
 
+        #region CalculateKnownVersions
+        static Version[] CalculateKnownVersions(ReportRepository repository)
+        {
+            const int blocks = 4;
+            const int versionsPerBlock = 2;
+            
+            HashSet<Version> popularVersions = new HashSet<Version>();
+            DateTime startDate = repository.Sessions.Min(s => s.StartTime);
+            DateTime endDate = repository.Sessions.Max(s => s.StartTime);
+            
+            TimeSpan span = endDate - startDate;
+            // last week has its own block, other 3 blocks are distributed evenly over the remaining timespan
+            if (span > new TimeSpan(30, 0, 0, 0))
+                span -= new TimeSpan(7, 0, 0, 0);
+            
+            foreach (var groupByBlock in repository.Sessions.AsEnumerable().GroupBy(s => (s.StartTime.Ticks-startDate.Ticks)*(blocks-1)/span.Ticks).OrderBy(g => g.Key)) {
+                int versionsAddedThisBlock = 0;
+                foreach (var version in groupByBlock.GroupBy(s => s.AppVersion).OrderByDescending(g => g.Count())) {
+                    if (popularVersions.Add(version.Key)) {
+                        if (++versionsAddedThisBlock >= versionsPerBlock)
+                            break;
+                    }
+                }
+            }
+            return popularVersions.OrderBy(v => v).ToArray();
+        }
+        #endregion
+        
         #region Usage
         private static void CreateUsageSheet(ExcelWorkbook workbook, ReportRepository repository)
         {
             Worksheet ws = workbook.CreateSheet("Usage");
+            var knownVersions = CalculateKnownVersions(repository);
             UsageTable usageTable = new UsageTable(repository.Sessions, knownVersions);
 
             int pos = 1;
             int chartPos = 30;
-            CreateUsageSheet(ws, ref pos, ref chartPos, usageTable.CreateDaily(), null, "Number of users per day");
-            CreateUsageSheet(ws, ref pos, ref chartPos, usageTable.CreateWeekly(), null, "Number of users per week");
-            CreateUsageSheet(ws, ref pos, ref chartPos, usageTable.CreateMonthly(), "MM.yyyy", "Number of users per month");
+            CreateUsageSheet(ws, knownVersions, ref pos, ref chartPos, usageTable.CreateDaily(), null, "Number of users per day");
+            CreateUsageSheet(ws, knownVersions, ref pos, ref chartPos, usageTable.CreateWeekly(), null, "Number of users per week");
+            CreateUsageSheet(ws, knownVersions, ref pos, ref chartPos, usageTable.CreateMonthly(), "MM.yyyy", "Number of users per month");
         }
 
-        private static void CreateUsageSheet(Worksheet ws, ref int pos, ref int chartPos, ReadOnlyCollection<UsageTable.Row> data, string dateFormat, string title)
+        private static void CreateUsageSheet(Worksheet ws, Version[] knownVersions, ref int pos, ref int chartPos, ReadOnlyCollection<UsageTable.Row> data, string dateFormat, string title)
         {
             ws.Cells[pos++, 1] = title;
             int startpos = pos;
