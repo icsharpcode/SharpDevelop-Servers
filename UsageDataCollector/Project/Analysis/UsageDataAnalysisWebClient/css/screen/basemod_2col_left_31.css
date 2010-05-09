@@ -32,12 +32,11 @@
    */
 
   /* left column | linke Spalte */
-  #col1 { width: 75%; float:right;}
+  #col1 { width: 99%; float:right;}
   #col1_content { padding-left: 10px; padding-right: 20px; }
 
   /* right column | Rechte Spalte */
   #col2, #col2_content { display:none; }
 
-  #col3 { margin-right: 75%; margin-left: 0; }
-  #col3_content { padding-left: 20px; padding-right: 10px; }
+  #col3, #col3_content { display:none; }
 }

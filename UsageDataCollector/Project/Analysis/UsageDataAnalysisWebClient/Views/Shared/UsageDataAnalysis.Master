@@ -69,16 +69,16 @@
 		
 		</span> 
       </div> 
-      <h1>Example | Beispiel <em>&laquo;2col_left_31&raquo;</em></h1> 
-      <span>YAML &#8226; (X)HTML/CSS Framework</span> 
+      <h1>Usage Data Collector</h1> 
+      <span>the #develop chronicles</span> 
     </div> 
     <!-- begin: main navigation #nav --> 
     <div id="nav" role="navigation"> 
       <div class="hlist"> 
         <ul> 
-          <li><a href="../index.html">Table Of Contents</a></li> 
-          <li><a href="2col_right_13.html">Next Example</a></li> 
-          <li><a href="2col_left_13.html">Previous Example</a></li> 
+          <li><%=Html.ActionLink("Home", "Index", "Home") %></li> 
+          <li><%=Html.ActionLink("Sessions", "Index", "Session") %></li> 
+          <li><%=Html.ActionLink("ExceptionGroups","Index", "ExceptionGroup") %></li> 
         </ul> 
       </div> 
     </div> 
@@ -96,9 +96,7 @@
       <!-- begin: #col3 static column --> 
       <div id="col3" role="complementary"> 
         <div id="col3_content" class="clearfix"> 
-          <%=Html.ActionLink("Home", "Index", "Home") %><br />
-          <%=Html.ActionLink("Sessions", "Index", "Session") %><br />
-	<%=Html.ActionLink("ExceptionGroups","Index", "ExceptionGroup") %>
+          
         </div> 
         <div id="ie_clearing">&nbsp;</div> 
         <!-- End: IE Column Clearing --> 
@@ -113,6 +111,6 @@ Layout based on <a href="http://www.yaml.de/">YAML</a></div>
   </div> 
 </div> 
 <!-- full skiplink functionality in webkit browsers --> 
-<script src="../../yaml/core/js/yaml-focusfix.js" type="text/javascript"></script> 
+<script src="/css/yaml/core/js/yaml-focusfix.js" type="text/javascript"></script> 
 </body>
 </html>

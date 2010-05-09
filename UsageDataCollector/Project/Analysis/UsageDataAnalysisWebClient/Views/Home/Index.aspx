@@ -7,7 +7,5 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
    <h2>Usage Data Analysis Website</h2>
-
-	<%=Html.ActionLink("Sessions", "Index", "Session") %>
-	<%=Html.ActionLink("ExceptionGroups","Index", "ExceptionGroup") %>
+   Please use the menu above...
 </asp:Content>

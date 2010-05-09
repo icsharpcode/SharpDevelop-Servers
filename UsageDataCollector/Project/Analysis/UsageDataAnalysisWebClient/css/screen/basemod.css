@@ -47,7 +47,8 @@
 
   /* (en) Layout: width, background, borders */
   /* (de) Layout: Breite, Hintergrund, Rahmen */
-  .page_margins { min-width: 740px; max-width: 80em; background: #fff; }
+  /* .page_margins { min-width: 740px; max-width: 80em; background: #fff; } */
+  .page_margins { min-width: 99%; max-width:99%; background:#fff;}
   .page { padding: 10px; }
 
   /* (en) Designing main layout elements */
