@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
+namespace ExcelReport.DataAccess
 {
     public partial class Session
     {

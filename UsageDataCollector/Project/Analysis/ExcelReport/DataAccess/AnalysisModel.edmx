@@ -112,51 +112,51 @@
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="AnalysisModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+      <Schema Namespace="ExcelReport.DataAccess" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="UsageDataAnalysisEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="ActivationMethods" EntityType="AnalysisModel.ActivationMethod" />
-          <EntitySet Name="EnvironmentData" EntityType="AnalysisModel.EnvironmentData" />
-          <EntitySet Name="EnvironmentDataNames" EntityType="AnalysisModel.EnvironmentDataName" />
-          <EntitySet Name="ExceptionGroups" EntityType="AnalysisModel.ExceptionGroup" />
-          <EntitySet Name="Exceptions" EntityType="AnalysisModel.Exception" />
-          <EntitySet Name="Features" EntityType="AnalysisModel.Feature" />
-          <EntitySet Name="FeatureUse" EntityType="AnalysisModel.FeatureUse" />
-          <EntitySet Name="Sessions" EntityType="AnalysisModel.Session" />
-          <EntitySet Name="Users" EntityType="AnalysisModel.User" />
-          <AssociationSet Name="UserSession" Association="AnalysisModel.UserSession">
+          <EntitySet Name="ActivationMethods" EntityType="ExcelReport.DataAccess.ActivationMethod" />
+          <EntitySet Name="EnvironmentData" EntityType="ExcelReport.DataAccess.EnvironmentData" />
+          <EntitySet Name="EnvironmentDataNames" EntityType="ExcelReport.DataAccess.EnvironmentDataName" />
+          <EntitySet Name="ExceptionGroups" EntityType="ExcelReport.DataAccess.ExceptionGroup" />
+          <EntitySet Name="Exceptions" EntityType="ExcelReport.DataAccess.Exception" />
+          <EntitySet Name="Features" EntityType="ExcelReport.DataAccess.Feature" />
+          <EntitySet Name="FeatureUse" EntityType="ExcelReport.DataAccess.FeatureUse" />
+          <EntitySet Name="Sessions" EntityType="ExcelReport.DataAccess.Session" />
+          <EntitySet Name="Users" EntityType="ExcelReport.DataAccess.User" />
+          <AssociationSet Name="UserSession" Association="ExcelReport.DataAccess.UserSession">
             <End Role="User" EntitySet="Users" />
             <End Role="Session" EntitySet="Sessions" />
           </AssociationSet>
-          <AssociationSet Name="SessionEnvironmentData" Association="AnalysisModel.SessionEnvironmentData">
+          <AssociationSet Name="SessionEnvironmentData" Association="ExcelReport.DataAccess.SessionEnvironmentData">
             <End Role="Session" EntitySet="Sessions" />
             <End Role="EnvironmentData" EntitySet="EnvironmentData" />
           </AssociationSet>
-          <AssociationSet Name="EnvironmentDataNameEnvironmentData" Association="AnalysisModel.EnvironmentDataNameEnvironmentData">
+          <AssociationSet Name="EnvironmentDataNameEnvironmentData" Association="ExcelReport.DataAccess.EnvironmentDataNameEnvironmentData">
             <End Role="EnvironmentDataName" EntitySet="EnvironmentDataNames" />
             <End Role="EnvironmentData" EntitySet="EnvironmentData" />
           </AssociationSet>
-          <AssociationSet Name="ExceptionGroupException" Association="AnalysisModel.ExceptionGroupException">
+          <AssociationSet Name="ExceptionGroupException" Association="ExcelReport.DataAccess.ExceptionGroupException">
             <End Role="ExceptionGroup" EntitySet="ExceptionGroups" />
             <End Role="Exception" EntitySet="Exceptions" />
           </AssociationSet>
-          <AssociationSet Name="SessionException" Association="AnalysisModel.SessionException">
+          <AssociationSet Name="SessionException" Association="ExcelReport.DataAccess.SessionException">
             <End Role="Session" EntitySet="Sessions" />
             <End Role="Exception" EntitySet="Exceptions" />
           </AssociationSet>
-          <AssociationSet Name="SessionFeatureUse" Association="AnalysisModel.SessionFeatureUse">
+          <AssociationSet Name="SessionFeatureUse" Association="ExcelReport.DataAccess.SessionFeatureUse">
             <End Role="Session" EntitySet="Sessions" />
             <End Role="FeatureUse" EntitySet="FeatureUse" />
           </AssociationSet>
-          <AssociationSet Name="FeatureUseFeature" Association="AnalysisModel.FeatureUseFeature">
+          <AssociationSet Name="FeatureUseFeature" Association="ExcelReport.DataAccess.FeatureUseFeature">
             <End Role="FeatureUse" EntitySet="FeatureUse" />
             <End Role="Feature" EntitySet="Features" />
           </AssociationSet>
-          <AssociationSet Name="ActivationMethodFeatureUse" Association="AnalysisModel.ActivationMethodFeatureUse">
+          <AssociationSet Name="ActivationMethodFeatureUse" Association="ExcelReport.DataAccess.ActivationMethodFeatureUse">
             <End Role="ActivationMethod" EntitySet="ActivationMethods" />
             <End Role="FeatureUse" EntitySet="FeatureUse" />
           </AssociationSet>
-          <EntitySet Name="EnvironmentDataValues" EntityType="AnalysisModel.EnvironmentDataValue" />
-          <AssociationSet Name="EnvironmentDataValueEnvironmentData" Association="AnalysisModel.EnvironmentDataValueEnvironmentData">
+          <EntitySet Name="EnvironmentDataValues" EntityType="ExcelReport.DataAccess.EnvironmentDataValue" />
+          <AssociationSet Name="EnvironmentDataValueEnvironmentData" Association="ExcelReport.DataAccess.EnvironmentDataValueEnvironmentData">
             <End Role="EnvironmentDataValue" EntitySet="EnvironmentDataValues" />
             <End Role="EnvironmentData" EntitySet="EnvironmentData" />
           </AssociationSet>
@@ -167,7 +167,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="FeatureUses" Relationship="AnalysisModel.ActivationMethodFeatureUse" FromRole="ActivationMethod" ToRole="FeatureUse" />
+          <NavigationProperty Name="FeatureUses" Relationship="ExcelReport.DataAccess.ActivationMethodFeatureUse" FromRole="ActivationMethod" ToRole="FeatureUse" />
         </EntityType>
         <EntityType Name="EnvironmentData">
           <Key>
@@ -176,10 +176,10 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SessionId" Type="Int32" Nullable="false" />
           <Property Name="NameId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Session" Relationship="AnalysisModel.SessionEnvironmentData" FromRole="EnvironmentData" ToRole="Session" />
-          <NavigationProperty Name="EnvironmentDataName" Relationship="AnalysisModel.EnvironmentDataNameEnvironmentData" FromRole="EnvironmentData" ToRole="EnvironmentDataName" />
+          <NavigationProperty Name="Session" Relationship="ExcelReport.DataAccess.SessionEnvironmentData" FromRole="EnvironmentData" ToRole="Session" />
+          <NavigationProperty Name="EnvironmentDataName" Relationship="ExcelReport.DataAccess.EnvironmentDataNameEnvironmentData" FromRole="EnvironmentData" ToRole="EnvironmentDataName" />
           <Property Type="Int32" Name="ValueId" Nullable="false" />
-          <NavigationProperty Name="EnvironmentDataValue" Relationship="AnalysisModel.EnvironmentDataValueEnvironmentData" FromRole="EnvironmentData" ToRole="EnvironmentDataValue" />
+          <NavigationProperty Name="EnvironmentDataValue" Relationship="ExcelReport.DataAccess.EnvironmentDataValueEnvironmentData" FromRole="EnvironmentData" ToRole="EnvironmentDataValue" />
         </EntityType>
         <EntityType Name="EnvironmentDataName">
           <Key>
@@ -187,7 +187,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="EnvironmentDatas" Relationship="AnalysisModel.EnvironmentDataNameEnvironmentData" FromRole="EnvironmentDataName" ToRole="EnvironmentData" />
+          <NavigationProperty Name="EnvironmentDatas" Relationship="ExcelReport.DataAccess.EnvironmentDataNameEnvironmentData" FromRole="EnvironmentDataName" ToRole="EnvironmentData" />
         </EntityType>
         <EntityType Name="ExceptionGroup">
           <Key>
@@ -200,7 +200,7 @@
           <Property Name="ExceptionLocation" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="UserComment" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="UserFixedInRevision" Type="Int32" />
-          <NavigationProperty Name="Exceptions" Relationship="AnalysisModel.ExceptionGroupException" FromRole="ExceptionGroup" ToRole="Exception" />
+          <NavigationProperty Name="Exceptions" Relationship="ExcelReport.DataAccess.ExceptionGroupException" FromRole="ExceptionGroup" ToRole="Exception" />
         </EntityType>
         <EntityType Name="Exception">
           <Key>
@@ -212,8 +212,8 @@
           <Property Name="ThrownAt" Type="DateTime" Nullable="false" />
           <Property Name="Stacktrace" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="IsFirstInSession" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="ExceptionGroup" Relationship="AnalysisModel.ExceptionGroupException" FromRole="Exception" ToRole="ExceptionGroup" />
-          <NavigationProperty Name="Session" Relationship="AnalysisModel.SessionException" FromRole="Exception" ToRole="Session" />
+          <NavigationProperty Name="ExceptionGroup" Relationship="ExcelReport.DataAccess.ExceptionGroupException" FromRole="Exception" ToRole="ExceptionGroup" />
+          <NavigationProperty Name="Session" Relationship="ExcelReport.DataAccess.SessionException" FromRole="Exception" ToRole="Session" />
         </EntityType>
         <EntityType Name="Feature">
           <Key>
@@ -221,7 +221,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="FeatureUses" Relationship="AnalysisModel.FeatureUseFeature" FromRole="Feature" ToRole="FeatureUse" />
+          <NavigationProperty Name="FeatureUses" Relationship="ExcelReport.DataAccess.FeatureUseFeature" FromRole="Feature" ToRole="FeatureUse" />
         </EntityType>
         <EntityType Name="FeatureUse">
           <Key>
@@ -233,9 +233,9 @@
           <Property Name="EndTime" Type="DateTime" />
           <Property Name="FeatureId" Type="Int32" Nullable="false" />
           <Property Name="ActivationMethodId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Session" Relationship="AnalysisModel.SessionFeatureUse" FromRole="FeatureUse" ToRole="Session" />
-          <NavigationProperty Name="Feature" Relationship="AnalysisModel.FeatureUseFeature" FromRole="FeatureUse" ToRole="Feature" />
-          <NavigationProperty Name="ActivationMethod" Relationship="AnalysisModel.ActivationMethodFeatureUse" FromRole="FeatureUse" ToRole="ActivationMethod" />
+          <NavigationProperty Name="Session" Relationship="ExcelReport.DataAccess.SessionFeatureUse" FromRole="FeatureUse" ToRole="Session" />
+          <NavigationProperty Name="Feature" Relationship="ExcelReport.DataAccess.FeatureUseFeature" FromRole="FeatureUse" ToRole="Feature" />
+          <NavigationProperty Name="ActivationMethod" Relationship="ExcelReport.DataAccess.ActivationMethodFeatureUse" FromRole="FeatureUse" ToRole="ActivationMethod" />
         </EntityType>
         <EntityType Name="Session">
           <Key>
@@ -246,10 +246,10 @@
           <Property Name="StartTime" Type="DateTime" Nullable="false" />
           <Property Name="EndTime" Type="DateTime" />
           <Property Name="UserId" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="User" Relationship="AnalysisModel.UserSession" FromRole="Session" ToRole="User" />
-          <NavigationProperty Name="EnvironmentDatas" Relationship="AnalysisModel.SessionEnvironmentData" FromRole="Session" ToRole="EnvironmentData" />
-          <NavigationProperty Name="Exceptions" Relationship="AnalysisModel.SessionException" FromRole="Session" ToRole="Exception" />
-          <NavigationProperty Name="FeatureUses" Relationship="AnalysisModel.SessionFeatureUse" FromRole="Session" ToRole="FeatureUse" />
+          <NavigationProperty Name="User" Relationship="ExcelReport.DataAccess.UserSession" FromRole="Session" ToRole="User" />
+          <NavigationProperty Name="EnvironmentDatas" Relationship="ExcelReport.DataAccess.SessionEnvironmentData" FromRole="Session" ToRole="EnvironmentData" />
+          <NavigationProperty Name="Exceptions" Relationship="ExcelReport.DataAccess.SessionException" FromRole="Session" ToRole="Exception" />
+          <NavigationProperty Name="FeatureUses" Relationship="ExcelReport.DataAccess.SessionFeatureUse" FromRole="Session" ToRole="FeatureUse" />
           <Property Type="Int32" Name="AppVersionMajor" />
           <Property Type="Int32" Name="AppVersionMinor" />
           <Property Type="Int32" Name="AppVersionBuild" />
@@ -261,11 +261,11 @@
           </Key>
           <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="AssociatedGuid" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
-          <NavigationProperty Name="Sessions" Relationship="AnalysisModel.UserSession" FromRole="User" ToRole="Session" />
+          <NavigationProperty Name="Sessions" Relationship="ExcelReport.DataAccess.UserSession" FromRole="User" ToRole="Session" />
         </EntityType>
         <Association Name="UserSession">
-          <End Type="AnalysisModel.User" Role="User" Multiplicity="1" />
-          <End Type="AnalysisModel.Session" Role="Session" Multiplicity="*" />
+          <End Type="ExcelReport.DataAccess.User" Role="User" Multiplicity="1" />
+          <End Type="ExcelReport.DataAccess.Session" Role="Session" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="User">
               <PropertyRef Name="UserId" />
@@ -276,8 +276,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="SessionEnvironmentData">
-          <End Type="AnalysisModel.Session" Role="Session" Multiplicity="1" />
-          <End Type="AnalysisModel.EnvironmentData" Role="EnvironmentData" Multiplicity="*" />
+          <End Type="ExcelReport.DataAccess.Session" Role="Session" Multiplicity="1" />
+          <End Type="ExcelReport.DataAccess.EnvironmentData" Role="EnvironmentData" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Session">
               <PropertyRef Name="SessionId" />
@@ -288,8 +288,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="EnvironmentDataNameEnvironmentData">
-          <End Type="AnalysisModel.EnvironmentDataName" Role="EnvironmentDataName" Multiplicity="1" />
-          <End Type="AnalysisModel.EnvironmentData" Role="EnvironmentData" Multiplicity="*" />
+          <End Type="ExcelReport.DataAccess.EnvironmentDataName" Role="EnvironmentDataName" Multiplicity="1" />
+          <End Type="ExcelReport.DataAccess.EnvironmentData" Role="EnvironmentData" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="EnvironmentDataName">
               <PropertyRef Name="Id" />
@@ -300,8 +300,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="ExceptionGroupException">
-          <End Type="AnalysisModel.ExceptionGroup" Role="ExceptionGroup" Multiplicity="1" />
-          <End Type="AnalysisModel.Exception" Role="Exception" Multiplicity="*" />
+          <End Type="ExcelReport.DataAccess.ExceptionGroup" Role="ExceptionGroup" Multiplicity="1" />
+          <End Type="ExcelReport.DataAccess.Exception" Role="Exception" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ExceptionGroup">
               <PropertyRef Name="ExceptionGroupId" />
@@ -312,8 +312,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="SessionException">
-          <End Type="AnalysisModel.Session" Role="Session" Multiplicity="1" />
-          <End Type="AnalysisModel.Exception" Role="Exception" Multiplicity="*" />
+          <End Type="ExcelReport.DataAccess.Session" Role="Session" Multiplicity="1" />
+          <End Type="ExcelReport.DataAccess.Exception" Role="Exception" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Session">
               <PropertyRef Name="SessionId" />
@@ -324,8 +324,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="SessionFeatureUse">
-          <End Type="AnalysisModel.Session" Role="Session" Multiplicity="1" />
-          <End Type="AnalysisModel.FeatureUse" Role="FeatureUse" Multiplicity="*" />
+          <End Type="ExcelReport.DataAccess.Session" Role="Session" Multiplicity="1" />
+          <End Type="ExcelReport.DataAccess.FeatureUse" Role="FeatureUse" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Session">
               <PropertyRef Name="SessionId" />
@@ -336,8 +336,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FeatureUseFeature">
-          <End Type="AnalysisModel.FeatureUse" Role="FeatureUse" Multiplicity="*" />
-          <End Type="AnalysisModel.Feature" Role="Feature" Multiplicity="1" />
+          <End Type="ExcelReport.DataAccess.FeatureUse" Role="FeatureUse" Multiplicity="*" />
+          <End Type="ExcelReport.DataAccess.Feature" Role="Feature" Multiplicity="1" />
           <ReferentialConstraint>
             <Principal Role="Feature">
               <PropertyRef Name="Id" />
@@ -348,8 +348,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="ActivationMethodFeatureUse">
-          <End Type="AnalysisModel.ActivationMethod" Role="ActivationMethod" Multiplicity="1" />
-          <End Type="AnalysisModel.FeatureUse" Role="FeatureUse" Multiplicity="*" />
+          <End Type="ExcelReport.DataAccess.ActivationMethod" Role="ActivationMethod" Multiplicity="1" />
+          <End Type="ExcelReport.DataAccess.FeatureUse" Role="FeatureUse" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="ActivationMethod">
               <PropertyRef Name="Id" />
@@ -365,11 +365,11 @@
           </Key>
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Value" MaxLength="255" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="EnvironmentDatas" Relationship="AnalysisModel.EnvironmentDataValueEnvironmentData" FromRole="EnvironmentDataValue" ToRole="EnvironmentData" />
+          <NavigationProperty Name="EnvironmentDatas" Relationship="ExcelReport.DataAccess.EnvironmentDataValueEnvironmentData" FromRole="EnvironmentDataValue" ToRole="EnvironmentData" />
         </EntityType>
         <Association Name="EnvironmentDataValueEnvironmentData">
-          <End Type="AnalysisModel.EnvironmentDataValue" Role="EnvironmentDataValue" Multiplicity="1" />
-          <End Type="AnalysisModel.EnvironmentData" Role="EnvironmentData" Multiplicity="*" />
+          <End Type="ExcelReport.DataAccess.EnvironmentDataValue" Role="EnvironmentDataValue" Multiplicity="1" />
+          <End Type="ExcelReport.DataAccess.EnvironmentData" Role="EnvironmentData" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="EnvironmentDataValue">
               <PropertyRef Name="Id" />
@@ -385,21 +385,21 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="AnalysisModelStoreContainer" CdmEntityContainer="UsageDataAnalysisEntities">
-          <EntitySetMapping Name="ActivationMethods"><EntityTypeMapping TypeName="AnalysisModel.ActivationMethod"><MappingFragment StoreEntitySet="ActivationMethods">
+          <EntitySetMapping Name="ActivationMethods"><EntityTypeMapping TypeName="ExcelReport.DataAccess.ActivationMethod"><MappingFragment StoreEntitySet="ActivationMethods">
             <ScalarProperty Name="Id" ColumnName="ActivationMethodId" />
             <ScalarProperty Name="Name" ColumnName="ActivationMethodName" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="EnvironmentData"><EntityTypeMapping TypeName="AnalysisModel.EnvironmentData"><MappingFragment StoreEntitySet="EnvironmentData">
+          <EntitySetMapping Name="EnvironmentData"><EntityTypeMapping TypeName="ExcelReport.DataAccess.EnvironmentData"><MappingFragment StoreEntitySet="EnvironmentData">
             <ScalarProperty Name="ValueId" ColumnName="EnvironmentDataValueId" />
                 <ScalarProperty Name="Id" ColumnName="EnvironmentDataId" />
             <ScalarProperty Name="SessionId" ColumnName="SessionId" />
             <ScalarProperty Name="NameId" ColumnName="EnvironmentDataNameId" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="EnvironmentDataNames"><EntityTypeMapping TypeName="AnalysisModel.EnvironmentDataName"><MappingFragment StoreEntitySet="EnvironmentDataNames">
+          <EntitySetMapping Name="EnvironmentDataNames"><EntityTypeMapping TypeName="ExcelReport.DataAccess.EnvironmentDataName"><MappingFragment StoreEntitySet="EnvironmentDataNames">
             <ScalarProperty Name="Id" ColumnName="EnvironmentDataNameId" />
             <ScalarProperty Name="Name" ColumnName="EnvironmentDataName" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="ExceptionGroups"><EntityTypeMapping TypeName="AnalysisModel.ExceptionGroup"><MappingFragment StoreEntitySet="ExceptionGroups">
+          <EntitySetMapping Name="ExceptionGroups"><EntityTypeMapping TypeName="ExcelReport.DataAccess.ExceptionGroup"><MappingFragment StoreEntitySet="ExceptionGroups">
             <ScalarProperty Name="ExceptionGroupId" ColumnName="ExceptionGroupId" />
             <ScalarProperty Name="TypeFingerprintSha256Hash" ColumnName="TypeFingerprintSha256Hash" />
             <ScalarProperty Name="ExceptionType" ColumnName="ExceptionType" />
@@ -408,7 +408,7 @@
             <ScalarProperty Name="UserComment" ColumnName="UserComment" />
             <ScalarProperty Name="UserFixedInRevision" ColumnName="UserFixedInRevision" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="Exceptions"><EntityTypeMapping TypeName="AnalysisModel.Exception"><MappingFragment StoreEntitySet="Exceptions">
+          <EntitySetMapping Name="Exceptions"><EntityTypeMapping TypeName="ExcelReport.DataAccess.Exception"><MappingFragment StoreEntitySet="Exceptions">
             <ScalarProperty Name="ExceptionId" ColumnName="ExceptionId" />
             <ScalarProperty Name="SessionId" ColumnName="SessionId" />
             <ScalarProperty Name="ExceptionGroupId" ColumnName="ExceptionGroupId" />
@@ -416,11 +416,11 @@
             <ScalarProperty Name="Stacktrace" ColumnName="Stacktrace" />
             <ScalarProperty Name="IsFirstInSession" ColumnName="IsFirstInSession" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="Features"><EntityTypeMapping TypeName="AnalysisModel.Feature"><MappingFragment StoreEntitySet="Features">
+          <EntitySetMapping Name="Features"><EntityTypeMapping TypeName="ExcelReport.DataAccess.Feature"><MappingFragment StoreEntitySet="Features">
             <ScalarProperty Name="Id" ColumnName="FeatureId" />
             <ScalarProperty Name="Name" ColumnName="FeatureName" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="FeatureUse"><EntityTypeMapping TypeName="AnalysisModel.FeatureUse"><MappingFragment StoreEntitySet="FeatureUse">
+          <EntitySetMapping Name="FeatureUse"><EntityTypeMapping TypeName="ExcelReport.DataAccess.FeatureUse"><MappingFragment StoreEntitySet="FeatureUse">
             <ScalarProperty Name="FeatureUseId" ColumnName="FeatureUseId" />
             <ScalarProperty Name="SessionId" ColumnName="SessionId" />
             <ScalarProperty Name="UseTime" ColumnName="UseTime" />
@@ -428,7 +428,7 @@
             <ScalarProperty Name="FeatureId" ColumnName="FeatureId" />
             <ScalarProperty Name="ActivationMethodId" ColumnName="ActivationMethodId" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="Sessions"><EntityTypeMapping TypeName="AnalysisModel.Session"><MappingFragment StoreEntitySet="Sessions">
+          <EntitySetMapping Name="Sessions"><EntityTypeMapping TypeName="ExcelReport.DataAccess.Session"><MappingFragment StoreEntitySet="Sessions">
             <ScalarProperty Name="AppVersionRevision" ColumnName="AppVersionRevision" />
                 <ScalarProperty Name="AppVersionBuild" ColumnName="AppVersionBuild" />
                 <ScalarProperty Name="AppVersionMinor" ColumnName="AppVersionMinor" />
@@ -439,12 +439,12 @@
             <ScalarProperty Name="EndTime" ColumnName="EndTime" />
             <ScalarProperty Name="UserId" ColumnName="UserId" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="Users"><EntityTypeMapping TypeName="AnalysisModel.User"><MappingFragment StoreEntitySet="Users">
+          <EntitySetMapping Name="Users"><EntityTypeMapping TypeName="ExcelReport.DataAccess.User"><MappingFragment StoreEntitySet="Users">
             <ScalarProperty Name="UserId" ColumnName="UserId" />
             <ScalarProperty Name="AssociatedGuid" ColumnName="AssociatedGuid" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="EnvironmentDataValues">
-            <EntityTypeMapping TypeName="AnalysisModel.EnvironmentDataValue">
+            <EntityTypeMapping TypeName="ExcelReport.DataAccess.EnvironmentDataValue">
               <MappingFragment StoreEntitySet="EnvironmentDataValues">
                 <ScalarProperty Name="Value" ColumnName="EnvironmentDataValue" />
                 <ScalarProperty Name="Id" ColumnName="EnvironmentDataValueId" />
@@ -472,49 +472,49 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="AnalysisModel">
-        <EntityTypeShape EntityType="AnalysisModel.ActivationMethod" Width="1.5" PointX="4.875" PointY="7.5" Height="1.5956835937499996" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.EnvironmentData" Width="1.5" PointX="3.5" PointY="0.5" Height="2.172587890625" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.EnvironmentDataName" Width="2.25" PointX="0.5" PointY="0.625" Height="1.59568359375" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.ExceptionGroup" Width="1.5" PointX="7.25" PointY="3.875" Height="2.5571907552083317" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.Exception" Width="1.5" PointX="5.25" PointY="3.875" Height="2.5571907552083326" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.Feature" Width="1.5" PointX="0.875" PointY="7.375" Height="1.5956835937499996" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.FeatureUse" Width="1.5" PointX="2.875" PointY="7.5" Height="2.7494921874999996" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.Session" Width="1.5" PointX="2.75" PointY="3.5" Height="3.5186979166666665" IsExpanded="true" />
-        <EntityTypeShape EntityType="AnalysisModel.User" Width="1.5" PointX="0.5" PointY="4" Height="1.5956835937499996" IsExpanded="true" />
-        <AssociationConnector Association="AnalysisModel.UserSession">
+        <EntityTypeShape EntityType="ExcelReport.DataAccess.ActivationMethod" Width="1.5" PointX="4.875" PointY="7.5" Height="1.5956835937499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExcelReport.DataAccess.EnvironmentData" Width="1.5" PointX="3.5" PointY="0.5" Height="2.172587890625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExcelReport.DataAccess.EnvironmentDataName" Width="2.25" PointX="0.5" PointY="0.625" Height="1.59568359375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExcelReport.DataAccess.ExceptionGroup" Width="1.5" PointX="7.25" PointY="3.875" Height="2.5571907552083317" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExcelReport.DataAccess.Exception" Width="1.5" PointX="5.25" PointY="3.875" Height="2.5571907552083326" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExcelReport.DataAccess.Feature" Width="1.5" PointX="0.875" PointY="7.375" Height="1.5956835937499996" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExcelReport.DataAccess.FeatureUse" Width="1.5" PointX="2.875" PointY="7.5" Height="2.7494921874999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExcelReport.DataAccess.Session" Width="1.5" PointX="2.75" PointY="3.5" Height="3.5186979166666665" IsExpanded="true" />
+        <EntityTypeShape EntityType="ExcelReport.DataAccess.User" Width="1.5" PointX="0.5" PointY="4" Height="1.5956835937499996" IsExpanded="true" />
+        <AssociationConnector Association="ExcelReport.DataAccess.UserSession">
           <ConnectorPoint PointX="2" PointY="4.797841796875" />
           <ConnectorPoint PointX="2.75" PointY="4.797841796875" />
         </AssociationConnector>
-        <AssociationConnector Association="AnalysisModel.SessionEnvironmentData">
+        <AssociationConnector Association="ExcelReport.DataAccess.SessionEnvironmentData">
           <ConnectorPoint PointX="3.875" PointY="3.5" />
           <ConnectorPoint PointX="3.875" PointY="2.672587890625" />
         </AssociationConnector>
-        <AssociationConnector Association="AnalysisModel.EnvironmentDataNameEnvironmentData">
+        <AssociationConnector Association="ExcelReport.DataAccess.EnvironmentDataNameEnvironmentData">
           <ConnectorPoint PointX="2.75" PointY="1.4228417968750002" />
           <ConnectorPoint PointX="3.5" PointY="1.4228417968750002" />
         </AssociationConnector>
-        <AssociationConnector Association="AnalysisModel.ExceptionGroupException">
+        <AssociationConnector Association="ExcelReport.DataAccess.ExceptionGroupException">
           <ConnectorPoint PointX="7.25" PointY="5.1535953776041659" />
           <ConnectorPoint PointX="6.75" PointY="5.1535953776041659" />
         </AssociationConnector>
-        <AssociationConnector Association="AnalysisModel.SessionException">
+        <AssociationConnector Association="ExcelReport.DataAccess.SessionException">
           <ConnectorPoint PointX="4.25" PointY="5.1535953776041659" />
           <ConnectorPoint PointX="5.25" PointY="5.1535953776041659" />
         </AssociationConnector>
-        <AssociationConnector Association="AnalysisModel.SessionFeatureUse">
+        <AssociationConnector Association="ExcelReport.DataAccess.SessionFeatureUse">
           <ConnectorPoint PointX="3.5625" PointY="7.0186979166666665" />
           <ConnectorPoint PointX="3.5625" PointY="7.5" />
         </AssociationConnector>
-        <AssociationConnector Association="AnalysisModel.FeatureUseFeature">
+        <AssociationConnector Association="ExcelReport.DataAccess.FeatureUseFeature">
           <ConnectorPoint PointX="2.875" PointY="8.235341796875" />
           <ConnectorPoint PointX="2.375" PointY="8.235341796875" />
         </AssociationConnector>
-        <AssociationConnector Association="AnalysisModel.ActivationMethodFeatureUse">
+        <AssociationConnector Association="ExcelReport.DataAccess.ActivationMethodFeatureUse">
           <ConnectorPoint PointX="4.875" PointY="8.297841796875" />
           <ConnectorPoint PointX="4.375" PointY="8.297841796875" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="AnalysisModel.EnvironmentDataValue" Width="1.5" PointX="5.75" PointY="0.75" Height="1.4033821614583317" />
-        <AssociationConnector Association="AnalysisModel.EnvironmentDataValueEnvironmentData">
+        <EntityTypeShape EntityType="ExcelReport.DataAccess.EnvironmentDataValue" Width="1.5" PointX="5.75" PointY="0.75" Height="1.4033821614583317" />
+        <AssociationConnector Association="ExcelReport.DataAccess.EnvironmentDataValueEnvironmentData">
           <ConnectorPoint PointX="5.75" PointY="1.5478417968750002" />
           <ConnectorPoint PointX="5" PointY="1.5478417968750002" />
         </AssociationConnector>

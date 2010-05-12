@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ICSharpCode.UsageDataCollector.DataAccess.Analysis;
+using ExcelReport.DataAccess;
 using System.Collections.ObjectModel;
 
 namespace ExcelReport

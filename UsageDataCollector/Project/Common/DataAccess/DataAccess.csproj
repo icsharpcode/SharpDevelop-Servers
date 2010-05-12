@@ -43,12 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Analysis\AnalysisModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AnalysisModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Analysis\Session.cs" />
     <Compile Include="Collector\CollectorModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -65,10 +59,6 @@
     </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="Analysis\AnalysisModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>AnalysisModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <None Include="App.Config" />
     <None Include="Properties\DataSources\ICSharpCode.UsageDataCollector.DataAccess.Analysis.UDCContext.datasource" />
     <None Include="Properties\DataSources\ICSharpCode.UsageDataCollector.DataAccess.Collector.UDCContext.datasource" />

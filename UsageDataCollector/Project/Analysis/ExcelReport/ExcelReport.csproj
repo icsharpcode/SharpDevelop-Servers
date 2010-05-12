@@ -38,6 +38,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -45,6 +47,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\AnalysisModel.Designer.cs">
+      <DependentUpon>AnalysisModel.edmx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="DataAccess\Session.cs" />
     <Compile Include="ExcelWorkbook.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -52,13 +60,11 @@
     <Compile Include="UsageTable.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common\DataAccess\DataAccess.csproj">
-      <Project>{3C72C5DF-EE0C-494A-8B28-F74DB14F7040}</Project>
-      <Name>DataAccess</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.Config" />
+    <EntityDeploy Include="DataAccess\AnalysisModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>AnalysisModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Interop.Excel">

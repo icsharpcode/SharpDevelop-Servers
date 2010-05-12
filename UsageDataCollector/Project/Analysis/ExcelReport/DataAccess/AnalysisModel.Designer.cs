@@ -18,19 +18,19 @@ using System.Runtime.Serialization;
 [assembly: EdmSchemaAttribute()]
 #region EDM Relationship Metadata
 
-[assembly: EdmRelationshipAttribute("AnalysisModel", "UserSession", "User", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.User), "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.Session), true)]
-[assembly: EdmRelationshipAttribute("AnalysisModel", "SessionEnvironmentData", "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.Session), "EnvironmentData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.EnvironmentData), true)]
-[assembly: EdmRelationshipAttribute("AnalysisModel", "EnvironmentDataNameEnvironmentData", "EnvironmentDataName", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.EnvironmentDataName), "EnvironmentData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.EnvironmentData), true)]
-[assembly: EdmRelationshipAttribute("AnalysisModel", "ExceptionGroupException", "ExceptionGroup", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.ExceptionGroup), "Exception", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.Exception), true)]
-[assembly: EdmRelationshipAttribute("AnalysisModel", "SessionException", "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.Session), "Exception", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.Exception), true)]
-[assembly: EdmRelationshipAttribute("AnalysisModel", "SessionFeatureUse", "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.Session), "FeatureUse", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.FeatureUse), true)]
-[assembly: EdmRelationshipAttribute("AnalysisModel", "FeatureUseFeature", "FeatureUse", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.FeatureUse), "Feature", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.Feature), true)]
-[assembly: EdmRelationshipAttribute("AnalysisModel", "ActivationMethodFeatureUse", "ActivationMethod", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.ActivationMethod), "FeatureUse", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.FeatureUse), true)]
-[assembly: EdmRelationshipAttribute("AnalysisModel", "EnvironmentDataValueEnvironmentData", "EnvironmentDataValue", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.EnvironmentDataValue), "EnvironmentData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ICSharpCode.UsageDataCollector.DataAccess.Analysis.EnvironmentData), true)]
+[assembly: EdmRelationshipAttribute("ExcelReport.DataAccess", "UserSession", "User", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ExcelReport.DataAccess.User), "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ExcelReport.DataAccess.Session), true)]
+[assembly: EdmRelationshipAttribute("ExcelReport.DataAccess", "SessionEnvironmentData", "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ExcelReport.DataAccess.Session), "EnvironmentData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ExcelReport.DataAccess.EnvironmentData), true)]
+[assembly: EdmRelationshipAttribute("ExcelReport.DataAccess", "EnvironmentDataNameEnvironmentData", "EnvironmentDataName", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ExcelReport.DataAccess.EnvironmentDataName), "EnvironmentData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ExcelReport.DataAccess.EnvironmentData), true)]
+[assembly: EdmRelationshipAttribute("ExcelReport.DataAccess", "ExceptionGroupException", "ExceptionGroup", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ExcelReport.DataAccess.ExceptionGroup), "Exception", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ExcelReport.DataAccess.Exception), true)]
+[assembly: EdmRelationshipAttribute("ExcelReport.DataAccess", "SessionException", "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ExcelReport.DataAccess.Session), "Exception", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ExcelReport.DataAccess.Exception), true)]
+[assembly: EdmRelationshipAttribute("ExcelReport.DataAccess", "SessionFeatureUse", "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ExcelReport.DataAccess.Session), "FeatureUse", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ExcelReport.DataAccess.FeatureUse), true)]
+[assembly: EdmRelationshipAttribute("ExcelReport.DataAccess", "FeatureUseFeature", "FeatureUse", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ExcelReport.DataAccess.FeatureUse), "Feature", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ExcelReport.DataAccess.Feature), true)]
+[assembly: EdmRelationshipAttribute("ExcelReport.DataAccess", "ActivationMethodFeatureUse", "ActivationMethod", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ExcelReport.DataAccess.ActivationMethod), "FeatureUse", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ExcelReport.DataAccess.FeatureUse), true)]
+[assembly: EdmRelationshipAttribute("ExcelReport.DataAccess", "EnvironmentDataValueEnvironmentData", "EnvironmentDataValue", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(ExcelReport.DataAccess.EnvironmentDataValue), "EnvironmentData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(ExcelReport.DataAccess.EnvironmentData), true)]
 
 #endregion
 
-namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
+namespace ExcelReport.DataAccess
 {
     #region Contexts
     
@@ -332,7 +332,7 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="AnalysisModel", Name="ActivationMethod")]
+    [EdmEntityTypeAttribute(NamespaceName="ExcelReport.DataAccess", Name="ActivationMethod")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
     public partial class ActivationMethod : EntityObject
@@ -414,18 +414,18 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "ActivationMethodFeatureUse", "FeatureUse")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "ActivationMethodFeatureUse", "FeatureUse")]
         public EntityCollection<FeatureUse> FeatureUses
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<FeatureUse>("AnalysisModel.ActivationMethodFeatureUse", "FeatureUse");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<FeatureUse>("ExcelReport.DataAccess.ActivationMethodFeatureUse", "FeatureUse");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<FeatureUse>("AnalysisModel.ActivationMethodFeatureUse", "FeatureUse", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<FeatureUse>("ExcelReport.DataAccess.ActivationMethodFeatureUse", "FeatureUse", value);
                 }
             }
         }
@@ -436,7 +436,7 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="AnalysisModel", Name="EnvironmentData")]
+    [EdmEntityTypeAttribute(NamespaceName="ExcelReport.DataAccess", Name="EnvironmentData")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
     public partial class EnvironmentData : EntityObject
@@ -572,16 +572,16 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "SessionEnvironmentData", "Session")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "SessionEnvironmentData", "Session")]
         public Session Session
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("AnalysisModel.SessionEnvironmentData", "Session").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("ExcelReport.DataAccess.SessionEnvironmentData", "Session").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("AnalysisModel.SessionEnvironmentData", "Session").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("ExcelReport.DataAccess.SessionEnvironmentData", "Session").Value = value;
             }
         }
         /// <summary>
@@ -593,13 +593,13 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("AnalysisModel.SessionEnvironmentData", "Session");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("ExcelReport.DataAccess.SessionEnvironmentData", "Session");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Session>("AnalysisModel.SessionEnvironmentData", "Session", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Session>("ExcelReport.DataAccess.SessionEnvironmentData", "Session", value);
                 }
             }
         }
@@ -610,16 +610,16 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "EnvironmentDataNameEnvironmentData", "EnvironmentDataName")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "EnvironmentDataNameEnvironmentData", "EnvironmentDataName")]
         public EnvironmentDataName EnvironmentDataName
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EnvironmentDataName>("AnalysisModel.EnvironmentDataNameEnvironmentData", "EnvironmentDataName").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EnvironmentDataName>("ExcelReport.DataAccess.EnvironmentDataNameEnvironmentData", "EnvironmentDataName").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EnvironmentDataName>("AnalysisModel.EnvironmentDataNameEnvironmentData", "EnvironmentDataName").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EnvironmentDataName>("ExcelReport.DataAccess.EnvironmentDataNameEnvironmentData", "EnvironmentDataName").Value = value;
             }
         }
         /// <summary>
@@ -631,13 +631,13 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EnvironmentDataName>("AnalysisModel.EnvironmentDataNameEnvironmentData", "EnvironmentDataName");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EnvironmentDataName>("ExcelReport.DataAccess.EnvironmentDataNameEnvironmentData", "EnvironmentDataName");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<EnvironmentDataName>("AnalysisModel.EnvironmentDataNameEnvironmentData", "EnvironmentDataName", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<EnvironmentDataName>("ExcelReport.DataAccess.EnvironmentDataNameEnvironmentData", "EnvironmentDataName", value);
                 }
             }
         }
@@ -648,16 +648,16 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "EnvironmentDataValueEnvironmentData", "EnvironmentDataValue")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "EnvironmentDataValueEnvironmentData", "EnvironmentDataValue")]
         public EnvironmentDataValue EnvironmentDataValue
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EnvironmentDataValue>("AnalysisModel.EnvironmentDataValueEnvironmentData", "EnvironmentDataValue").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EnvironmentDataValue>("ExcelReport.DataAccess.EnvironmentDataValueEnvironmentData", "EnvironmentDataValue").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EnvironmentDataValue>("AnalysisModel.EnvironmentDataValueEnvironmentData", "EnvironmentDataValue").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EnvironmentDataValue>("ExcelReport.DataAccess.EnvironmentDataValueEnvironmentData", "EnvironmentDataValue").Value = value;
             }
         }
         /// <summary>
@@ -669,13 +669,13 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EnvironmentDataValue>("AnalysisModel.EnvironmentDataValueEnvironmentData", "EnvironmentDataValue");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<EnvironmentDataValue>("ExcelReport.DataAccess.EnvironmentDataValueEnvironmentData", "EnvironmentDataValue");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<EnvironmentDataValue>("AnalysisModel.EnvironmentDataValueEnvironmentData", "EnvironmentDataValue", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<EnvironmentDataValue>("ExcelReport.DataAccess.EnvironmentDataValueEnvironmentData", "EnvironmentDataValue", value);
                 }
             }
         }
@@ -686,7 +686,7 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="AnalysisModel", Name="EnvironmentDataName")]
+    [EdmEntityTypeAttribute(NamespaceName="ExcelReport.DataAccess", Name="EnvironmentDataName")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
     public partial class EnvironmentDataName : EntityObject
@@ -770,18 +770,18 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "EnvironmentDataNameEnvironmentData", "EnvironmentData")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "EnvironmentDataNameEnvironmentData", "EnvironmentData")]
         public EntityCollection<EnvironmentData> EnvironmentDatas
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<EnvironmentData>("AnalysisModel.EnvironmentDataNameEnvironmentData", "EnvironmentData");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<EnvironmentData>("ExcelReport.DataAccess.EnvironmentDataNameEnvironmentData", "EnvironmentData");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<EnvironmentData>("AnalysisModel.EnvironmentDataNameEnvironmentData", "EnvironmentData", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<EnvironmentData>("ExcelReport.DataAccess.EnvironmentDataNameEnvironmentData", "EnvironmentData", value);
                 }
             }
         }
@@ -792,7 +792,7 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="AnalysisModel", Name="EnvironmentDataValue")]
+    [EdmEntityTypeAttribute(NamespaceName="ExcelReport.DataAccess", Name="EnvironmentDataValue")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
     public partial class EnvironmentDataValue : EntityObject
@@ -874,18 +874,18 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "EnvironmentDataValueEnvironmentData", "EnvironmentData")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "EnvironmentDataValueEnvironmentData", "EnvironmentData")]
         public EntityCollection<EnvironmentData> EnvironmentDatas
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<EnvironmentData>("AnalysisModel.EnvironmentDataValueEnvironmentData", "EnvironmentData");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<EnvironmentData>("ExcelReport.DataAccess.EnvironmentDataValueEnvironmentData", "EnvironmentData");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<EnvironmentData>("AnalysisModel.EnvironmentDataValueEnvironmentData", "EnvironmentData", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<EnvironmentData>("ExcelReport.DataAccess.EnvironmentDataValueEnvironmentData", "EnvironmentData", value);
                 }
             }
         }
@@ -896,7 +896,7 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="AnalysisModel", Name="Exception")]
+    [EdmEntityTypeAttribute(NamespaceName="ExcelReport.DataAccess", Name="Exception")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
     public partial class Exception : EntityObject
@@ -1084,16 +1084,16 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "ExceptionGroupException", "ExceptionGroup")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "ExceptionGroupException", "ExceptionGroup")]
         public ExceptionGroup ExceptionGroup
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ExceptionGroup>("AnalysisModel.ExceptionGroupException", "ExceptionGroup").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ExceptionGroup>("ExcelReport.DataAccess.ExceptionGroupException", "ExceptionGroup").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ExceptionGroup>("AnalysisModel.ExceptionGroupException", "ExceptionGroup").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ExceptionGroup>("ExcelReport.DataAccess.ExceptionGroupException", "ExceptionGroup").Value = value;
             }
         }
         /// <summary>
@@ -1105,13 +1105,13 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ExceptionGroup>("AnalysisModel.ExceptionGroupException", "ExceptionGroup");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ExceptionGroup>("ExcelReport.DataAccess.ExceptionGroupException", "ExceptionGroup");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ExceptionGroup>("AnalysisModel.ExceptionGroupException", "ExceptionGroup", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ExceptionGroup>("ExcelReport.DataAccess.ExceptionGroupException", "ExceptionGroup", value);
                 }
             }
         }
@@ -1122,16 +1122,16 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "SessionException", "Session")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "SessionException", "Session")]
         public Session Session
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("AnalysisModel.SessionException", "Session").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("ExcelReport.DataAccess.SessionException", "Session").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("AnalysisModel.SessionException", "Session").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("ExcelReport.DataAccess.SessionException", "Session").Value = value;
             }
         }
         /// <summary>
@@ -1143,13 +1143,13 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("AnalysisModel.SessionException", "Session");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("ExcelReport.DataAccess.SessionException", "Session");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Session>("AnalysisModel.SessionException", "Session", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Session>("ExcelReport.DataAccess.SessionException", "Session", value);
                 }
             }
         }
@@ -1160,7 +1160,7 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="AnalysisModel", Name="ExceptionGroup")]
+    [EdmEntityTypeAttribute(NamespaceName="ExcelReport.DataAccess", Name="ExceptionGroup")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
     public partial class ExceptionGroup : EntityObject
@@ -1370,18 +1370,18 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "ExceptionGroupException", "Exception")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "ExceptionGroupException", "Exception")]
         public EntityCollection<Exception> Exceptions
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Exception>("AnalysisModel.ExceptionGroupException", "Exception");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Exception>("ExcelReport.DataAccess.ExceptionGroupException", "Exception");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Exception>("AnalysisModel.ExceptionGroupException", "Exception", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Exception>("ExcelReport.DataAccess.ExceptionGroupException", "Exception", value);
                 }
             }
         }
@@ -1392,7 +1392,7 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="AnalysisModel", Name="Feature")]
+    [EdmEntityTypeAttribute(NamespaceName="ExcelReport.DataAccess", Name="Feature")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
     public partial class Feature : EntityObject
@@ -1476,18 +1476,18 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "FeatureUseFeature", "FeatureUse")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "FeatureUseFeature", "FeatureUse")]
         public EntityCollection<FeatureUse> FeatureUses
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<FeatureUse>("AnalysisModel.FeatureUseFeature", "FeatureUse");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<FeatureUse>("ExcelReport.DataAccess.FeatureUseFeature", "FeatureUse");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<FeatureUse>("AnalysisModel.FeatureUseFeature", "FeatureUse", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<FeatureUse>("ExcelReport.DataAccess.FeatureUseFeature", "FeatureUse", value);
                 }
             }
         }
@@ -1498,7 +1498,7 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="AnalysisModel", Name="FeatureUse")]
+    [EdmEntityTypeAttribute(NamespaceName="ExcelReport.DataAccess", Name="FeatureUse")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
     public partial class FeatureUse : EntityObject
@@ -1684,16 +1684,16 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "SessionFeatureUse", "Session")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "SessionFeatureUse", "Session")]
         public Session Session
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("AnalysisModel.SessionFeatureUse", "Session").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("ExcelReport.DataAccess.SessionFeatureUse", "Session").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("AnalysisModel.SessionFeatureUse", "Session").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("ExcelReport.DataAccess.SessionFeatureUse", "Session").Value = value;
             }
         }
         /// <summary>
@@ -1705,13 +1705,13 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("AnalysisModel.SessionFeatureUse", "Session");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("ExcelReport.DataAccess.SessionFeatureUse", "Session");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Session>("AnalysisModel.SessionFeatureUse", "Session", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Session>("ExcelReport.DataAccess.SessionFeatureUse", "Session", value);
                 }
             }
         }
@@ -1722,16 +1722,16 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "FeatureUseFeature", "Feature")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "FeatureUseFeature", "Feature")]
         public Feature Feature
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Feature>("AnalysisModel.FeatureUseFeature", "Feature").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Feature>("ExcelReport.DataAccess.FeatureUseFeature", "Feature").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Feature>("AnalysisModel.FeatureUseFeature", "Feature").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Feature>("ExcelReport.DataAccess.FeatureUseFeature", "Feature").Value = value;
             }
         }
         /// <summary>
@@ -1743,13 +1743,13 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Feature>("AnalysisModel.FeatureUseFeature", "Feature");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Feature>("ExcelReport.DataAccess.FeatureUseFeature", "Feature");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Feature>("AnalysisModel.FeatureUseFeature", "Feature", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Feature>("ExcelReport.DataAccess.FeatureUseFeature", "Feature", value);
                 }
             }
         }
@@ -1760,16 +1760,16 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "ActivationMethodFeatureUse", "ActivationMethod")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "ActivationMethodFeatureUse", "ActivationMethod")]
         public ActivationMethod ActivationMethod
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ActivationMethod>("AnalysisModel.ActivationMethodFeatureUse", "ActivationMethod").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ActivationMethod>("ExcelReport.DataAccess.ActivationMethodFeatureUse", "ActivationMethod").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ActivationMethod>("AnalysisModel.ActivationMethodFeatureUse", "ActivationMethod").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ActivationMethod>("ExcelReport.DataAccess.ActivationMethodFeatureUse", "ActivationMethod").Value = value;
             }
         }
         /// <summary>
@@ -1781,13 +1781,13 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ActivationMethod>("AnalysisModel.ActivationMethodFeatureUse", "ActivationMethod");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<ActivationMethod>("ExcelReport.DataAccess.ActivationMethodFeatureUse", "ActivationMethod");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ActivationMethod>("AnalysisModel.ActivationMethodFeatureUse", "ActivationMethod", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<ActivationMethod>("ExcelReport.DataAccess.ActivationMethodFeatureUse", "ActivationMethod", value);
                 }
             }
         }
@@ -1798,7 +1798,7 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="AnalysisModel", Name="Session")]
+    [EdmEntityTypeAttribute(NamespaceName="ExcelReport.DataAccess", Name="Session")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
     public partial class Session : EntityObject
@@ -2054,16 +2054,16 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "UserSession", "User")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "UserSession", "User")]
         public User User
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<User>("AnalysisModel.UserSession", "User").Value;
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<User>("ExcelReport.DataAccess.UserSession", "User").Value;
             }
             set
             {
-                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<User>("AnalysisModel.UserSession", "User").Value = value;
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<User>("ExcelReport.DataAccess.UserSession", "User").Value = value;
             }
         }
         /// <summary>
@@ -2075,13 +2075,13 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<User>("AnalysisModel.UserSession", "User");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<User>("ExcelReport.DataAccess.UserSession", "User");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<User>("AnalysisModel.UserSession", "User", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<User>("ExcelReport.DataAccess.UserSession", "User", value);
                 }
             }
         }
@@ -2092,18 +2092,18 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "SessionEnvironmentData", "EnvironmentData")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "SessionEnvironmentData", "EnvironmentData")]
         public EntityCollection<EnvironmentData> EnvironmentDatas
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<EnvironmentData>("AnalysisModel.SessionEnvironmentData", "EnvironmentData");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<EnvironmentData>("ExcelReport.DataAccess.SessionEnvironmentData", "EnvironmentData");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<EnvironmentData>("AnalysisModel.SessionEnvironmentData", "EnvironmentData", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<EnvironmentData>("ExcelReport.DataAccess.SessionEnvironmentData", "EnvironmentData", value);
                 }
             }
         }
@@ -2114,18 +2114,18 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "SessionException", "Exception")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "SessionException", "Exception")]
         public EntityCollection<Exception> Exceptions
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Exception>("AnalysisModel.SessionException", "Exception");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Exception>("ExcelReport.DataAccess.SessionException", "Exception");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Exception>("AnalysisModel.SessionException", "Exception", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Exception>("ExcelReport.DataAccess.SessionException", "Exception", value);
                 }
             }
         }
@@ -2136,18 +2136,18 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "SessionFeatureUse", "FeatureUse")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "SessionFeatureUse", "FeatureUse")]
         public EntityCollection<FeatureUse> FeatureUses
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<FeatureUse>("AnalysisModel.SessionFeatureUse", "FeatureUse");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<FeatureUse>("ExcelReport.DataAccess.SessionFeatureUse", "FeatureUse");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<FeatureUse>("AnalysisModel.SessionFeatureUse", "FeatureUse", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<FeatureUse>("ExcelReport.DataAccess.SessionFeatureUse", "FeatureUse", value);
                 }
             }
         }
@@ -2158,7 +2158,7 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
     /// <summary>
     /// No Metadata Documentation available.
     /// </summary>
-    [EdmEntityTypeAttribute(NamespaceName="AnalysisModel", Name="User")]
+    [EdmEntityTypeAttribute(NamespaceName="ExcelReport.DataAccess", Name="User")]
     [Serializable()]
     [DataContractAttribute(IsReference=true)]
     public partial class User : EntityObject
@@ -2242,18 +2242,18 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Analysis
         [XmlIgnoreAttribute()]
         [SoapIgnoreAttribute()]
         [DataMemberAttribute()]
-        [EdmRelationshipNavigationPropertyAttribute("AnalysisModel", "UserSession", "Session")]
+        [EdmRelationshipNavigationPropertyAttribute("ExcelReport.DataAccess", "UserSession", "Session")]
         public EntityCollection<Session> Sessions
         {
             get
             {
-                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Session>("AnalysisModel.UserSession", "Session");
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Session>("ExcelReport.DataAccess.UserSession", "Session");
             }
             set
             {
                 if ((value != null))
                 {
-                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Session>("AnalysisModel.UserSession", "Session", value);
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Session>("ExcelReport.DataAccess.UserSession", "Session", value);
                 }
             }
         }
