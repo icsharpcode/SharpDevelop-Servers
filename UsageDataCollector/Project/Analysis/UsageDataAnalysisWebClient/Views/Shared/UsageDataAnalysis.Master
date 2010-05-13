@@ -6,10 +6,12 @@
 	<title>
 		<asp:ContentPlaceHolder ID="TitleContent" runat="server" />
 	</title>
-	<link href="/css/layout_2col_left_31.css" rel="stylesheet" type="text/css" />
+
+	<link href="~/css/layout_2col_left_31.css" rel="stylesheet" type="text/css" />
 	<!--[if lte IE 7]>
-	<link href="css/patches/patch_2col_left_31.css" rel="stylesheet" type="text/css" />
+	<link href="~/css/patches/patch_2col_left_31.css" rel="stylesheet" type="text/css" />
 	<![endif]-->
+
 	<style type="text/css">
 		.editor-label
 		{
@@ -110,7 +112,9 @@ Layout based on <a href="http://www.yaml.de/">YAML</a></div>
     <!-- end: #footer --> 
   </div> 
 </div> 
+
 <!-- full skiplink functionality in webkit browsers --> 
-<script src="/css/yaml/core/js/yaml-focusfix.js" type="text/javascript"></script> 
+<script type="text/javascript" src="<%= ResolveClientUrl("~/css/yaml/core/js/yaml-focusfix.js") %>"></script>
+
 </body>
 </html>
