@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 
 namespace UsageDataAnalysisWebClient.Models
 {
-    public class ExceptionGroupViewModel
+    public class ExceptionGroupIndexModel
     {
         public int ExceptionGroupId { get; set; }
         public string ExceptionType { get; set; }
@@ -62,6 +62,5 @@ namespace UsageDataAnalysisWebClient.Models
                 return new HtmlString(html);
             }
         }
-
     }
 }

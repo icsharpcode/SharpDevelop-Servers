@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/UsageDataAnalysis.Master" Inherits="System.Web.Mvc.ViewPage<UsageDataAnalysisWebClient.Models.ExceptionGroup>" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/UsageDataAnalysis.Master" Inherits="System.Web.Mvc.ViewPage<UsageDataAnalysisWebClient.Models.ExceptionGroupEditModel>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	Edit
@@ -15,6 +15,7 @@
             
             <div class="editor-label">
                 <%= Html.LabelFor(model => model.ExceptionGroupId) %>
+				<%=Html.HiddenFor(model => model.ExceptionGroupId) %>
             </div>
             <div class="editor-field">
                 <%: Model.ExceptionGroupId %>
@@ -97,8 +98,8 @@
                 var environmentDataQuery = from env in instance.Session.EnvironmentDatas
                                            select new
                                            {
-                                               Name = env.EnvironmentDataName.EnvironmentDataName1,
-                                               Value = env.EnvironmentDataValue.EnvironmentDataValue1
+                                               Name = env.EnvironmentDataName,
+                                               Value = env.EnvironmentDataValue
                                            };
                 foreach (var environmentData in environmentDataQuery.OrderBy(e => e.Name))
                 {
