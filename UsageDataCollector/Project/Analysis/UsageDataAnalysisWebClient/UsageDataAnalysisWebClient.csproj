@@ -40,6 +40,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web.DataVisualization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -74,7 +75,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ExceptionGroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\SessionController.cs" />
+    <Compile Include="Controllers\UsageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -85,6 +86,7 @@
     <Compile Include="Models\ExceptionGroupIndexModel.cs" />
     <Compile Include="Models\ExceptionModel.cs" />
     <Compile Include="Models\SessionModel.cs" />
+    <Compile Include="Models\UsageModel.cs" />
     <Compile Include="Models\UsageDataAnalysis.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -207,7 +209,7 @@
     <Content Include="Views\ExceptionGroup\Edit.aspx" />
     <Content Include="Views\ExceptionGroup\Index.aspx" />
     <Content Include="Views\Home\Index.aspx" />
-    <Content Include="Views\Session\Index.aspx" />
+    <Content Include="Views\Usage\Index.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -230,6 +232,7 @@
       <LastGenOutput>UsageDataAnalysis.Designer.cs</LastGenOutput>
     </EntityDeploy>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

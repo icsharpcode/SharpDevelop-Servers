@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/UsageDataAnalysis.Master" Inherits="System.Web.Mvc.ViewPage<IEnumerable<UsageDataAnalysisWebClient.Models.ExceptionGroupIndexModel>>" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Views/Shared/UsageDataAnalysis.Master" Inherits="System.Web.Mvc.ViewPage<UsageDataAnalysisWebClient.Models.ExceptionGroupIndexModel>" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
 	Index
@@ -7,6 +7,13 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <h2>Index</h2>
+
+    <% using (Html.BeginForm(null, null, FormMethod.Get)) { %>
+        Show exceptions from revision <%: Html.TextBoxFor(model => model.MinimumRevision) %>
+        to <%: Html.TextBoxFor(model => model.MaximumRevision) %> on branch
+        <%: Html.DropDownListFor(model => model.Branch, Model.AllBranchNames.Select(b => new SelectListItem { Text = b, Value = b, Selected = (b == Model.Branch) }))%>
+        <input type="submit" value="Go" />
+    <% } %>
 
     <table>
         <tr>
@@ -20,7 +27,7 @@
             <th>Comment</th>
         </tr>
 
-    <% foreach (var item in Model) { %>
+    <% foreach (var item in Model.Entries) { %>
     
         <tr class='<%: item.UserFixedInRevision != null ? (item.UserFixedInRevision > item.LastSeenRevision ? "goodRow" : "badRow") : "normalRow" %>'>
            <%--  <td>

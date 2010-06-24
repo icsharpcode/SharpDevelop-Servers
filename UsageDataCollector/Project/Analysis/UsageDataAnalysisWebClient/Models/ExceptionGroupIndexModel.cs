@@ -7,7 +7,22 @@ using System.Text.RegularExpressions;
 
 namespace UsageDataAnalysisWebClient.Models
 {
-    public class ExceptionGroupIndexModel
+	public class ExceptionGroupIndexModel
+	{
+		public ExceptionGroupIndexModel()
+		{
+			this.MinimumRevision = 5949;
+			this.Branch = "all";
+		}
+
+		public int MinimumRevision { get; set; }
+		public int MaximumRevision { get; set; }
+		public string Branch { get; set; }
+		public IEnumerable<string> AllBranchNames { get; set; }
+		public IEnumerable<ExceptionGroupIndexModelEntry> Entries { get; set; }
+	}
+
+    public class ExceptionGroupIndexModelEntry
     {
         public int ExceptionGroupId { get; set; }
         public string ExceptionType { get; set; }

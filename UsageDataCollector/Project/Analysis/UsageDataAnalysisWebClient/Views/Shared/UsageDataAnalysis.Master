@@ -79,7 +79,7 @@
       <div class="hlist"> 
         <ul> 
           <li><%=Html.ActionLink("Home", "Index", "Home") %></li> 
-          <li><%=Html.ActionLink("Sessions", "Index", "Session") %></li> 
+          <li><%=Html.ActionLink("Usage", "Index", "Usage") %></li> 
           <li><%=Html.ActionLink("ExceptionGroups","Index", "ExceptionGroup") %></li> 
         </ul> 
       </div> 

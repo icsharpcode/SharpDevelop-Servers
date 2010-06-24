@@ -8,11 +8,12 @@ namespace UsageDataAnalysisWebClient.Controllers
 	[Authorize]
     public class ExceptionGroupController : Controller
     {
-
-		
-        public ActionResult Index()
+        public ActionResult Index(ExceptionGroupIndexModel model)
         {
-        	ViewData.Model = new ExceptionGroupRepository().GetExceptionGroups();
+			ExceptionGroupRepository repo = new ExceptionGroupRepository();
+			model.AllBranchNames = repo.GetAllBranchNames();
+			model.Entries = repo.GetExceptionGroups(model.MinimumRevision, model.MaximumRevision, model.Branch);
+			ViewData.Model = model;
             return View();
         }
 

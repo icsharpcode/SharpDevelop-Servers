@@ -3,23 +3,40 @@ using System.Collections.Generic;
 using System.Linq;
 using UsageDataAnalysisWebClient.Models;
 using Exception = UsageDataAnalysisWebClient.Models.Exception;
+using System.Diagnostics;
 
 namespace UsageDataAnalysisWebClient.Repositories {
 	public class ExceptionGroupRepository : IExceptionGroupRepository {
 
-		private udcEntities _db;
+		private udcEntities _db = new udcEntities();
 
-		public List<ExceptionGroupIndexModel> GetExceptionGroups() {
-			const int minimumAffectedUsers = 2;
-			const int minimumRevision = 5570; // TODO: make this parameter user-editable
+		public List<string> GetAllBranchNames()
+		{
+			var q = from data in _db.EnvironmentDatas
+					where data.EnvironmentDataName.EnvironmentDataName1 == "branch"
+					select data.EnvironmentDataValue.EnvironmentDataValue1;
+			return new string[] { "all", "none" }.Concat(EvaluateQuery(q.Distinct().OrderBy(b => b))).ToList();
+		}
 
-			_db = new udcEntities();
-			var q = from ex in _db.Exceptions
-					// filter exceptions:
-					// don't show follow-up errors 
-					where ex.IsFirstInSession
-					// ignore errors in ancient versions of the app
-					where ex.Session.AppVersionRevision >= minimumRevision
+		public List<ExceptionGroupIndexModelEntry> GetExceptionGroups(int minimumRevision, int maximumRevision, string branch)
+		{
+			var exceptions = _db.Exceptions.Where(ex => ex.IsFirstInSession); // filter exceptions: don't show follow-up errors 
+
+			// ignore errors in ancient versions of the app
+			if (minimumRevision > 0)
+				exceptions = exceptions.Where(ex => ex.Session.AppVersionRevision >= minimumRevision);
+			if (maximumRevision > 0)
+				exceptions = exceptions.Where(ex => ex.Session.AppVersionRevision <= maximumRevision);
+			if (branch != "all") {
+				if (branch == "none") {
+					exceptions = exceptions.Where(ex => !ex.Session.EnvironmentDatas.Any(data => data.EnvironmentDataName.EnvironmentDataName1 == "branch"));
+				} else {
+					exceptions = exceptions.Where(ex => ex.Session.EnvironmentDatas.Any(data => data.EnvironmentDataName.EnvironmentDataName1 == "branch"
+						&& data.EnvironmentDataValue.EnvironmentDataValue1 == branch));
+				}
+			}
+
+			var q = from ex in exceptions
 					group ex by ex.ExceptionGroup into g
 					// search "first seen" and "last seen" in all exceptions within the exception group
 					// (not just those matching the filters above)
@@ -27,7 +44,7 @@ namespace UsageDataAnalysisWebClient.Repositories {
 					let firstSeenVersion = sessionsForVersionSearch.FirstOrDefault(s => s.AppVersionRevision == sessionsForVersionSearch.Min(s2 => s2.AppVersionRevision))
 					let lastSeenVersion = sessionsForVersionSearch.FirstOrDefault(s => s.AppVersionRevision == sessionsForVersionSearch.Max(s2 => s2.AppVersionRevision))
 					// fill the ViewModel instance with all the data
-					select new ExceptionGroupIndexModel {
+					select new ExceptionGroupIndexModelEntry {
 						ExceptionGroupId = g.Key.ExceptionGroupId,
 						ExceptionType = g.Key.ExceptionType,
 						ExceptionLocation = g.Key.ExceptionLocation,
@@ -44,14 +61,18 @@ namespace UsageDataAnalysisWebClient.Repositories {
 						LastSeenBuild = lastSeenVersion.AppVersionBuild,
 						LastSeenRevision = lastSeenVersion.AppVersionRevision,
 					} into viewModel
-					where viewModel.AffectedUsers >= minimumAffectedUsers
 					orderby viewModel.AffectedUsers descending, viewModel.Occurrences descending
 					select viewModel;
-			return q.ToList();
+			return EvaluateQuery(q.Take(50));
+		}
+
+		private List<T> EvaluateQuery<T>(IQueryable<T> query)
+		{
+			Debug.WriteLine(((System.Data.Objects.ObjectQuery)query).ToTraceString());
+			return query.ToList();
 		}
 
 		public ExceptionGroupEditModel GetExceptionGroupById(int id) {
-			_db = new udcEntities();
 			ExceptionGroup exceptionGroup = _db.ExceptionGroups.First(eg => eg.ExceptionGroupId == id);
 			ExceptionGroupEditModel editModel = new ExceptionGroupEditModel();
 			editModel.ExceptionFingerprint = exceptionGroup.ExceptionFingerprint;
@@ -81,7 +102,6 @@ namespace UsageDataAnalysisWebClient.Repositories {
 		}
 
 		public void Save(int exceptionGroupId, string userComment, int? userFixedInRevision) {
-			_db = new udcEntities();
 			ExceptionGroup exceptionGroup = _db.ExceptionGroups.First(eg => eg.ExceptionGroupId == exceptionGroupId);
 			exceptionGroup.UserComment = userComment;
 			exceptionGroup.UserFixedInRevision = userFixedInRevision;
