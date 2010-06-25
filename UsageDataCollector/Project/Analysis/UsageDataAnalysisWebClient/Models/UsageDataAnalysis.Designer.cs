@@ -23,6 +23,7 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("udcModel", "SessionEnvironmentData", "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(UsageDataAnalysisWebClient.Models.Session), "EnvironmentData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(UsageDataAnalysisWebClient.Models.EnvironmentData), true)]
 [assembly: EdmRelationshipAttribute("udcModel", "EnvironmentDataNameEnvironmentData", "EnvironmentDataName", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(UsageDataAnalysisWebClient.Models.EnvironmentDataName), "EnvironmentData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(UsageDataAnalysisWebClient.Models.EnvironmentData), true)]
 [assembly: EdmRelationshipAttribute("udcModel", "EnvironmentDataValueEnvironmentData", "EnvironmentDataValue", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(UsageDataAnalysisWebClient.Models.EnvironmentDataValue), "EnvironmentData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(UsageDataAnalysisWebClient.Models.EnvironmentData), true)]
+[assembly: EdmRelationshipAttribute("udcModel", "SessionFeatureUse", "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(UsageDataAnalysisWebClient.Models.Session), "FeatureUse", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(UsageDataAnalysisWebClient.Models.FeatureUse), true)]
 
 #endregion
 
@@ -1572,6 +1573,47 @@ namespace UsageDataAnalysisWebClient.Models
 
         #endregion
     
+        #region Navigationseigenschaften
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("udcModel", "SessionFeatureUse", "Session")]
+        public Session Session
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("udcModel.SessionFeatureUse", "Session").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("udcModel.SessionFeatureUse", "Session").Value = value;
+            }
+        }
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Session> SessionReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Session>("udcModel.SessionFeatureUse", "Session");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Session>("udcModel.SessionFeatureUse", "Session", value);
+                }
+            }
+        }
+
+        #endregion
     }
     
     /// <summary>
@@ -1867,6 +1909,28 @@ namespace UsageDataAnalysisWebClient.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<EnvironmentData>("udcModel.SessionEnvironmentData", "EnvironmentData", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("udcModel", "SessionFeatureUse", "FeatureUse")]
+        public EntityCollection<FeatureUse> FeatureUses
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<FeatureUse>("udcModel.SessionFeatureUse", "FeatureUse");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<FeatureUse>("udcModel.SessionFeatureUse", "FeatureUse", value);
                 }
             }
         }

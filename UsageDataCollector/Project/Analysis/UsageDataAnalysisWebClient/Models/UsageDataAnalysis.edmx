@@ -144,6 +144,10 @@
             <End Role="EnvironmentDataValue" EntitySet="EnvironmentDataValues" />
             <End Role="EnvironmentData" EntitySet="EnvironmentDatas" />
           </AssociationSet>
+          <AssociationSet Name="SessionFeatureUse" Association="udcModel.SessionFeatureUse">
+            <End Role="Session" EntitySet="Sessions" />
+            <End Role="FeatureUse" EntitySet="FeatureUses" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ActivationMethod">
           <Key>
@@ -214,6 +218,7 @@
           <Property Name="EndTime" Type="DateTime" />
           <Property Name="FeatureId" Type="Int32" Nullable="false" />
           <Property Name="ActivationMethodId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Session" Relationship="udcModel.SessionFeatureUse" FromRole="FeatureUse" ToRole="Session" />
         </EntityType>
         <EntityType Name="Session">
           <Key>
@@ -230,6 +235,7 @@
           <Property Type="Int32" Name="AppVersionRevision" />
           <NavigationProperty Name="Exceptions" Relationship="udcModel.SessionException" FromRole="Session" ToRole="Exception" />
           <NavigationProperty Name="EnvironmentDatas" Relationship="udcModel.SessionEnvironmentData" FromRole="Session" ToRole="EnvironmentData" />
+          <NavigationProperty Name="FeatureUses" Relationship="udcModel.SessionFeatureUse" FromRole="Session" ToRole="FeatureUse" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -302,6 +308,18 @@
             </Principal>
             <Dependent Role="EnvironmentData">
               <PropertyRef Name="EnvironmentDataValueId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SessionFeatureUse">
+          <End Type="udcModel.Session" Role="Session" Multiplicity="1" />
+          <End Type="udcModel.FeatureUse" Role="FeatureUse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Session">
+              <PropertyRef Name="SessionId" />
+            </Principal>
+            <Dependent Role="FeatureUse">
+              <PropertyRef Name="SessionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -439,6 +457,10 @@
         <AssociationConnector Association="udcModel.EnvironmentDataValueEnvironmentData">
           <ConnectorPoint PointX="2" PointY="2.4176741536458337" />
           <ConnectorPoint PointX="2.5" PointY="2.4176741536458337" />
+        </AssociationConnector>
+        <AssociationConnector Association="udcModel.SessionFeatureUse">
+          <ConnectorPoint PointX="7.5312525" PointY="3.75" />
+          <ConnectorPoint PointX="7.5312525" PointY="2.835348307291667" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

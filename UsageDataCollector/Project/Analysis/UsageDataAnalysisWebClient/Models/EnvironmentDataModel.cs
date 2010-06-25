@@ -8,7 +8,7 @@ namespace UsageDataAnalysisWebClient.Models {
 		public EnvironmentViewModel()
 		{
 			this.StartDate = GetStartOfWeek(DateTime.Today.AddMonths(-12));
-			this.EndDate = GetStartOfWeek(DateTime.Today.AddDays(-7)); // data takes a while to be uploaded, so don't show incomplete week
+			this.EndDate = GetStartOfWeek(DateTime.Today.AddDays(-1));
 		}
 
 		static DateTime GetStartOfWeek(DateTime time)

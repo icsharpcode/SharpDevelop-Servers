@@ -76,6 +76,7 @@
     <Compile Include="Controllers\EnvironmentController.cs" />
     <Compile Include="Controllers\ExceptionGroupController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\StabilityController.cs" />
     <Compile Include="Controllers\UsageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -211,6 +212,7 @@
     <Content Include="Views\ExceptionGroup\Edit.aspx" />
     <Content Include="Views\ExceptionGroup\Index.aspx" />
     <Content Include="Views\Home\Index.aspx" />
+    <Content Include="Views\Stability\Index.aspx" />
     <Content Include="Views\Usage\Index.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
