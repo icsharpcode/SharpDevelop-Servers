@@ -7,6 +7,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
 
     <h2>Instability</h2>
+	Probability that at least one exception/unclean exit will occur in a given day for a given user<br/>
      <%
         var chart = Model;
         chart.Width = 813;
