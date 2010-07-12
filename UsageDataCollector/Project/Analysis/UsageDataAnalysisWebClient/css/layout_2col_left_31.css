@@ -16,7 +16,7 @@
  */
 
 /* import core styles | Basis-Stylesheets einbinden */
-@import url(/css/yaml/core/base.css);
+@import url(yaml/core/base.css);
 
 /* import screen layout | Screen-Layout einbinden */
 @import url(yaml/navigation/nav_shinybuttons.css);
@@ -25,4 +25,4 @@
 @import url(screen/content.css);
 
 /* import print layout | Druck-Layout einbinden */
-@import url(/css/yaml/print/print_100_draft.css);
+@import url(yaml/print/print_100_draft.css);
