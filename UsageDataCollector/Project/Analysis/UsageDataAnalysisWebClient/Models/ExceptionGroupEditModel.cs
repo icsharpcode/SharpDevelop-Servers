@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Collections.Generic;
 
 namespace UsageDataAnalysisWebClient.Models {
@@ -13,8 +14,10 @@ namespace UsageDataAnalysisWebClient.Models {
 
 		public string ExceptionFingerprint { get; set; }
 
+		[DisplayName("Comment")]
 		public string UserComment { get; set; }
 
+		[DisplayName("Fixed in Revision")]
 		public int? UserFixedInRevision { get; set; }
 
 		public IEnumerable<ExceptionModel> Exceptions { get; set; }
