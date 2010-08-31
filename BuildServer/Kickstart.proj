@@ -7,8 +7,8 @@
 	
 	<PropertyGroup>
 		<!-- to prevent including a newline in the property value, the '>' must be on the same line as the value -->
-		<BuildArtefactsDir Condition="Exists('D:\WebSites\build.sharpdevelop.net') and ('$(BuildArtefactsDir)' == '')"
-			>D:\WebSites\build.sharpdevelop.net\www\BuildArtefacts\</BuildArtefactsDir>
+		<BuildArtefactsDir Condition="Exists('W:\WebSites\build.sharpdevelop.net') and ('$(BuildArtefactsDir)' == '')"
+			>W:\WebSites\build.sharpdevelop.net\www\BuildArtefacts\</BuildArtefactsDir>
 		<BuildArtefactsDir Condition="('$(BuildArtefactsDir)' == '')"
 			>c:\temp\</BuildArtefactsDir>
 		
@@ -16,6 +16,7 @@
 		
 		<TestReportsDir>$(MSBuildProjectDirectory)\TestReports\$(CCNetProject)</TestReportsDir>
 		<ArtefactsTempDir>$(MSBuildProjectDirectory)\ArtefactsTemp\$(CCNetProject)</ArtefactsTempDir>
+		<IsOfficialBuildServer>True</IsOfficialBuildServer>
 	</PropertyGroup>
 	
 	<Target Name="go">
@@ -31,7 +32,7 @@
 								 (this is a temp directory, copy to the final BuildArtefactsDir is only done when build was successful)
 			TestReportsDir     : full path of directory to write CC.net report files to
 		-->
-		<MSBuild Projects="$(AutomatedBuildFile)" Properties="ArtefactsOutputDir=$(ArtefactsTempDir); TestReportsDir=$(TestReportsDir)"/>
+		<MSBuild Projects="$(AutomatedBuildFile)" Properties="ArtefactsOutputDir=$(ArtefactsTempDir); TestReportsDir=$(TestReportsDir); IsOfficialBuildServer=$(IsOfficialBuildServer)"/>
 		
 		<!-- get list of files in ArtefactsTempDir -->
 		<CreateItem Include="$(ArtefactsTempDir)\**">
