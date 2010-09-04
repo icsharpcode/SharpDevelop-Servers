@@ -1,86 +1,33 @@
 using System;
-using System.Net;
-using System.Web;
-
+using System.Xml;
 using Exortech.NetReflector;
-
 using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 
 namespace ccnet.IrcPublisher.plugin
 {
-	[ReflectorType("irc")]
+	[ReflectorType("ircpublisher")]
 	public class IrcPublisher : ITask
 	{
-		private const string UPDATE_STATUS_URL = "http://twitter.com/statuses/update.xml?status={0}";
-		
-		private string _user;
-		private string _password;
-		private string _proxyHost;
-		private int _proxyPort = -1;
-		private string _proxyBypassList;
-		private bool _proxyBypassOnLocal;
-		private string _proxyUsername;
-		private string _proxyPassword;
-		
 		#region Public properties
 		
-		[ReflectorProperty("user", Required = true)]
-		public string User
-		{
-			get { return _user; }
-			set { _user = value; }
-		}
+		[ReflectorProperty("server", Required = true)]
+		public string Server { get; set; }
 		
-		[ReflectorProperty("password", Required = true)]
-		public string Password
-		{
-			get { return _password; }
-			set { _password = value; }
-		}
+		[ReflectorProperty("port", Required = true)]
+		public int Port { get; set; }
 		
-		[ReflectorProperty("proxyHost", Required = false)]
-		public string ProxyHost
-		{
-			get { return _proxyHost; }
-			set { _proxyHost = value; }
-		}
+		[ReflectorProperty("room", Required = true)]
+		public string Room { get; set; }
 		
-		[ReflectorProperty("proxyPort", Required = false)]
-		public int ProxyPort
-		{
-			get { return _proxyPort; }
-			set { _proxyPort = value; }
-		}
+		[ReflectorProperty("nick", Required = false)]
+		public string Nick { get; set; }
 		
-		[ReflectorProperty("proxyBypassList", Required = false)]
-		public string ProxyBypassList
-		{
-			get { return _proxyBypassList; }
-			set { _proxyBypassList = value; }
-		}
+		[ReflectorProperty("realname", Required = false)]
+		public string RealName { get; set; }
 		
-		[ReflectorProperty("proxyBypassOnLocal", Required = false)]
-		public bool ProxyBypassOnLocal
-		{
-			get { return _proxyBypassOnLocal; }
-			set { _proxyBypassOnLocal = value; }
-		}
-		
-		[ReflectorProperty("proxyUsername", Required = false)]
-		public string ProxyUsername
-		{
-			get { return _proxyUsername; }
-			set { _proxyUsername = value; }
-		}
-		
-		[ReflectorProperty("proxyPassword", Required = false)]
-		public string ProxyPassword
-		{
-			get { return _proxyPassword; }
-			set { _proxyPassword = value; }
-		}
+		[ReflectorProperty("revisionfile", Required = false)]
+		public string RevisionFile { get; set; }
 		
 		#endregion
 		
@@ -89,67 +36,54 @@ namespace ccnet.IrcPublisher.plugin
 			if (result.Status == IntegrationStatus.Unknown)
 				return;
 			
-			string status = CreateStatus(result);
-			try
-			{
-				string url = String.Format(UPDATE_STATUS_URL, HttpUtility.UrlEncode(status));
-				
-				HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(url);
-				IWebProxy proxy = GetWebProxy();
-				if (proxy != null)
-					webRequest.Proxy = proxy;
-				webRequest.Method = "POST";
-				webRequest.ServicePoint.Expect100Continue = false;
-				webRequest.KeepAlive = false;
-				webRequest.ContentType = "application/xml";
-				webRequest.Accept = "application/xml";
-				webRequest.Credentials = new NetworkCredential(_user, _password);
-				
-				webRequest.GetResponse();
-				
-				Log.Info("Integration results published on twitter");
-			}
-			catch (Exception e)
-			{
-				Log.Error(e);
-			}
-		}
-		
-		private IWebProxy GetWebProxy()
-		{
-			if (!String.IsNullOrEmpty(_proxyHost) && _proxyPort > 0)
-			{
-				WebProxy proxy = new WebProxy(_proxyHost, _proxyPort);
-				
-				if (!String.IsNullOrEmpty(_proxyBypassList))
-					proxy.BypassList = _proxyBypassList.Split(',');
-				proxy.BypassProxyOnLocal = _proxyBypassOnLocal;
-				
-				if (!String.IsNullOrEmpty(_proxyUsername) && !String.IsNullOrEmpty(_proxyPassword))
-					proxy.Credentials = new NetworkCredential(_proxyUsername, _proxyPassword);
-				
-				return proxy;
-			}
+			string commitHash;
+			string revision = ReadRevision(out commitHash) ?? "?";
 			
-			return null;
+			string message = CreateStatus(result, revision, commitHash ?? new string('?', 40));
+			SendIrcMessage(message);
 		}
 		
-		private static string CreateStatus(IIntegrationResult result)
+		string ReadRevision(out string commitHash)
 		{
-			if (result.Status == IntegrationStatus.Success)
-			{
-				if (result.LastIntegrationStatus != result.Status)
-				{
-					return String.Format("{0} Build Fixed: Build {1}. See {2}", result.ProjectName, result.Label, result.ProjectUrl);
+			commitHash = null;
+			if (string.IsNullOrEmpty(this.RevisionFile))
+				return null;
+			XmlDocument doc = new XmlDocument();
+			doc.Load(this.RevisionFile);
+			XmlElement hash = doc.DocumentElement["commitHash"];
+			if (hash != null)
+				commitHash = hash.InnerText;
+			XmlElement version = doc.DocumentElement["version"];
+			if (version == null)
+				return null;
+			return version.InnerText;
+		}
+		
+		void SendIrcMessage(string message)
+		{
+			Console.WriteLine(message);
+			try {
+				IrcBotSettings settings = new IrcBotSettings(
+					this.Server, this.Port,
+					this.Nick ?? "ccnetbot",
+					this.RealName ?? "CCnet IRC Publisher");
+				IrcBot bot = IrcBot.GetBot(settings);
+				string[] channels = this.Room.Split(new char[] { ',', ';'}, StringSplitOptions.RemoveEmptyEntries);
+				foreach (string channel in channels) {
+					bot.SendMessage(channel, message);
 				}
-				else
-				{
-					return String.Format("{0} Build Successful: Build {1}. See {2}", result.ProjectName, result.Label, result.ProjectUrl);
-				}
+			} catch (Exception ex) {
+				Console.WriteLine(ex.ToString());
 			}
-			else
-			{
-				return String.Format("{0} Build Failed. See {1}", result.ProjectName, result.ProjectUrl);
+		}
+		
+		private static string CreateStatus(IIntegrationResult result, string revision, string hash)
+		{
+			if (result.Status == IntegrationStatus.Success) {
+				return String.Format("{0} Build {1} successful (commit {2}, took {3}).", result.ProjectName, revision, hash.Substring(0, 8),
+				                     (int)result.TotalIntegrationTime.TotalMinutes + ":" + result.TotalIntegrationTime.Seconds);
+			} else {
+				return String.Format("{0} Build {1} failed (commit {2}). See {3}", result.ProjectName, revision, hash.Substring(0, 8), result.ProjectUrl);
 			}
 		}
 	}
