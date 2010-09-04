@@ -73,8 +73,11 @@ namespace ccnet.IrcPublisher.plugin
 		void ListenThread()
 		{
 			try {
-				client.Listen();
-				client.Disconnect();
+				try {
+					client.Listen();
+				} finally {
+					client.Disconnect();
+				}
 			} catch (ThreadAbortException) {
 				throw;
 			} catch (Exception ex) {
