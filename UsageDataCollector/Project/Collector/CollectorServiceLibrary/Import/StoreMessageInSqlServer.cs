@@ -95,7 +95,11 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
                     AppVersionMajor = appVersionMajor,
                     AppVersionMinor = appVersionMinor,
                     AppVersionBuild = appVersionBuild,
-                    AppVersionRevision = appVersionRevision
+                    AppVersionRevision = appVersionRevision,
+					CommitId = commitId,
+					IsDebug = msgSession.EnvironmentProperties.Any(ep => ep.Name == "debug"),
+					FirstException = msgSession.Exceptions.Min(e => (DateTime?)e.Time), // cast time to nullable to that Min/Max() can return null
+					LastFeatureUse = msgSession.FeatureUses.Max(f => (DateTime?)f.Time) // when there are no exceptions or feature uses
                 };
 
                 newSessions.Add(modelSession);

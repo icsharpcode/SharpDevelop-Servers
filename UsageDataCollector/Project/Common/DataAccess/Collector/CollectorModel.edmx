@@ -121,6 +121,9 @@
           <Property Name="AppVersionBuild" Type="int" />
           <Property Name="AppVersionRevision" Type="int" />
           <Property Name="CommitId" Type="int" />
+          <Property Name="IsDebug" Type="bit" Nullable="false" />
+          <Property Name="FirstException" Type="datetime" />
+          <Property Name="LastFeatureUse" Type="datetime" />
         </EntityType>
         <EntityType Name="TaggedCommits">
           <Key>
@@ -249,6 +252,9 @@
           <Property Type="Int32" Name="AppVersionBuild" />
           <Property Type="Int32" Name="AppVersionRevision" />
           <Property Type="Int32" Name="CommitId" />
+          <Property Type="Boolean" Name="IsDebug" Nullable="false" />
+          <Property Type="DateTime" Name="FirstException" />
+          <Property Type="DateTime" Name="LastFeatureUse" />
         </EntityType>
         <EntityType Name="Commit">
           <Key>
@@ -371,6 +377,9 @@
           <EntitySetMapping Name="Sessions">
             <EntityTypeMapping TypeName="CollectorModel.Session">
               <MappingFragment StoreEntitySet="Sessions">
+                <ScalarProperty Name="LastFeatureUse" ColumnName="LastFeatureUse" />
+                <ScalarProperty Name="FirstException" ColumnName="FirstException" />
+                <ScalarProperty Name="IsDebug" ColumnName="IsDebug" />
                 <ScalarProperty Name="CommitId" ColumnName="CommitId" />
                 <ScalarProperty Name="AppVersionRevision" ColumnName="AppVersionRevision" />
                 <ScalarProperty Name="AppVersionBuild" ColumnName="AppVersionBuild" />

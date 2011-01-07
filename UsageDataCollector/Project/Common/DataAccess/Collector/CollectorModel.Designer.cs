@@ -1624,13 +1624,15 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// <param name="clientSessionId">Anfangswert der Eigenschaft ClientSessionId.</param>
         /// <param name="startTime">Anfangswert der Eigenschaft StartTime.</param>
         /// <param name="userId">Anfangswert der Eigenschaft UserId.</param>
-        public static Session CreateSession(global::System.Int32 id, global::System.Int64 clientSessionId, global::System.DateTime startTime, global::System.Int32 userId)
+        /// <param name="isDebug">Anfangswert der Eigenschaft IsDebug.</param>
+        public static Session CreateSession(global::System.Int32 id, global::System.Int64 clientSessionId, global::System.DateTime startTime, global::System.Int32 userId, global::System.Boolean isDebug)
         {
             Session session = new Session();
             session.Id = id;
             session.ClientSessionId = clientSessionId;
             session.StartTime = startTime;
             session.UserId = userId;
+            session.IsDebug = isDebug;
             return session;
         }
 
@@ -1879,6 +1881,78 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         private Nullable<global::System.Int32> _CommitId;
         partial void OnCommitIdChanging(Nullable<global::System.Int32> value);
         partial void OnCommitIdChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsDebug
+        {
+            get
+            {
+                return _IsDebug;
+            }
+            set
+            {
+                OnIsDebugChanging(value);
+                ReportPropertyChanging("IsDebug");
+                _IsDebug = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsDebug");
+                OnIsDebugChanged();
+            }
+        }
+        private global::System.Boolean _IsDebug;
+        partial void OnIsDebugChanging(global::System.Boolean value);
+        partial void OnIsDebugChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> FirstException
+        {
+            get
+            {
+                return _FirstException;
+            }
+            set
+            {
+                OnFirstExceptionChanging(value);
+                ReportPropertyChanging("FirstException");
+                _FirstException = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("FirstException");
+                OnFirstExceptionChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _FirstException;
+        partial void OnFirstExceptionChanging(Nullable<global::System.DateTime> value);
+        partial void OnFirstExceptionChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> LastFeatureUse
+        {
+            get
+            {
+                return _LastFeatureUse;
+            }
+            set
+            {
+                OnLastFeatureUseChanging(value);
+                ReportPropertyChanging("LastFeatureUse");
+                _LastFeatureUse = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LastFeatureUse");
+                OnLastFeatureUseChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _LastFeatureUse;
+        partial void OnLastFeatureUseChanging(Nullable<global::System.DateTime> value);
+        partial void OnLastFeatureUseChanged();
 
         #endregion
     

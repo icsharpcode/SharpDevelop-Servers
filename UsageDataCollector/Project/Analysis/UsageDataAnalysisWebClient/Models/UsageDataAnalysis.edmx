@@ -7,6 +7,8 @@
     <Schema Namespace="udcModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="udcModelStoreContainer">
           <EntitySet Name="ActivationMethods" EntityType="udcModel.Store.ActivationMethods" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CommitRelations" EntityType="udcModel.Store.CommitRelations" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Commits" EntityType="udcModel.Store.Commits" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EnvironmentData" EntityType="udcModel.Store.EnvironmentData" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EnvironmentDataNames" EntityType="udcModel.Store.EnvironmentDataNames" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EnvironmentDataValues" EntityType="udcModel.Store.EnvironmentDataValues" store:Type="Tables" Schema="dbo" />
@@ -15,6 +17,7 @@
           <EntitySet Name="Features" EntityType="udcModel.Store.Features" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FeatureUse" EntityType="udcModel.Store.FeatureUse" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Sessions" EntityType="udcModel.Store.Sessions" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="TaggedCommits" EntityType="udcModel.Store.TaggedCommits" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Users" EntityType="udcModel.Store.Users" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="ActivationMethods">
@@ -23,6 +26,22 @@
           </Key>
           <Property Name="ActivationMethodId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="ActivationMethodName" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="CommitRelations">
+          <Key>
+            <PropertyRef Name="ParentCommit" />
+            <PropertyRef Name="ChildCommit" />
+          </Key>
+          <Property Name="ParentCommit" Type="int" Nullable="false" />
+          <Property Name="ChildCommit" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Commits">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Hash" Type="nchar" Nullable="false" MaxLength="40" />
+          <Property Name="CommitDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="EnvironmentData">
           <Key>
@@ -101,6 +120,19 @@
           <Property Name="AppVersionMinor" Type="int" />
           <Property Name="AppVersionBuild" Type="int" />
           <Property Name="AppVersionRevision" Type="int" />
+          <Property Name="CommitId" Type="int" />
+          <Property Name="IsDebug" Type="bit" Nullable="false" />
+          <Property Name="FirstException" Type="datetime" />
+          <Property Name="LastFeatureUse" Type="datetime" />
+        </EntityType>
+        <EntityType Name="TaggedCommits">
+          <Key>
+            <PropertyRef Name="TagId" />
+          </Key>
+          <Property Name="TagId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CommitId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" Nullable="false" MaxLength="20" />
+          <Property Name="IsRelease" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -148,6 +180,9 @@
             <End Role="Session" EntitySet="Sessions" />
             <End Role="FeatureUse" EntitySet="FeatureUses" />
           </AssociationSet>
+          <EntitySet Name="CommitRelations" EntityType="udcModel.CommitRelation" />
+          <EntitySet Name="Commits" EntityType="udcModel.Commit" />
+          <EntitySet Name="TaggedCommits" EntityType="udcModel.TaggedCommit" />
         </EntityContainer>
         <EntityType Name="ActivationMethod">
           <Key>
@@ -236,6 +271,10 @@
           <NavigationProperty Name="Exceptions" Relationship="udcModel.SessionException" FromRole="Session" ToRole="Exception" />
           <NavigationProperty Name="EnvironmentDatas" Relationship="udcModel.SessionEnvironmentData" FromRole="Session" ToRole="EnvironmentData" />
           <NavigationProperty Name="FeatureUses" Relationship="udcModel.SessionFeatureUse" FromRole="Session" ToRole="FeatureUse" />
+          <Property Type="Int32" Name="CommitId" />
+          <Property Type="Boolean" Name="IsDebug" Nullable="false" />
+          <Property Type="DateTime" Name="FirstException" />
+          <Property Type="DateTime" Name="LastFeatureUse" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -323,6 +362,31 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="CommitRelation">
+          <Key>
+            <PropertyRef Name="ParentCommit" />
+            <PropertyRef Name="ChildCommit" />
+          </Key>
+          <Property Type="Int32" Name="ParentCommit" Nullable="false" />
+          <Property Type="Int32" Name="ChildCommit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Commit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Hash" Nullable="false" MaxLength="40" FixedLength="true" Unicode="true" />
+          <Property Type="DateTime" Name="CommitDate" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaggedCommit">
+          <Key>
+            <PropertyRef Name="TagId" />
+          </Key>
+          <Property Type="Int32" Name="TagId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="CommitId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Type="Boolean" Name="IsRelease" Nullable="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -373,7 +437,11 @@
             <ScalarProperty Name="ActivationMethodId" ColumnName="ActivationMethodId" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Sessions"><EntityTypeMapping TypeName="udcModel.Session"><MappingFragment StoreEntitySet="Sessions">
-            <ScalarProperty Name="AppVersionRevision" ColumnName="AppVersionRevision" />
+            <ScalarProperty Name="LastFeatureUse" ColumnName="LastFeatureUse" />
+                <ScalarProperty Name="FirstException" ColumnName="FirstException" />
+                <ScalarProperty Name="IsDebug" ColumnName="IsDebug" />
+                <ScalarProperty Name="CommitId" ColumnName="CommitId" />
+                <ScalarProperty Name="AppVersionRevision" ColumnName="AppVersionRevision" />
                 <ScalarProperty Name="AppVersionBuild" ColumnName="AppVersionBuild" />
                 <ScalarProperty Name="AppVersionMinor" ColumnName="AppVersionMinor" />
                 <ScalarProperty Name="AppVersionMajor" ColumnName="AppVersionMajor" />
@@ -392,6 +460,33 @@
               <MappingFragment StoreEntitySet="EnvironmentDataValues">
                 <ScalarProperty Name="EnvironmentDataValue1" ColumnName="EnvironmentDataValue" />
                 <ScalarProperty Name="EnvironmentDataValueId" ColumnName="EnvironmentDataValueId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CommitRelations">
+            <EntityTypeMapping TypeName="udcModel.CommitRelation">
+              <MappingFragment StoreEntitySet="CommitRelations">
+                <ScalarProperty Name="ChildCommit" ColumnName="ChildCommit" />
+                <ScalarProperty Name="ParentCommit" ColumnName="ParentCommit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Commits">
+            <EntityTypeMapping TypeName="udcModel.Commit">
+              <MappingFragment StoreEntitySet="Commits">
+                <ScalarProperty Name="CommitDate" ColumnName="CommitDate" />
+                <ScalarProperty Name="Hash" ColumnName="Hash" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaggedCommits">
+            <EntityTypeMapping TypeName="udcModel.TaggedCommit">
+              <MappingFragment StoreEntitySet="TaggedCommits">
+                <ScalarProperty Name="IsRelease" ColumnName="IsRelease" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CommitId" ColumnName="CommitId" />
+                <ScalarProperty Name="TagId" ColumnName="TagId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -424,14 +519,14 @@
         <EntityTypeShape EntityType="udcModel.Feature" Width="1.5" PointX="4.75" PointY="3.75" Height="1.4033821614583322" IsExpanded="true" />
         <EntityTypeShape EntityType="udcModel.FeatureUse" Width="1.5" PointX="6.75" PointY="0.75" Height="2.1725878906249996" IsExpanded="true" />
         <EntityTypeShape EntityType="udcModel.Session" Width="1.5" PointX="6.75" PointY="3.75" Height="1.9802864583333317" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.User" Width="1.5" PointX="6.75" PointY="6.75" Height="1.4033821614583317" IsExpanded="true" />
+        <EntityTypeShape EntityType="udcModel.User" Width="1.5" PointX="9" PointY="6" Height="1.2636116536458335" IsExpanded="true" />
         <EntityTypeShape EntityType="udcModel.EnvironmentDataValue" Width="1.5" PointX="0.5" PointY="2.25" Height="1.2636116536458335" />
         <AssociationConnector Association="udcModel.SessionException">
           <ConnectorPoint PointX="6.75" PointY="3.75" />
           <ConnectorPoint PointX="6.375" PointY="3.375" />
           <ConnectorPoint PointX="6.625" PointY="3.375" />
-          <ConnectorPoint PointX="6.625" PointY="3.210348307291667" />
-          <ConnectorPoint PointX="6.25" PointY="2.835348307291667" />
+          <ConnectorPoint PointX="6.625" PointY="3.3746956380208335" />
+          <ConnectorPoint PointX="6.25" PointY="2.9996956380208331" />
         </AssociationConnector>
         <AssociationConnector Association="udcModel.ExceptionGroupException">
           <ConnectorPoint PointX="4.25" PointY="3.75" />
@@ -443,9 +538,9 @@
           <ConnectorPoint PointX="4.75" PointY="2.9996956380208335" />
         </AssociationConnector>
         <AssociationConnector Association="udcModel.SessionEnvironmentData">
-          <ConnectorPoint PointX="6.75" PointY="6.2774666341145835" />
-          <ConnectorPoint PointX="4.40625" PointY="6.2774666341145835" />
-          <ConnectorPoint PointX="4.40625" PointY="2.2566536458333335" />
+          <ConnectorPoint PointX="6.75" PointY="6.3748478190104167" />
+          <ConnectorPoint PointX="4.40625" PointY="6.3748478190104167" />
+          <ConnectorPoint PointX="4.40625" PointY="2.585348307291667" />
         </AssociationConnector>
         <AssociationConnector Association="udcModel.EnvironmentDataNameEnvironmentData">
           <ConnectorPoint PointX="2.25" PointY="4.3818058268229159" />
@@ -462,6 +557,9 @@
           <ConnectorPoint PointX="7.5312525" PointY="3.75" />
           <ConnectorPoint PointX="7.5312525" PointY="2.835348307291667" />
         </AssociationConnector>
+        <EntityTypeShape EntityType="udcModel.CommitRelation" Width="1.5" PointX="9.75" PointY="4.25" Height="1.2636116536458353" />
+        <EntityTypeShape EntityType="udcModel.Commit" Width="1.5" PointX="9.75" PointY="2.625" Height="1.4279589843750031" />
+        <EntityTypeShape EntityType="udcModel.TaggedCommit" Width="1.5" PointX="9.75" PointY="0.75" Height="1.5923063151041674" />
       </Diagram>
     </Diagrams>
   </Designer>

@@ -234,6 +234,54 @@ namespace UsageDataAnalysisWebClient.Models
             }
         }
         private ObjectSet<EnvironmentDataValue> _EnvironmentDataValues;
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        public ObjectSet<CommitRelation> CommitRelations
+        {
+            get
+            {
+                if ((_CommitRelations == null))
+                {
+                    _CommitRelations = base.CreateObjectSet<CommitRelation>("CommitRelations");
+                }
+                return _CommitRelations;
+            }
+        }
+        private ObjectSet<CommitRelation> _CommitRelations;
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        public ObjectSet<Commit> Commits
+        {
+            get
+            {
+                if ((_Commits == null))
+                {
+                    _Commits = base.CreateObjectSet<Commit>("Commits");
+                }
+                return _Commits;
+            }
+        }
+        private ObjectSet<Commit> _Commits;
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        public ObjectSet<TaggedCommit> TaggedCommits
+        {
+            get
+            {
+                if ((_TaggedCommits == null))
+                {
+                    _TaggedCommits = base.CreateObjectSet<TaggedCommit>("TaggedCommits");
+                }
+                return _TaggedCommits;
+            }
+        }
+        private ObjectSet<TaggedCommit> _TaggedCommits;
 
         #endregion
         #region AddTo-Methoden
@@ -316,6 +364,30 @@ namespace UsageDataAnalysisWebClient.Models
         public void AddToEnvironmentDataValues(EnvironmentDataValue environmentDataValue)
         {
             base.AddObject("EnvironmentDataValues", environmentDataValue);
+        }
+    
+        /// <summary>
+        /// Veraltete Methode zum Hinzufügen eines neuen Objekts zum EntitySet 'CommitRelations'. Verwenden Sie stattdessen die Methode '.Add' der zugeordneten Eigenschaft 'ObjectSet&lt;T&gt;'.
+        /// </summary>
+        public void AddToCommitRelations(CommitRelation commitRelation)
+        {
+            base.AddObject("CommitRelations", commitRelation);
+        }
+    
+        /// <summary>
+        /// Veraltete Methode zum Hinzufügen eines neuen Objekts zum EntitySet 'Commits'. Verwenden Sie stattdessen die Methode '.Add' der zugeordneten Eigenschaft 'ObjectSet&lt;T&gt;'.
+        /// </summary>
+        public void AddToCommits(Commit commit)
+        {
+            base.AddObject("Commits", commit);
+        }
+    
+        /// <summary>
+        /// Veraltete Methode zum Hinzufügen eines neuen Objekts zum EntitySet 'TaggedCommits'. Verwenden Sie stattdessen die Methode '.Add' der zugeordneten Eigenschaft 'ObjectSet&lt;T&gt;'.
+        /// </summary>
+        public void AddToTaggedCommits(TaggedCommit taggedCommit)
+        {
+            base.AddObject("TaggedCommits", taggedCommit);
         }
 
         #endregion
@@ -400,6 +472,197 @@ namespace UsageDataAnalysisWebClient.Models
         private global::System.String _ActivationMethodName;
         partial void OnActivationMethodNameChanging(global::System.String value);
         partial void OnActivationMethodNameChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// Keine Dokumentation für Metadaten verfügbar.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="udcModel", Name="Commit")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class Commit : EntityObject
+    {
+        #region Factory-Methode
+    
+        /// <summary>
+        /// Erstellt ein neues Commit-Objekt.
+        /// </summary>
+        /// <param name="id">Anfangswert der Eigenschaft Id.</param>
+        /// <param name="hash">Anfangswert der Eigenschaft Hash.</param>
+        /// <param name="commitDate">Anfangswert der Eigenschaft CommitDate.</param>
+        public static Commit CreateCommit(global::System.Int32 id, global::System.String hash, global::System.DateTime commitDate)
+        {
+            Commit commit = new Commit();
+            commit.Id = id;
+            commit.Hash = hash;
+            commit.CommitDate = commitDate;
+            return commit;
+        }
+
+        #endregion
+        #region Primitive Eigenschaften
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 Id
+        {
+            get
+            {
+                return _Id;
+            }
+            set
+            {
+                if (_Id != value)
+                {
+                    OnIdChanging(value);
+                    ReportPropertyChanging("Id");
+                    _Id = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("Id");
+                    OnIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _Id;
+        partial void OnIdChanging(global::System.Int32 value);
+        partial void OnIdChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Hash
+        {
+            get
+            {
+                return _Hash;
+            }
+            set
+            {
+                OnHashChanging(value);
+                ReportPropertyChanging("Hash");
+                _Hash = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Hash");
+                OnHashChanged();
+            }
+        }
+        private global::System.String _Hash;
+        partial void OnHashChanging(global::System.String value);
+        partial void OnHashChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.DateTime CommitDate
+        {
+            get
+            {
+                return _CommitDate;
+            }
+            set
+            {
+                OnCommitDateChanging(value);
+                ReportPropertyChanging("CommitDate");
+                _CommitDate = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CommitDate");
+                OnCommitDateChanged();
+            }
+        }
+        private global::System.DateTime _CommitDate;
+        partial void OnCommitDateChanging(global::System.DateTime value);
+        partial void OnCommitDateChanged();
+
+        #endregion
+    
+    }
+    
+    /// <summary>
+    /// Keine Dokumentation für Metadaten verfügbar.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="udcModel", Name="CommitRelation")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class CommitRelation : EntityObject
+    {
+        #region Factory-Methode
+    
+        /// <summary>
+        /// Erstellt ein neues CommitRelation-Objekt.
+        /// </summary>
+        /// <param name="parentCommit">Anfangswert der Eigenschaft ParentCommit.</param>
+        /// <param name="childCommit">Anfangswert der Eigenschaft ChildCommit.</param>
+        public static CommitRelation CreateCommitRelation(global::System.Int32 parentCommit, global::System.Int32 childCommit)
+        {
+            CommitRelation commitRelation = new CommitRelation();
+            commitRelation.ParentCommit = parentCommit;
+            commitRelation.ChildCommit = childCommit;
+            return commitRelation;
+        }
+
+        #endregion
+        #region Primitive Eigenschaften
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ParentCommit
+        {
+            get
+            {
+                return _ParentCommit;
+            }
+            set
+            {
+                if (_ParentCommit != value)
+                {
+                    OnParentCommitChanging(value);
+                    ReportPropertyChanging("ParentCommit");
+                    _ParentCommit = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("ParentCommit");
+                    OnParentCommitChanged();
+                }
+            }
+        }
+        private global::System.Int32 _ParentCommit;
+        partial void OnParentCommitChanging(global::System.Int32 value);
+        partial void OnParentCommitChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 ChildCommit
+        {
+            get
+            {
+                return _ChildCommit;
+            }
+            set
+            {
+                if (_ChildCommit != value)
+                {
+                    OnChildCommitChanging(value);
+                    ReportPropertyChanging("ChildCommit");
+                    _ChildCommit = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("ChildCommit");
+                    OnChildCommitChanged();
+                }
+            }
+        }
+        private global::System.Int32 _ChildCommit;
+        partial void OnChildCommitChanging(global::System.Int32 value);
+        partial void OnChildCommitChanged();
 
         #endregion
     
@@ -1633,13 +1896,15 @@ namespace UsageDataAnalysisWebClient.Models
         /// <param name="clientSessionId">Anfangswert der Eigenschaft ClientSessionId.</param>
         /// <param name="startTime">Anfangswert der Eigenschaft StartTime.</param>
         /// <param name="userId">Anfangswert der Eigenschaft UserId.</param>
-        public static Session CreateSession(global::System.Int32 sessionId, global::System.Int64 clientSessionId, global::System.DateTime startTime, global::System.Int32 userId)
+        /// <param name="isDebug">Anfangswert der Eigenschaft IsDebug.</param>
+        public static Session CreateSession(global::System.Int32 sessionId, global::System.Int64 clientSessionId, global::System.DateTime startTime, global::System.Int32 userId, global::System.Boolean isDebug)
         {
             Session session = new Session();
             session.SessionId = sessionId;
             session.ClientSessionId = clientSessionId;
             session.StartTime = startTime;
             session.UserId = userId;
+            session.IsDebug = isDebug;
             return session;
         }
 
@@ -1864,6 +2129,102 @@ namespace UsageDataAnalysisWebClient.Models
         private Nullable<global::System.Int32> _AppVersionRevision;
         partial void OnAppVersionRevisionChanging(Nullable<global::System.Int32> value);
         partial void OnAppVersionRevisionChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.Int32> CommitId
+        {
+            get
+            {
+                return _CommitId;
+            }
+            set
+            {
+                OnCommitIdChanging(value);
+                ReportPropertyChanging("CommitId");
+                _CommitId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CommitId");
+                OnCommitIdChanged();
+            }
+        }
+        private Nullable<global::System.Int32> _CommitId;
+        partial void OnCommitIdChanging(Nullable<global::System.Int32> value);
+        partial void OnCommitIdChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsDebug
+        {
+            get
+            {
+                return _IsDebug;
+            }
+            set
+            {
+                OnIsDebugChanging(value);
+                ReportPropertyChanging("IsDebug");
+                _IsDebug = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsDebug");
+                OnIsDebugChanged();
+            }
+        }
+        private global::System.Boolean _IsDebug;
+        partial void OnIsDebugChanging(global::System.Boolean value);
+        partial void OnIsDebugChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> FirstException
+        {
+            get
+            {
+                return _FirstException;
+            }
+            set
+            {
+                OnFirstExceptionChanging(value);
+                ReportPropertyChanging("FirstException");
+                _FirstException = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("FirstException");
+                OnFirstExceptionChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _FirstException;
+        partial void OnFirstExceptionChanging(Nullable<global::System.DateTime> value);
+        partial void OnFirstExceptionChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
+        [DataMemberAttribute()]
+        public Nullable<global::System.DateTime> LastFeatureUse
+        {
+            get
+            {
+                return _LastFeatureUse;
+            }
+            set
+            {
+                OnLastFeatureUseChanging(value);
+                ReportPropertyChanging("LastFeatureUse");
+                _LastFeatureUse = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("LastFeatureUse");
+                OnLastFeatureUseChanged();
+            }
+        }
+        private Nullable<global::System.DateTime> _LastFeatureUse;
+        partial void OnLastFeatureUseChanging(Nullable<global::System.DateTime> value);
+        partial void OnLastFeatureUseChanged();
 
         #endregion
     
@@ -1936,6 +2297,139 @@ namespace UsageDataAnalysisWebClient.Models
         }
 
         #endregion
+    }
+    
+    /// <summary>
+    /// Keine Dokumentation für Metadaten verfügbar.
+    /// </summary>
+    [EdmEntityTypeAttribute(NamespaceName="udcModel", Name="TaggedCommit")]
+    [Serializable()]
+    [DataContractAttribute(IsReference=true)]
+    public partial class TaggedCommit : EntityObject
+    {
+        #region Factory-Methode
+    
+        /// <summary>
+        /// Erstellt ein neues TaggedCommit-Objekt.
+        /// </summary>
+        /// <param name="tagId">Anfangswert der Eigenschaft TagId.</param>
+        /// <param name="commitId">Anfangswert der Eigenschaft CommitId.</param>
+        /// <param name="name">Anfangswert der Eigenschaft Name.</param>
+        /// <param name="isRelease">Anfangswert der Eigenschaft IsRelease.</param>
+        public static TaggedCommit CreateTaggedCommit(global::System.Int32 tagId, global::System.Int32 commitId, global::System.String name, global::System.Boolean isRelease)
+        {
+            TaggedCommit taggedCommit = new TaggedCommit();
+            taggedCommit.TagId = tagId;
+            taggedCommit.CommitId = commitId;
+            taggedCommit.Name = name;
+            taggedCommit.IsRelease = isRelease;
+            return taggedCommit;
+        }
+
+        #endregion
+        #region Primitive Eigenschaften
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 TagId
+        {
+            get
+            {
+                return _TagId;
+            }
+            set
+            {
+                if (_TagId != value)
+                {
+                    OnTagIdChanging(value);
+                    ReportPropertyChanging("TagId");
+                    _TagId = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("TagId");
+                    OnTagIdChanged();
+                }
+            }
+        }
+        private global::System.Int32 _TagId;
+        partial void OnTagIdChanging(global::System.Int32 value);
+        partial void OnTagIdChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Int32 CommitId
+        {
+            get
+            {
+                return _CommitId;
+            }
+            set
+            {
+                OnCommitIdChanging(value);
+                ReportPropertyChanging("CommitId");
+                _CommitId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("CommitId");
+                OnCommitIdChanged();
+            }
+        }
+        private global::System.Int32 _CommitId;
+        partial void OnCommitIdChanging(global::System.Int32 value);
+        partial void OnCommitIdChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.String Name
+        {
+            get
+            {
+                return _Name;
+            }
+            set
+            {
+                OnNameChanging(value);
+                ReportPropertyChanging("Name");
+                _Name = StructuralObject.SetValidValue(value, false);
+                ReportPropertyChanged("Name");
+                OnNameChanged();
+            }
+        }
+        private global::System.String _Name;
+        partial void OnNameChanging(global::System.String value);
+        partial void OnNameChanged();
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [DataMemberAttribute()]
+        public global::System.Boolean IsRelease
+        {
+            get
+            {
+                return _IsRelease;
+            }
+            set
+            {
+                OnIsReleaseChanging(value);
+                ReportPropertyChanging("IsRelease");
+                _IsRelease = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("IsRelease");
+                OnIsReleaseChanged();
+            }
+        }
+        private global::System.Boolean _IsRelease;
+        partial void OnIsReleaseChanging(global::System.Boolean value);
+        partial void OnIsReleaseChanged();
+
+        #endregion
+    
     }
     
     /// <summary>

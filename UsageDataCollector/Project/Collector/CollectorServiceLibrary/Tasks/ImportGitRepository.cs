@@ -17,7 +17,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 		public ImportGitRepository()
 		{
 			this.Remote = "origin";
-			this.EarliestCommitDate = new DateTime(2010, 06, 01);
+			this.EarliestCommitDate = new DateTime(2010, 03, 01);
 		}
 
 		CollectorRepository db;
@@ -84,7 +84,8 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 			db.Context.SaveChanges();
 		}
 
-		static readonly Regex gitSvnRegex = new Regex(@"^\s*git-svn-id: [a-z0-9.:/]+@(\d+) [0-9a-f-]+$");
+		// import svn-revision numbers from trunk only (because we can't identify the branch reliably otherwise)
+		static readonly Regex gitSvnRegex = new Regex(@"^\s*git-svn-id: [a-z0-9.:/]+/trunk@(\d+) [0-9a-f-]+$");
 
 		private int? ImportCommit(ObjectId commitRef)
 		{
