@@ -45,17 +45,9 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 
                 if (potentialDuplicates.Count > 0)
                 {
-                    // Match on time, but this time in-memory, with the potential duplicates only
-                    List<UsageDataSession> matches = (from s in message.Sessions
-                                                      join dup in potentialDuplicates on s.SessionID equals dup.ClientSessionId
-                                                      where s.StartTime == dup.StartTime
-                                                      select s).ToList();
-
-                    // Remove all duplicates that were detected from this message
-                    foreach (UsageDataSession s in matches)
-                    {
-                        bool bRemoved = message.Sessions.Remove(s);
-                    }
+					// Remove all duplicates that were detected from this message
+					// SQL Server doesn't store times with the same accurracy as .NET; so we only look whether the times were close
+					message.Sessions.RemoveAll(s => potentialDuplicates.Any(d => s.SessionID == d.ClientSessionId && Math.Abs((s.StartTime - d.StartTime).TotalSeconds) < 1));
                 }
             }
             
