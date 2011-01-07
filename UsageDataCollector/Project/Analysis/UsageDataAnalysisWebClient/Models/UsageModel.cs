@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web.UI.DataVisualization.Charting;
 
 namespace UsageDataAnalysisWebClient.Models {
 	public class UsageViewModel
@@ -14,12 +15,15 @@ namespace UsageDataAnalysisWebClient.Models {
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
 
-		public IEnumerable<UsageDataPoint> DiagramData { get; set; }
+		public Chart DailyUsers { get; set; }
+		public Chart WeeklyUsers { get; set; }
+		public Chart MonthlyUsers { get; set; }
 	}
 
 	public class UsageDataPoint
 	{
 		public DateTime Date { get; set; }
+		public string Version { get; set; }
 		public int UserCount { get; set; }
 	}
 }

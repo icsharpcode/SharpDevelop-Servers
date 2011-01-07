@@ -8,6 +8,7 @@ using System.Data;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Web.UI.DataVisualization.Charting;
+using UsageDataAnalysisWebClient.Repositories;
 
 namespace UsageDataAnalysisWebClient.Controllers
 {
@@ -55,15 +56,17 @@ namespace UsageDataAnalysisWebClient.Controllers
 					List<DateTime> allDates = dicts.SelectMany(d => d.Keys).Distinct().OrderBy(d => d).ToList();
 					if (dicts.Count > 10) {
 						var dictsToCombine = dicts.OrderByDescending(d => d.Values.Sum()).Skip(9).ToList();
-						dicts = dicts.OrderByDescending(d => d.Values.Sum()).Take(9).ToList();
+						dicts = dicts.OrderByDescending(d => d.Values.Sum()).Take(9).OrderBy(d => d.Name, new VersionNameComparer()).ToList();
 						DiagramSeries other = new DiagramSeries { Name = "Other" };
 						var q = from dict in dictsToCombine
-							from pair in dict
-							group pair.Value by pair.Key;
+								from pair in dict
+								group pair.Value by pair.Key;
 						foreach (var g in q) {
 							other.Add(g.Key, g.Sum());
 						}
 						dicts.Add(other);
+					} else {
+						dicts = dicts.OrderBy(d => d.Name, new VersionNameComparer()).ToList();
 					}
 
 					foreach (var dict in dicts) {
@@ -72,7 +75,7 @@ namespace UsageDataAnalysisWebClient.Controllers
 						foreach (DateTime dt in allDates) {
 							int count;
 							dict.TryGetValue(dt, out count);
-							series.Points.AddXY(dt, count);
+							series.Points.AddXY(dt + TimeSpan.FromDays(3.5), count); // add a half week so that the data points are in the middle of the week
 						}
 					}
 					model.Charts.Add(chart);

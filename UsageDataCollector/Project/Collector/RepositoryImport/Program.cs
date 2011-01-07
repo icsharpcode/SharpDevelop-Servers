@@ -14,7 +14,7 @@ namespace RepositoryImport
             task.ConnectionString = "name=UDCContext";
             task.Directory = "c:\\sharpdevelop";
 			task.Remote = "udc";
-			task.Fetch = true;
+			task.Fetch = false;
             task.Execute();
         }
     }

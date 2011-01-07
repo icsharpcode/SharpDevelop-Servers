@@ -14,24 +14,18 @@
     <% } %>
     <h2>Number of users per day</h2>
     <%
-        System.Web.UI.DataVisualization.Charting.Chart Chart2 = new System.Web.UI.DataVisualization.Charting.Chart();  
-        Chart2.Width = 800;  
-        Chart2.Height = 300;  
-        Chart2.RenderType = RenderType.ImageTag;  
-
-        Chart2.Palette = ChartColorPalette.BrightPastel;  
-        Chart2.ChartAreas.Add("Series 1");
-        var s = Chart2.Series.Add("Number of users");
-        s.ChartType = SeriesChartType.Line;
-        foreach (var value in Model.DiagramData)  
-        {  
-            s.Points.AddXY(value.Date, value.UserCount);
-        }
-
-        // Render chart control  
-        Chart2.Page = this;  
-        Chart2.RenderControl(new HtmlTextWriter(Page.Response.Output));  
- 
+        Model.DailyUsers.Page = this;
+        Model.DailyUsers.RenderControl(new HtmlTextWriter(Page.Response.Output));  
+   %>
+    <h2>Number of users per week</h2>
+    <%
+        Model.WeeklyUsers.Page = this;
+        Model.WeeklyUsers.RenderControl(new HtmlTextWriter(Page.Response.Output));  
+   %>
+    <h2>Number of users per month</h2>
+    <%
+        Model.MonthlyUsers.Page = this;
+        Model.MonthlyUsers.RenderControl(new HtmlTextWriter(Page.Response.Output));  
    %>
 </asp:Content>
 
