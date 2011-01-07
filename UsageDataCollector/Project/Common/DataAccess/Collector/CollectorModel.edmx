@@ -7,6 +7,8 @@
     <Schema Namespace="CollectorModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityContainer Name="CollectorModelStoreContainer">
           <EntitySet Name="ActivationMethods" EntityType="CollectorModel.Store.ActivationMethods" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="CommitRelations" EntityType="CollectorModel.Store.CommitRelations" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Commits" EntityType="CollectorModel.Store.Commits" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EnvironmentData" EntityType="CollectorModel.Store.EnvironmentData" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EnvironmentDataNames" EntityType="CollectorModel.Store.EnvironmentDataNames" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="EnvironmentDataValues" EntityType="CollectorModel.Store.EnvironmentDataValues" store:Type="Tables" Schema="dbo" />
@@ -15,6 +17,7 @@
           <EntitySet Name="Features" EntityType="CollectorModel.Store.Features" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="FeatureUse" EntityType="CollectorModel.Store.FeatureUse" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Sessions" EntityType="CollectorModel.Store.Sessions" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="TaggedCommits" EntityType="CollectorModel.Store.TaggedCommits" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="Users" EntityType="CollectorModel.Store.Users" store:Type="Tables" Schema="dbo" />
         </EntityContainer>
         <EntityType Name="ActivationMethods">
@@ -23,6 +26,22 @@
           </Key>
           <Property Name="ActivationMethodId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="ActivationMethodName" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="CommitRelations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="ParentCommit" Type="int" Nullable="false" />
+          <Property Name="ChildCommit" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="Commits">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Hash" Type="nchar" Nullable="false" MaxLength="40" />
+          <Property Name="CommitDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="EnvironmentData">
           <Key>
@@ -101,6 +120,16 @@
           <Property Name="AppVersionMinor" Type="int" />
           <Property Name="AppVersionBuild" Type="int" />
           <Property Name="AppVersionRevision" Type="int" />
+          <Property Name="CommitId" Type="int" />
+        </EntityType>
+        <EntityType Name="TaggedCommits">
+          <Key>
+            <PropertyRef Name="TagId" />
+          </Key>
+          <Property Name="TagId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="CommitId" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" Nullable="false" MaxLength="20" />
+          <Property Name="IsRelease" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -124,7 +153,10 @@
           <EntitySet Name="EnvironmentDatas" EntityType="CollectorModel.EnvironmentData" />
           <EntitySet Name="EnvironmentDataValues" EntityType="CollectorModel.EnvironmentDataValue" />
           <EntitySet Name="Sessions" EntityType="CollectorModel.Session" />
-        </EntityContainer>
+          <EntitySet Name="CommitRelations" EntityType="CollectorModel.CommitRelation" />
+          <EntitySet Name="Commits" EntityType="CollectorModel.Commit" />
+          <EntitySet Name="TaggedCommits" EntityType="CollectorModel.TaggedCommit" />
+          </EntityContainer>
         <EntityType Name="EnvironmentDataName">
           <Key>
             <PropertyRef Name="Id" />
@@ -216,6 +248,32 @@
           <Property Type="Int32" Name="AppVersionMinor" />
           <Property Type="Int32" Name="AppVersionBuild" />
           <Property Type="Int32" Name="AppVersionRevision" />
+          <Property Type="Int32" Name="CommitId" />
+        </EntityType>
+        <EntityType Name="CommitRelation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="ParentCommit" Nullable="false" />
+          <Property Type="Int32" Name="ChildCommit" Nullable="false" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityType Name="Commit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Hash" Nullable="false" MaxLength="40" FixedLength="true" Unicode="true" />
+          <Property Type="DateTime" Name="CommitDate" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TaggedCommit">
+          <Key>
+            <PropertyRef Name="TagId" />
+          </Key>
+          <Property Type="Int32" Name="TagId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="CommitId" Nullable="false" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Type="Boolean" Name="IsRelease" Nullable="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -313,6 +371,7 @@
           <EntitySetMapping Name="Sessions">
             <EntityTypeMapping TypeName="CollectorModel.Session">
               <MappingFragment StoreEntitySet="Sessions">
+                <ScalarProperty Name="CommitId" ColumnName="CommitId" />
                 <ScalarProperty Name="AppVersionRevision" ColumnName="AppVersionRevision" />
                 <ScalarProperty Name="AppVersionBuild" ColumnName="AppVersionBuild" />
                 <ScalarProperty Name="AppVersionMinor" ColumnName="AppVersionMinor" />
@@ -325,7 +384,35 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="CommitRelations">
+            <EntityTypeMapping TypeName="CollectorModel.CommitRelation">
+              <MappingFragment StoreEntitySet="CommitRelations">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ChildCommit" ColumnName="ChildCommit" />
+                <ScalarProperty Name="ParentCommit" ColumnName="ParentCommit" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Commits">
+            <EntityTypeMapping TypeName="CollectorModel.Commit">
+              <MappingFragment StoreEntitySet="Commits">
+                <ScalarProperty Name="CommitDate" ColumnName="CommitDate" />
+                <ScalarProperty Name="Hash" ColumnName="Hash" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TaggedCommits">
+            <EntityTypeMapping TypeName="CollectorModel.TaggedCommit">
+              <MappingFragment StoreEntitySet="TaggedCommits">
+                <ScalarProperty Name="IsRelease" ColumnName="IsRelease" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CommitId" ColumnName="CommitId" />
+                <ScalarProperty Name="TagId" ColumnName="TagId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>
@@ -356,6 +443,9 @@
         <EntityTypeShape EntityType="CollectorModel.EnvironmentData" Width="2.25" PointX="4.5" PointY="3.75" Height="1.7879850260416674" />
         <EntityTypeShape EntityType="CollectorModel.EnvironmentDataValue" Width="2.5" PointX="7.5" PointY="6" Height="1.4033821614583353" />
         <EntityTypeShape EntityType="CollectorModel.Session" Width="1.875" PointX="3.25" PointY="0.5" Height="2.7494921875000031" />
+        <EntityTypeShape EntityType="CollectorModel.CommitRelation" Width="1.5" PointX="0.75" PointY="6.75" Height="1.4279589843750031" />
+        <EntityTypeShape EntityType="CollectorModel.Commit" Width="1.5" PointX="2.75" PointY="6.75" Height="1.4279589843750031" />
+        <EntityTypeShape EntityType="CollectorModel.TaggedCommit" Width="1.5" PointX="4.75" PointY="6.75" Height="1.5923063151041674" />
       </Diagram>
     </Diagrams>
   </Designer>

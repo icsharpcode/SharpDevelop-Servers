@@ -67,18 +67,24 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
 
                 if (null != appVersion && !String.IsNullOrEmpty(appVersion.Value))
                 {
-                    try
-                    {
-                        Version v = new Version(appVersion.Value);  // this can throw a couple of exceptions, but we don't care if it does
-                        appVersionMajor = v.Major;
-                        appVersionMinor = v.Minor;
-                        appVersionBuild = v.Build;
-                        appVersionRevision = v.Revision;
-                    }
-                    catch(System.Exception)
-                    {
-                    }
+					Version v;
+					if (Version.TryParse(appVersion.Value, out v)) {
+						appVersionMajor = v.Major;
+						appVersionMinor = v.Minor;
+						appVersionBuild = v.Build;
+						appVersionRevision = v.Revision;
+					}
                 }
+
+				// Set up the association with the commit; if that's already stored in the database.
+				UsageDataEnvironmentProperty commitHash = msgSession.EnvironmentProperties.FirstOrDefault(ep => ep.Name == "commit");
+				int? commitId = null;
+				if (commitHash != null) {
+					Commit commit = repository.GetCommitByHash(commitHash.Value);
+					if (commit != null) {
+						commitId = commit.Id;
+					}
+				}
 
                 Session modelSession = new Session()
                 {

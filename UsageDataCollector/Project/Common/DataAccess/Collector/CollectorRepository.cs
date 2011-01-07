@@ -168,5 +168,15 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
                 IgnoreDuplicateKeysOnSaveChanges<T>();   // there could be more exceptions
             }
         }
+
+        public TaggedCommit GetTag(string name, bool isRelease)
+        {
+            return Context.TaggedCommits.FirstOrDefault(tag => tag.Name == name && tag.IsRelease == isRelease);
+        }
+
+        public Commit GetCommitByHash(string hash)
+        {
+            return Context.Commits.FirstOrDefault(c => c.Hash == hash);
+        }
     }
 }
