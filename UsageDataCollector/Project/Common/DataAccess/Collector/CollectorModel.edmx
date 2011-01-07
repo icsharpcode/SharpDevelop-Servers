@@ -29,11 +29,11 @@
         </EntityType>
         <EntityType Name="CommitRelations">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="ParentCommit" />
+            <PropertyRef Name="ChildCommit" />
           </Key>
           <Property Name="ParentCommit" Type="int" Nullable="false" />
           <Property Name="ChildCommit" Type="int" Nullable="false" />
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
         </EntityType>
         <EntityType Name="Commits">
           <Key>
@@ -153,9 +153,9 @@
           <EntitySet Name="EnvironmentDatas" EntityType="CollectorModel.EnvironmentData" />
           <EntitySet Name="EnvironmentDataValues" EntityType="CollectorModel.EnvironmentDataValue" />
           <EntitySet Name="Sessions" EntityType="CollectorModel.Session" />
-          <EntitySet Name="CommitRelations" EntityType="CollectorModel.CommitRelation" />
           <EntitySet Name="Commits" EntityType="CollectorModel.Commit" />
           <EntitySet Name="TaggedCommits" EntityType="CollectorModel.TaggedCommit" />
+          <EntitySet Name="CommitRelations" EntityType="CollectorModel.CommitRelation" />
           </EntityContainer>
         <EntityType Name="EnvironmentDataName">
           <Key>
@@ -250,14 +250,6 @@
           <Property Type="Int32" Name="AppVersionRevision" />
           <Property Type="Int32" Name="CommitId" />
         </EntityType>
-        <EntityType Name="CommitRelation">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Type="Int32" Name="ParentCommit" Nullable="false" />
-          <Property Type="Int32" Name="ChildCommit" Nullable="false" />
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-        </EntityType>
         <EntityType Name="Commit">
           <Key>
             <PropertyRef Name="Id" />
@@ -274,6 +266,14 @@
           <Property Type="Int32" Name="CommitId" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="20" FixedLength="true" Unicode="true" />
           <Property Type="Boolean" Name="IsRelease" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CommitRelation">
+          <Key>
+            <PropertyRef Name="ParentCommit" />
+            <PropertyRef Name="ChildCommit" />
+          </Key>
+          <Property Type="Int32" Name="ParentCommit" Nullable="false" />
+          <Property Type="Int32" Name="ChildCommit" Nullable="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -384,15 +384,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CommitRelations">
-            <EntityTypeMapping TypeName="CollectorModel.CommitRelation">
-              <MappingFragment StoreEntitySet="CommitRelations">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="ChildCommit" ColumnName="ChildCommit" />
-                <ScalarProperty Name="ParentCommit" ColumnName="ParentCommit" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Commits">
             <EntityTypeMapping TypeName="CollectorModel.Commit">
               <MappingFragment StoreEntitySet="Commits">
@@ -409,6 +400,14 @@
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="CommitId" ColumnName="CommitId" />
                 <ScalarProperty Name="TagId" ColumnName="TagId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CommitRelations">
+            <EntityTypeMapping TypeName="CollectorModel.CommitRelation">
+              <MappingFragment StoreEntitySet="CommitRelations">
+                <ScalarProperty Name="ChildCommit" ColumnName="ChildCommit" />
+                <ScalarProperty Name="ParentCommit" ColumnName="ParentCommit" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -443,9 +442,9 @@
         <EntityTypeShape EntityType="CollectorModel.EnvironmentData" Width="2.25" PointX="4.5" PointY="3.75" Height="1.7879850260416674" />
         <EntityTypeShape EntityType="CollectorModel.EnvironmentDataValue" Width="2.5" PointX="7.5" PointY="6" Height="1.4033821614583353" />
         <EntityTypeShape EntityType="CollectorModel.Session" Width="1.875" PointX="3.25" PointY="0.5" Height="2.7494921875000031" />
-        <EntityTypeShape EntityType="CollectorModel.CommitRelation" Width="1.5" PointX="0.75" PointY="6.75" Height="1.4279589843750031" />
         <EntityTypeShape EntityType="CollectorModel.Commit" Width="1.5" PointX="2.75" PointY="6.75" Height="1.4279589843750031" />
         <EntityTypeShape EntityType="CollectorModel.TaggedCommit" Width="1.5" PointX="4.75" PointY="6.75" Height="1.5923063151041674" />
+        <EntityTypeShape EntityType="CollectorModel.CommitRelation" Width="1.5" PointX="0.875" PointY="6.875" Height="1.2636116536458388" />
       </Diagram>
     </Diagrams>
   </Designer>

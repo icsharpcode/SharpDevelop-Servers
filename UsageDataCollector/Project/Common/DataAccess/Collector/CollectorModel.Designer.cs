@@ -228,22 +228,6 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// <summary>
         /// Keine Dokumentation für Metadaten verfügbar.
         /// </summary>
-        public ObjectSet<CommitRelation> CommitRelations
-        {
-            get
-            {
-                if ((_CommitRelations == null))
-                {
-                    _CommitRelations = base.CreateObjectSet<CommitRelation>("CommitRelations");
-                }
-                return _CommitRelations;
-            }
-        }
-        private ObjectSet<CommitRelation> _CommitRelations;
-    
-        /// <summary>
-        /// Keine Dokumentation für Metadaten verfügbar.
-        /// </summary>
         public ObjectSet<Commit> Commits
         {
             get
@@ -272,6 +256,22 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
             }
         }
         private ObjectSet<TaggedCommit> _TaggedCommits;
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        public ObjectSet<CommitRelation> CommitRelations
+        {
+            get
+            {
+                if ((_CommitRelations == null))
+                {
+                    _CommitRelations = base.CreateObjectSet<CommitRelation>("CommitRelations");
+                }
+                return _CommitRelations;
+            }
+        }
+        private ObjectSet<CommitRelation> _CommitRelations;
 
         #endregion
         #region AddTo-Methoden
@@ -357,14 +357,6 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         }
     
         /// <summary>
-        /// Veraltete Methode zum Hinzufügen eines neuen Objekts zum EntitySet 'CommitRelations'. Verwenden Sie stattdessen die Methode '.Add' der zugeordneten Eigenschaft 'ObjectSet&lt;T&gt;'.
-        /// </summary>
-        public void AddToCommitRelations(CommitRelation commitRelation)
-        {
-            base.AddObject("CommitRelations", commitRelation);
-        }
-    
-        /// <summary>
         /// Veraltete Methode zum Hinzufügen eines neuen Objekts zum EntitySet 'Commits'. Verwenden Sie stattdessen die Methode '.Add' der zugeordneten Eigenschaft 'ObjectSet&lt;T&gt;'.
         /// </summary>
         public void AddToCommits(Commit commit)
@@ -378,6 +370,14 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         public void AddToTaggedCommits(TaggedCommit taggedCommit)
         {
             base.AddObject("TaggedCommits", taggedCommit);
+        }
+    
+        /// <summary>
+        /// Veraltete Methode zum Hinzufügen eines neuen Objekts zum EntitySet 'CommitRelations'. Verwenden Sie stattdessen die Methode '.Add' der zugeordneten Eigenschaft 'ObjectSet&lt;T&gt;'.
+        /// </summary>
+        public void AddToCommitRelations(CommitRelation commitRelation)
+        {
+            base.AddObject("CommitRelations", commitRelation);
         }
 
         #endregion
@@ -589,13 +589,11 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// </summary>
         /// <param name="parentCommit">Anfangswert der Eigenschaft ParentCommit.</param>
         /// <param name="childCommit">Anfangswert der Eigenschaft ChildCommit.</param>
-        /// <param name="id">Anfangswert der Eigenschaft Id.</param>
-        public static CommitRelation CreateCommitRelation(global::System.Int32 parentCommit, global::System.Int32 childCommit, global::System.Int32 id)
+        public static CommitRelation CreateCommitRelation(global::System.Int32 parentCommit, global::System.Int32 childCommit)
         {
             CommitRelation commitRelation = new CommitRelation();
             commitRelation.ParentCommit = parentCommit;
             commitRelation.ChildCommit = childCommit;
-            commitRelation.Id = id;
             return commitRelation;
         }
 
@@ -605,7 +603,7 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// <summary>
         /// Keine Dokumentation für Metadaten verfügbar.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Int32 ParentCommit
         {
@@ -615,11 +613,14 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
             }
             set
             {
-                OnParentCommitChanging(value);
-                ReportPropertyChanging("ParentCommit");
-                _ParentCommit = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ParentCommit");
-                OnParentCommitChanged();
+                if (_ParentCommit != value)
+                {
+                    OnParentCommitChanging(value);
+                    ReportPropertyChanging("ParentCommit");
+                    _ParentCommit = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("ParentCommit");
+                    OnParentCommitChanged();
+                }
             }
         }
         private global::System.Int32 _ParentCommit;
@@ -629,7 +630,7 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// <summary>
         /// Keine Dokumentation für Metadaten verfügbar.
         /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=false)]
+        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
         [DataMemberAttribute()]
         public global::System.Int32 ChildCommit
         {
@@ -639,43 +640,19 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
             }
             set
             {
-                OnChildCommitChanging(value);
-                ReportPropertyChanging("ChildCommit");
-                _ChildCommit = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("ChildCommit");
-                OnChildCommitChanged();
+                if (_ChildCommit != value)
+                {
+                    OnChildCommitChanging(value);
+                    ReportPropertyChanging("ChildCommit");
+                    _ChildCommit = StructuralObject.SetValidValue(value);
+                    ReportPropertyChanged("ChildCommit");
+                    OnChildCommitChanged();
+                }
             }
         }
         private global::System.Int32 _ChildCommit;
         partial void OnChildCommitChanging(global::System.Int32 value);
         partial void OnChildCommitChanged();
-    
-        /// <summary>
-        /// Keine Dokumentation für Metadaten verfügbar.
-        /// </summary>
-        [EdmScalarPropertyAttribute(EntityKeyProperty=true, IsNullable=false)]
-        [DataMemberAttribute()]
-        public global::System.Int32 Id
-        {
-            get
-            {
-                return _Id;
-            }
-            set
-            {
-                if (_Id != value)
-                {
-                    OnIdChanging(value);
-                    ReportPropertyChanging("Id");
-                    _Id = StructuralObject.SetValidValue(value);
-                    ReportPropertyChanged("Id");
-                    OnIdChanged();
-                }
-            }
-        }
-        private global::System.Int32 _Id;
-        partial void OnIdChanging(global::System.Int32 value);
-        partial void OnIdChanged();
 
         #endregion
     
