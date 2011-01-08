@@ -7,6 +7,7 @@ using UsageDataAnalysisWebClient.Models;
 using System.Data.Objects;
 using System.Diagnostics;
 using System.Web.UI.DataVisualization.Charting;
+using UsageDataAnalysisWebClient.Repositories;
 
 namespace UsageDataAnalysisWebClient.Controllers
 {
@@ -36,16 +37,15 @@ namespace UsageDataAnalysisWebClient.Controllers
 			var resultList = (
 				from g in q.AsEnumerable() // don't do this on DB, EF generates too slow SQL
 				group g by new { g.Key.Name } into g
-				orderby g.Key.Name
 				select new {
 					TagName = g.Key.Name,
 					UserDaysWithCrash = g.Count(g2 => g2.Any(s => s.IsCrashed)),
 					UserDaysWithKilled = g.Count(g2 => g2.Any(s => s.IsKilled)),
 					UserDays = g.Count(),
 					SessionsWithCrashOrKilled = g.Sum(g2 => g2.Count(s => s.IsKilled || s.IsCrashed)),
-					TotalSessionLength = g.Sum(g2 => g2.Sum(s => Math.Max(0, ((s.CrashTime - s.StartTime) ?? new TimeSpan()).TotalHours)))
+					TotalSessionLength = g.Sum(g2 => g2.Sum(s => Math.Max(0, ((s.CrashTime - s.StartTime) ?? TimeSpan.Zero).TotalHours)))
 				}
-			).ToList();
+			).OrderBy(g => g.TagName, new VersionNameComparer()).ToList();
 
 			foreach (var item in resultList) {
 				Debug.WriteLine(item.ToString());

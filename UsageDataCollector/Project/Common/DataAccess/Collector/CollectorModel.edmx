@@ -40,7 +40,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Hash" Type="nchar" Nullable="false" MaxLength="40" />
+          <Property Name="Hash" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="CommitDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="EnvironmentData">
@@ -76,7 +76,7 @@
           <Property Name="ExceptionFingerprint" Type="nvarchar(max)" Nullable="false" />
           <Property Name="ExceptionLocation" Type="nvarchar(max)" Nullable="false" />
           <Property Name="UserComment" Type="nvarchar(max)" />
-          <Property Name="UserFixedInRevision" Type="int" />
+          <Property Name="UserFixedInCommit" Type="int" />
         </EntityType>
         <EntityType Name="Exceptions">
           <Key>
@@ -131,7 +131,7 @@
           </Key>
           <Property Name="TagId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="CommitId" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nchar" Nullable="false" MaxLength="20" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="IsRelease" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
@@ -202,7 +202,7 @@
           <Property Type="String" Name="ExceptionFingerprint" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="ExceptionLocation" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Type="String" Name="UserComment" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Type="Int32" Name="UserFixedInRevision" />
+          <Property Type="Int32" Name="UserFixedInCommit" />
         </EntityType>
         <EntityType Name="Exception">
           <Key>
@@ -326,7 +326,7 @@
           <EntitySetMapping Name="ExceptionGroups">
             <EntityTypeMapping TypeName="CollectorModel.ExceptionGroup">
               <MappingFragment StoreEntitySet="ExceptionGroups">
-                <ScalarProperty Name="UserFixedInRevision" ColumnName="UserFixedInRevision" />
+                <ScalarProperty Name="UserFixedInCommit" ColumnName="UserFixedInCommit" />
                 <ScalarProperty Name="UserComment" ColumnName="UserComment" />
                 <ScalarProperty Name="ExceptionLocation" ColumnName="ExceptionLocation" />
                 <ScalarProperty Name="ExceptionFingerprint" ColumnName="ExceptionFingerprint" />
@@ -445,7 +445,7 @@
         <EntityTypeShape EntityType="CollectorModel.Feature" Width="1.625" PointX="5.625" PointY="0.5" Height="1.4033821614583388" />
         <EntityTypeShape EntityType="CollectorModel.FeatureUse" Width="1.5" PointX="1" PointY="3.75" Height="2.1725878906250031" />
         <EntityTypeShape EntityType="CollectorModel.User" Width="1.5" PointX="0.875" PointY="0.5" Height="1.4033821614583388" />
-        <EntityTypeShape EntityType="CollectorModel.ExceptionGroup" Width="2.5" PointX="7.5" PointY="3.5" Height="2.3648893229166674" />
+        <EntityTypeShape EntityType="CollectorModel.ExceptionGroup" Width="2.5" PointX="7.5" PointY="3.5" Height="2.0853483072916665" />
         <EntityTypeShape EntityType="CollectorModel.Exception" Width="1.5" PointX="2.75" PointY="3.75" Height="2.1725878906250031" />
         <EntityTypeShape EntityType="CollectorModel.ActivationMethod" Width="2.5" PointX="7.5" PointY="0.5" Height="1.4033821614583353" />
         <EntityTypeShape EntityType="CollectorModel.EnvironmentData" Width="2.25" PointX="4.5" PointY="3.75" Height="1.7879850260416674" />

@@ -97,6 +97,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ExceptionGroupRepository.cs" />
     <Compile Include="Repositories\IExceptionGroupRepository.cs" />
+    <Compile Include="Repositories\SourceControlRepository.cs" />
     <Compile Include="Repositories\VersionNameComparer.cs" />
     <Compile Include="Services\ExceptionGroupService.cs" />
   </ItemGroup>

@@ -24,6 +24,8 @@ using System.Runtime.Serialization;
 [assembly: EdmRelationshipAttribute("udcModel", "EnvironmentDataNameEnvironmentData", "EnvironmentDataName", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(UsageDataAnalysisWebClient.Models.EnvironmentDataName), "EnvironmentData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(UsageDataAnalysisWebClient.Models.EnvironmentData), true)]
 [assembly: EdmRelationshipAttribute("udcModel", "EnvironmentDataValueEnvironmentData", "EnvironmentDataValue", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(UsageDataAnalysisWebClient.Models.EnvironmentDataValue), "EnvironmentData", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(UsageDataAnalysisWebClient.Models.EnvironmentData), true)]
 [assembly: EdmRelationshipAttribute("udcModel", "SessionFeatureUse", "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.One, typeof(UsageDataAnalysisWebClient.Models.Session), "FeatureUse", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(UsageDataAnalysisWebClient.Models.FeatureUse), true)]
+[assembly: EdmRelationshipAttribute("udcModel", "CommitSession", "Commit", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(UsageDataAnalysisWebClient.Models.Commit), "Session", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(UsageDataAnalysisWebClient.Models.Session), true)]
+[assembly: EdmRelationshipAttribute("udcModel", "CommitExceptionGroup", "Commit", System.Data.Metadata.Edm.RelationshipMultiplicity.ZeroOrOne, typeof(UsageDataAnalysisWebClient.Models.Commit), "ExceptionGroup", System.Data.Metadata.Edm.RelationshipMultiplicity.Many, typeof(UsageDataAnalysisWebClient.Models.ExceptionGroup), true)]
 
 #endregion
 
@@ -582,6 +584,53 @@ namespace UsageDataAnalysisWebClient.Models
 
         #endregion
     
+        #region Navigationseigenschaften
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("udcModel", "CommitSession", "Session")]
+        public EntityCollection<Session> Sessions
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<Session>("udcModel.CommitSession", "Session");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Session>("udcModel.CommitSession", "Session", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("udcModel", "CommitExceptionGroup", "ExceptionGroup")]
+        public EntityCollection<ExceptionGroup> ExceptionGroups
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedCollection<ExceptionGroup>("udcModel.CommitExceptionGroup", "ExceptionGroup");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<ExceptionGroup>("udcModel.CommitExceptionGroup", "ExceptionGroup", value);
+                }
+            }
+        }
+
+        #endregion
     }
     
     /// <summary>
@@ -1526,24 +1575,24 @@ namespace UsageDataAnalysisWebClient.Models
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> UserFixedInRevision
+        public Nullable<global::System.Int32> UserFixedInCommitId
         {
             get
             {
-                return _UserFixedInRevision;
+                return _UserFixedInCommitId;
             }
             set
             {
-                OnUserFixedInRevisionChanging(value);
-                ReportPropertyChanging("UserFixedInRevision");
-                _UserFixedInRevision = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("UserFixedInRevision");
-                OnUserFixedInRevisionChanged();
+                OnUserFixedInCommitIdChanging(value);
+                ReportPropertyChanging("UserFixedInCommitId");
+                _UserFixedInCommitId = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("UserFixedInCommitId");
+                OnUserFixedInCommitIdChanged();
             }
         }
-        private Nullable<global::System.Int32> _UserFixedInRevision;
-        partial void OnUserFixedInRevisionChanging(Nullable<global::System.Int32> value);
-        partial void OnUserFixedInRevisionChanged();
+        private Nullable<global::System.Int32> _UserFixedInCommitId;
+        partial void OnUserFixedInCommitIdChanging(Nullable<global::System.Int32> value);
+        partial void OnUserFixedInCommitIdChanged();
 
         #endregion
     
@@ -1567,6 +1616,44 @@ namespace UsageDataAnalysisWebClient.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<Exception>("udcModel.ExceptionGroupException", "Exception", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("udcModel", "CommitExceptionGroup", "Commit")]
+        public Commit UserFixedInCommit
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Commit>("udcModel.CommitExceptionGroup", "Commit").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Commit>("udcModel.CommitExceptionGroup", "Commit").Value = value;
+            }
+        }
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Commit> UserFixedInCommitReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Commit>("udcModel.CommitExceptionGroup", "Commit");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Commit>("udcModel.CommitExceptionGroup", "Commit", value);
                 }
             }
         }
@@ -2292,6 +2379,44 @@ namespace UsageDataAnalysisWebClient.Models
                 if ((value != null))
                 {
                     ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedCollection<FeatureUse>("udcModel.SessionFeatureUse", "FeatureUse", value);
+                }
+            }
+        }
+    
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [XmlIgnoreAttribute()]
+        [SoapIgnoreAttribute()]
+        [DataMemberAttribute()]
+        [EdmRelationshipNavigationPropertyAttribute("udcModel", "CommitSession", "Commit")]
+        public Commit Commit
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Commit>("udcModel.CommitSession", "Commit").Value;
+            }
+            set
+            {
+                ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Commit>("udcModel.CommitSession", "Commit").Value = value;
+            }
+        }
+        /// <summary>
+        /// Keine Dokumentation für Metadaten verfügbar.
+        /// </summary>
+        [BrowsableAttribute(false)]
+        [DataMemberAttribute()]
+        public EntityReference<Commit> CommitReference
+        {
+            get
+            {
+                return ((IEntityWithRelationships)this).RelationshipManager.GetRelatedReference<Commit>("udcModel.CommitSession", "Commit");
+            }
+            set
+            {
+                if ((value != null))
+                {
+                    ((IEntityWithRelationships)this).RelationshipManager.InitializeRelatedReference<Commit>("udcModel.CommitSession", "Commit", value);
                 }
             }
         }

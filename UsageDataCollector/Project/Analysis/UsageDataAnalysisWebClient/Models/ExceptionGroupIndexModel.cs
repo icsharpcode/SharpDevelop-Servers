@@ -11,14 +11,12 @@ namespace UsageDataAnalysisWebClient.Models
 	{
 		public ExceptionGroupIndexModel()
 		{
-			this.MinimumRevision = 5949;
-			this.Branch = "all";
+			
 		}
 
-		public int MinimumRevision { get; set; }
-		public int MaximumRevision { get; set; }
-		public string Branch { get; set; }
-		public IEnumerable<string> AllBranchNames { get; set; }
+		public string StartCommitHash { get; set; }
+		public string EndCommitHash { get; set; }
+
 		public IEnumerable<ExceptionGroupIndexModelEntry> Entries { get; set; }
 	}
 
@@ -28,32 +26,14 @@ namespace UsageDataAnalysisWebClient.Models
         public string ExceptionType { get; set; }
         public string ExceptionLocation { get; set; }
         public string UserComment { get; set; }
-        public int? UserFixedInRevision { get; set; }
+		public int? UserFixedInCommitId { get; set; }
+        public string UserFixedInCommitHash { get; set; }
+		public bool HasRepeatedAfterFixVersion { get; set; }
         public int AffectedUsers { get; set; }
         public int Occurrences { get; set; }
 
-        public int? FirstSeenMajor { get; set; }
-        public int? FirstSeenMinor { get; set; }
-        public int? FirstSeenBuild { get; set; }
-        public int? FirstSeenRevision { get; set; }
-
-        public int? LastSeenMajor { get; set; }
-        public int? LastSeenMinor { get; set; }
-        public int? LastSeenBuild { get; set; }
-        public int? LastSeenRevision { get; set; }
-
-        public string FirstSeenVersion {
-            get
-            {
-                return FirstSeenMajor + "." + FirstSeenMinor + "." + FirstSeenBuild + "." + FirstSeenRevision;
-            }
-        }
-        public string LastSeenVersion {
-            get
-            {
-                return LastSeenMajor + "." + LastSeenMinor + "." + LastSeenBuild + "." + LastSeenRevision;
-            }
-        }
+        public string FirstSeenVersion { get; set; }
+        public string LastSeenVersion { get; set; }
 
         public string ShortExceptionType
         {
@@ -73,7 +53,7 @@ namespace UsageDataAnalysisWebClient.Models
                 string html = HttpUtility.HtmlEncode(UserComment);
                 if (html == null)
                     return null;
-                html = Regex.Replace(html, @"SD2-([0-9]+)", @"<a href=""http://bugtracker.sharpdevelop.net/Default.aspx?p=4&i=$1"">SD2-$1</a>");
+                html = Regex.Replace(html, @"SD-([0-9]+)", @"<a href=""http://bugtracker.sharpdevelop.net/Default.aspx?p=4&i=$1"">SD2-$1</a>");
                 return new HtmlString(html);
             }
         }

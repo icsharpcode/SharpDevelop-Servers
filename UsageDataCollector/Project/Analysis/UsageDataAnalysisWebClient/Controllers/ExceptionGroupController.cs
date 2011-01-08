@@ -11,8 +11,11 @@ namespace UsageDataAnalysisWebClient.Controllers
         public ActionResult Index(ExceptionGroupIndexModel model)
         {
 			ExceptionGroupRepository repo = new ExceptionGroupRepository();
-			model.AllBranchNames = repo.GetAllBranchNames();
-			model.Entries = repo.GetExceptionGroups(model.MinimumRevision, model.MaximumRevision, model.Branch);
+			if (model.StartCommitHash == null)
+				model.StartCommitHash = repo.GetLatestTagName();
+			if (model.EndCommitHash == null)
+				model.EndCommitHash = "";
+			model.Entries = repo.GetExceptionGroups(model.StartCommitHash, model.EndCommitHash);
 			ViewData.Model = model;
             return View();
         }
@@ -26,7 +29,7 @@ namespace UsageDataAnalysisWebClient.Controllers
         public ActionResult Edit(int id, ExceptionGroupEditModel exceptionGroupEditModel)
         {
         	ExceptionGroupRepository exceptionGroupRepository = new ExceptionGroupRepository();
-            exceptionGroupRepository.Save(id, exceptionGroupEditModel.UserComment, exceptionGroupEditModel.UserFixedInRevision);
+            exceptionGroupRepository.Save(id, exceptionGroupEditModel.UserComment, exceptionGroupEditModel.UserFixedInCommit);
             return RedirectToAction("Index");
         }
 

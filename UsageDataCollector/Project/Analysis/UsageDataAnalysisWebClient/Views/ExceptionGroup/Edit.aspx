@@ -58,11 +58,11 @@
             </div>
             
             <div class="editor-label">
-                <%= Html.LabelFor(model => model.UserFixedInRevision) %>
+                <%= Html.LabelFor(model => model.UserFixedInCommit) %>
             </div>
             <div class="editor-field">
-                <%= Html.TextBoxFor(model => model.UserFixedInRevision) %>
-                <%= Html.ValidationMessageFor(model => model.UserFixedInRevision) %>
+                <%= Html.TextBoxFor(model => model.UserFixedInCommit) %>
+                <%= Html.ValidationMessageFor(model => model.UserFixedInCommit) %>
             </div>
             
             <p>

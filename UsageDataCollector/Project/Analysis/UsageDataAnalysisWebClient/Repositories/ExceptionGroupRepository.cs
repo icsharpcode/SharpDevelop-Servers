@@ -10,60 +10,63 @@ namespace UsageDataAnalysisWebClient.Repositories {
 
 		private udcEntities _db = new udcEntities();
 
-		public List<string> GetAllBranchNames()
+		public string GetLatestTagName()
 		{
-			var q = from data in _db.EnvironmentDatas
-					where data.EnvironmentDataName.EnvironmentDataName1 == "branch"
-					select data.EnvironmentDataValue.EnvironmentDataValue1;
-			return new string[] { "all", "none" }.Concat(EvaluateQuery(q.Distinct().OrderBy(b => b))).ToList();
+			DateTime minimumCommitAge = DateTime.Now.AddDays(-14);
+			return (from tag in _db.TaggedCommits
+					where tag.IsRelease
+					join c in _db.Commits on tag.CommitId equals c.Id
+					where c.CommitDate < minimumCommitAge
+					orderby c.CommitDate descending
+					select tag.Name
+				   ).FirstOrDefault();
 		}
 
-		public List<ExceptionGroupIndexModelEntry> GetExceptionGroups(int minimumRevision, int maximumRevision, string branch)
+		public List<ExceptionGroupIndexModelEntry> GetExceptionGroups(string startCommit, string endCommit)
 		{
-			var exceptions = _db.Exceptions.Where(ex => ex.IsFirstInSession); // filter exceptions: don't show follow-up errors 
+			SourceControlRepository scm = new SourceControlRepository(_db);
 
-			// ignore errors in ancient versions of the app
-			if (minimumRevision > 0)
-				exceptions = exceptions.Where(ex => ex.Session.AppVersionRevision >= minimumRevision);
-			if (maximumRevision > 0)
-				exceptions = exceptions.Where(ex => ex.Session.AppVersionRevision <= maximumRevision);
-			if (branch != "all") {
-				if (branch == "none") {
-					exceptions = exceptions.Where(ex => !ex.Session.EnvironmentDatas.Any(data => data.EnvironmentDataName.EnvironmentDataName1 == "branch"));
-				} else {
-					exceptions = exceptions.Where(ex => ex.Session.EnvironmentDatas.Any(data => data.EnvironmentDataName.EnvironmentDataName1 == "branch"
-						&& data.EnvironmentDataValue.EnvironmentDataValue1 == branch));
-				}
-			}
+			int? startCommitId = FindCommitId(startCommit);
+			int? endCommitId = FindCommitId(endCommit);
+			var interestingCommitIds = scm.GetCommitsBetween(startCommitId, endCommitId).Select(c => c.Id).ToList();
 
-			var q = from ex in exceptions
+			var q = from ex in _db.Exceptions
+					where ex.IsFirstInSession
+					where interestingCommitIds.Contains((int)ex.Session.CommitId)
 					group ex by ex.ExceptionGroup into g
-					// search "first seen" and "last seen" in all exceptions within the exception group
-					// (not just those matching the filters above)
-					let sessionsForVersionSearch = g.Key.Exceptions.Select(ex => ex.Session).Where(s => s.AppVersionRevision > 0)
-					let firstSeenVersion = sessionsForVersionSearch.FirstOrDefault(s => s.AppVersionRevision == sessionsForVersionSearch.Min(s2 => s2.AppVersionRevision))
-					let lastSeenVersion = sessionsForVersionSearch.FirstOrDefault(s => s.AppVersionRevision == sessionsForVersionSearch.Max(s2 => s2.AppVersionRevision))
 					// fill the ViewModel instance with all the data
 					select new ExceptionGroupIndexModelEntry {
 						ExceptionGroupId = g.Key.ExceptionGroupId,
 						ExceptionType = g.Key.ExceptionType,
 						ExceptionLocation = g.Key.ExceptionLocation,
 						UserComment = g.Key.UserComment,
-						UserFixedInRevision = g.Key.UserFixedInRevision,
+						UserFixedInCommitId = g.Key.UserFixedInCommitId,
 						AffectedUsers = g.Select(ex => ex.Session.UserId).Distinct().Count(),
-						Occurrences = g.Count(),
-						FirstSeenMajor = firstSeenVersion.AppVersionMajor,
-						FirstSeenMinor = firstSeenVersion.AppVersionMinor,
-						FirstSeenBuild = firstSeenVersion.AppVersionBuild,
-						FirstSeenRevision = firstSeenVersion.AppVersionRevision,
-						LastSeenMajor = lastSeenVersion.AppVersionMajor,
-						LastSeenMinor = lastSeenVersion.AppVersionMinor,
-						LastSeenBuild = lastSeenVersion.AppVersionBuild,
-						LastSeenRevision = lastSeenVersion.AppVersionRevision,
+						Occurrences = g.Count()
 					} into viewModel
 					orderby viewModel.AffectedUsers descending, viewModel.Occurrences descending
 					select viewModel;
-			return EvaluateQuery(q.Take(50));
+			var exceptions = EvaluateQuery(q.Take(50));
+			// Get "fixed in" hashes from in-memory commit list:
+			foreach (var exception in exceptions) {
+				if (exception.UserFixedInCommitId != null) {
+					var fixedIn = scm.GetCommitById(exception.UserFixedInCommitId.Value);
+					exception.UserFixedInCommitHash = fixedIn.Hash;
+
+					// check whether the exception has re-occurred in any commit after the fix
+					var allFixedInCommitIds = fixedIn.GetDescendants().Select(c => c.Id).ToList();
+					exception.HasRepeatedAfterFixVersion = _db.Exceptions.Any(e => e.ExceptionGroupId == exception.ExceptionGroupId && allFixedInCommitIds.Contains((int)e.Session.CommitId));
+				}
+			}
+
+			/*
+			var displayedGroupIds = exceptions.Select(e => e.ExceptionGroupId).ToList();
+			var q2 = (from ex in _db.Exceptions
+					  where displayedGroupIds.Contains(ex.ExceptionGroupId)
+					  group ex.Session.CommitId by ex.ExceptionGroupId).ToDictionary(g => g.Key);
+			*/
+
+			return exceptions;
 		}
 
 		private List<T> EvaluateQuery<T>(IQueryable<T> query)
@@ -72,22 +75,26 @@ namespace UsageDataAnalysisWebClient.Repositories {
 			return query.ToList();
 		}
 
-		public ExceptionGroupEditModel GetExceptionGroupById(int id) {
+		public ExceptionGroupEditModel GetExceptionGroupById(int id)
+		{
 			ExceptionGroup exceptionGroup = _db.ExceptionGroups.First(eg => eg.ExceptionGroupId == id);
 			ExceptionGroupEditModel editModel = new ExceptionGroupEditModel();
 			editModel.ExceptionFingerprint = exceptionGroup.ExceptionFingerprint;
 			editModel.ExceptionGroupId = exceptionGroup.ExceptionGroupId;
 			editModel.ExceptionLocation = exceptionGroup.ExceptionLocation;
 			editModel.ExceptionType = exceptionGroup.ExceptionType;
+			editModel.UserComment = exceptionGroup.UserComment;
+			if (exceptionGroup.UserFixedInCommit != null)
+				editModel.UserFixedInCommit = exceptionGroup.UserFixedInCommit.Hash;
 			List<ExceptionModel> exceptions = new List<ExceptionModel>();
-			foreach(Exception exception in exceptionGroup.Exceptions) {
+			foreach (Exception exception in exceptionGroup.Exceptions) {
 				ExceptionModel exceptionModel = new ExceptionModel();
 				exceptionModel.IsFirstInSession = exception.IsFirstInSession;
 				exceptionModel.Stacktrace = exception.Stacktrace;
 				exceptionModel.ThrownAt = exception.ThrownAt;
 				SessionModel sessionModel = new SessionModel();
 				List<EnvironmentDataModel> environmentData = new List<EnvironmentDataModel>();
-				foreach(EnvironmentData data in exception.Session.EnvironmentDatas) {
+				foreach (EnvironmentData data in exception.Session.EnvironmentDatas) {
 					EnvironmentDataModel dataModel = new EnvironmentDataModel();
 					dataModel.EnvironmentDataName = data.EnvironmentDataName.EnvironmentDataName1;
 					dataModel.EnvironmentDataValue = data.EnvironmentDataValue.EnvironmentDataValue1;
@@ -96,16 +103,31 @@ namespace UsageDataAnalysisWebClient.Repositories {
 				sessionModel.EnvironmentDatas = environmentData;
 				exceptionModel.Session = sessionModel;
 				exceptions.Add(exceptionModel);
-				}
+			}
 			editModel.Exceptions = exceptions;
 			return editModel;
 		}
 
-		public void Save(int exceptionGroupId, string userComment, int? userFixedInRevision) {
+		public void Save(int exceptionGroupId, string userComment, string userFixedInCommitHash) {
 			ExceptionGroup exceptionGroup = _db.ExceptionGroups.First(eg => eg.ExceptionGroupId == exceptionGroupId);
 			exceptionGroup.UserComment = userComment;
-			exceptionGroup.UserFixedInRevision = userFixedInRevision;
+			exceptionGroup.UserFixedInCommitId = FindCommitId(userFixedInCommitHash);
 			_db.SaveChanges();
 		}
+
+		public int? FindCommitId(string hashOrTagName)
+		{
+			if (string.IsNullOrEmpty(hashOrTagName))
+				return null;
+			Commit commit = _db.Commits.FirstOrDefault(c => c.Hash.StartsWith(hashOrTagName));
+			if (commit != null) {
+				return commit.Id;
+			} else {
+				var taggedCommit = _db.TaggedCommits.FirstOrDefault(c => c.Name == hashOrTagName);
+				if (taggedCommit != null)
+					return taggedCommit.CommitId;
+			}
+			return null;
+		}	
 	}
 }

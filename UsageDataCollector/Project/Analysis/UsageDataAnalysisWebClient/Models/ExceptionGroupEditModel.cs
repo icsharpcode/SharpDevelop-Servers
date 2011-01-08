@@ -17,8 +17,8 @@ namespace UsageDataAnalysisWebClient.Models {
 		[DisplayName("Comment")]
 		public string UserComment { get; set; }
 
-		[DisplayName("Fixed in Revision")]
-		public int? UserFixedInRevision { get; set; }
+		[DisplayName("Fixed in Commit")]
+		public string UserFixedInCommit { get; set; }
 
 		public IEnumerable<ExceptionModel> Exceptions { get; set; }
 	}

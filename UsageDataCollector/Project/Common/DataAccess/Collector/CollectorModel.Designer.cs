@@ -1320,24 +1320,24 @@ namespace ICSharpCode.UsageDataCollector.DataAccess.Collector
         /// </summary>
         [EdmScalarPropertyAttribute(EntityKeyProperty=false, IsNullable=true)]
         [DataMemberAttribute()]
-        public Nullable<global::System.Int32> UserFixedInRevision
+        public Nullable<global::System.Int32> UserFixedInCommit
         {
             get
             {
-                return _UserFixedInRevision;
+                return _UserFixedInCommit;
             }
             set
             {
-                OnUserFixedInRevisionChanging(value);
-                ReportPropertyChanging("UserFixedInRevision");
-                _UserFixedInRevision = StructuralObject.SetValidValue(value);
-                ReportPropertyChanged("UserFixedInRevision");
-                OnUserFixedInRevisionChanged();
+                OnUserFixedInCommitChanging(value);
+                ReportPropertyChanging("UserFixedInCommit");
+                _UserFixedInCommit = StructuralObject.SetValidValue(value);
+                ReportPropertyChanged("UserFixedInCommit");
+                OnUserFixedInCommitChanged();
             }
         }
-        private Nullable<global::System.Int32> _UserFixedInRevision;
-        partial void OnUserFixedInRevisionChanging(Nullable<global::System.Int32> value);
-        partial void OnUserFixedInRevisionChanged();
+        private Nullable<global::System.Int32> _UserFixedInCommit;
+        partial void OnUserFixedInCommitChanging(Nullable<global::System.Int32> value);
+        partial void OnUserFixedInCommitChanged();
 
         #endregion
     

@@ -9,9 +9,8 @@
     <h2>Index</h2>
 
     <% using (Html.BeginForm(null, null, FormMethod.Get)) { %>
-        Show exceptions from revision <%: Html.TextBoxFor(model => model.MinimumRevision) %>
-        to <%: Html.TextBoxFor(model => model.MaximumRevision) %> on branch
-        <%: Html.DropDownListFor(model => model.Branch, Model.AllBranchNames.Select(b => new SelectListItem { Text = b, Value = b, Selected = (b == Model.Branch) }))%>
+        Show exceptions from <%: Html.TextBoxFor(model => model.StartCommitHash) %>
+        to <%: Html.TextBoxFor(model => model.EndCommitHash) %>
         <input type="submit" value="Go" />
     <% } %>
 
@@ -29,7 +28,7 @@
 
     <% foreach (var item in Model.Entries) { %>
     
-        <tr class='<%: item.UserFixedInRevision != null ? (item.UserFixedInRevision > item.LastSeenRevision ? "goodRow" : "badRow") : "normalRow" %>'>
+        <tr class='<%: item.UserFixedInCommitId != null ? (item.HasRepeatedAfterFixVersion ? "badRow" : "goodRow") : "normalRow" %>'>
            <%--  <td>
                 <%: Html.ActionLink("Details", "Details", new { id=item.ExceptionGroupId })%> |
                 <%: Html.ActionLink("Delete", "Delete", new { id=item.ExceptionGroupId })%>
@@ -57,9 +56,9 @@
             </td>
             <td>
                 <%: item.RichUserComment %>
-                <% if (item.UserFixedInRevision != null)
+                <% if (item.UserFixedInCommitHash != null)
                    { %>
-                   fixed in <a href="http://fisheye2.atlassian.com/changelog/sharpdevelop/?cs=<%: item.UserFixedInRevision %>">r<%: item.UserFixedInRevision %></a>
+                   fixed in <a href="https://github.com/icsharpcode/SharpDevelop/commit/<%: item.UserFixedInCommitHash %>"><%: item.UserFixedInCommitHash.Length > 8 ? item.UserFixedInCommitHash.Substring(0, 8) : item.UserFixedInCommitHash %></a>
                 <% } %>
             </td>
         </tr>

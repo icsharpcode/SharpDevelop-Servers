@@ -40,7 +40,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Hash" Type="nchar" Nullable="false" MaxLength="40" />
+          <Property Name="Hash" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="CommitDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="EnvironmentData">
@@ -76,7 +76,7 @@
           <Property Name="ExceptionFingerprint" Type="nvarchar(max)" Nullable="false" />
           <Property Name="ExceptionLocation" Type="nvarchar(max)" Nullable="false" />
           <Property Name="UserComment" Type="nvarchar(max)" />
-          <Property Name="UserFixedInRevision" Type="int" />
+          <Property Name="UserFixedInCommit" Type="int" />
         </EntityType>
         <EntityType Name="Exceptions">
           <Key>
@@ -131,7 +131,7 @@
           </Key>
           <Property Name="TagId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="CommitId" Type="int" Nullable="false" />
-          <Property Name="Name" Type="nchar" Nullable="false" MaxLength="20" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
           <Property Name="IsRelease" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
@@ -183,6 +183,14 @@
           <EntitySet Name="CommitRelations" EntityType="udcModel.CommitRelation" />
           <EntitySet Name="Commits" EntityType="udcModel.Commit" />
           <EntitySet Name="TaggedCommits" EntityType="udcModel.TaggedCommit" />
+          <AssociationSet Name="CommitSession" Association="udcModel.CommitSession">
+            <End Role="Commit" EntitySet="Commits" />
+            <End Role="Session" EntitySet="Sessions" />
+          </AssociationSet>
+          <AssociationSet Name="CommitExceptionGroup" Association="udcModel.CommitExceptionGroup">
+            <End Role="Commit" EntitySet="Commits" />
+            <End Role="ExceptionGroup" EntitySet="ExceptionGroups" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ActivationMethod">
           <Key>
@@ -220,8 +228,9 @@
           <Property Name="ExceptionFingerprint" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="ExceptionLocation" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
           <Property Name="UserComment" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
-          <Property Name="UserFixedInRevision" Type="Int32" />
           <NavigationProperty Name="Exceptions" Relationship="udcModel.ExceptionGroupException" FromRole="ExceptionGroup" ToRole="Exception" />
+          <Property Type="Int32" Name="UserFixedInCommitId" />
+          <NavigationProperty Name="UserFixedInCommit" Relationship="udcModel.CommitExceptionGroup" FromRole="ExceptionGroup" ToRole="Commit" />
         </EntityType>
         <EntityType Name="Exception">
           <Key>
@@ -275,6 +284,7 @@
           <Property Type="Boolean" Name="IsDebug" Nullable="false" />
           <Property Type="DateTime" Name="FirstException" />
           <Property Type="DateTime" Name="LastFeatureUse" />
+          <NavigationProperty Name="Commit" Relationship="udcModel.CommitSession" FromRole="Session" ToRole="Commit" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -377,6 +387,8 @@
           <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="Hash" Nullable="false" MaxLength="40" FixedLength="true" Unicode="true" />
           <Property Type="DateTime" Name="CommitDate" Nullable="false" />
+          <NavigationProperty Name="Sessions" Relationship="udcModel.CommitSession" FromRole="Commit" ToRole="Session" />
+          <NavigationProperty Name="ExceptionGroups" Relationship="udcModel.CommitExceptionGroup" FromRole="Commit" ToRole="ExceptionGroup" />
         </EntityType>
         <EntityType Name="TaggedCommit">
           <Key>
@@ -387,6 +399,30 @@
           <Property Type="String" Name="Name" Nullable="false" MaxLength="20" FixedLength="true" Unicode="true" />
           <Property Type="Boolean" Name="IsRelease" Nullable="false" />
         </EntityType>
+        <Association Name="CommitSession">
+          <End Type="udcModel.Commit" Role="Commit" Multiplicity="0..1" />
+          <End Type="udcModel.Session" Role="Session" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Commit">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Session">
+              <PropertyRef Name="CommitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CommitExceptionGroup">
+          <End Type="udcModel.Commit" Role="Commit" Multiplicity="0..1" />
+          <End Type="udcModel.ExceptionGroup" Role="ExceptionGroup" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Commit">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ExceptionGroup">
+              <PropertyRef Name="UserFixedInCommitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -408,13 +444,13 @@
             <ScalarProperty Name="EnvironmentDataName1" ColumnName="EnvironmentDataName" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="ExceptionGroups"><EntityTypeMapping TypeName="udcModel.ExceptionGroup"><MappingFragment StoreEntitySet="ExceptionGroups">
-            <ScalarProperty Name="ExceptionGroupId" ColumnName="ExceptionGroupId" />
+            <ScalarProperty Name="UserFixedInCommitId" ColumnName="UserFixedInCommit" />
+                <ScalarProperty Name="ExceptionGroupId" ColumnName="ExceptionGroupId" />
             <ScalarProperty Name="TypeFingerprintSha256Hash" ColumnName="TypeFingerprintSha256Hash" />
             <ScalarProperty Name="ExceptionType" ColumnName="ExceptionType" />
             <ScalarProperty Name="ExceptionFingerprint" ColumnName="ExceptionFingerprint" />
             <ScalarProperty Name="ExceptionLocation" ColumnName="ExceptionLocation" />
             <ScalarProperty Name="UserComment" ColumnName="UserComment" />
-            <ScalarProperty Name="UserFixedInRevision" ColumnName="UserFixedInRevision" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Exceptions"><EntityTypeMapping TypeName="udcModel.Exception"><MappingFragment StoreEntitySet="Exceptions">
             <ScalarProperty Name="ExceptionId" ColumnName="ExceptionId" />
@@ -514,7 +550,7 @@
         <EntityTypeShape EntityType="udcModel.ActivationMethod" Width="1.5" PointX="0.75" PointY="0.75" Height="1.4033821614583331" IsExpanded="true" />
         <EntityTypeShape EntityType="udcModel.EnvironmentData" Width="2" PointX="2.5" PointY="0.5" Height="1.5923063151041665" IsExpanded="true" />
         <EntityTypeShape EntityType="udcModel.EnvironmentDataName" Width="1.5" PointX="0.75" PointY="3.75" Height="1.2636116536458326" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.ExceptionGroup" Width="1.5" PointX="2.75" PointY="3.75" Height="2.3648893229166656" IsExpanded="true" />
+        <EntityTypeShape EntityType="udcModel.ExceptionGroup" Width="1.5" PointX="2.75" PointY="3.75" Height="2.2496956380208335" IsExpanded="true" />
         <EntityTypeShape EntityType="udcModel.Exception" Width="1.5" PointX="4.75" PointY="0.75" Height="2.1725878906249996" IsExpanded="true" />
         <EntityTypeShape EntityType="udcModel.Feature" Width="1.5" PointX="4.75" PointY="3.75" Height="1.4033821614583322" IsExpanded="true" />
         <EntityTypeShape EntityType="udcModel.FeatureUse" Width="1.5" PointX="6.75" PointY="0.75" Height="2.1725878906249996" IsExpanded="true" />
@@ -538,8 +574,8 @@
           <ConnectorPoint PointX="4.75" PointY="2.9996956380208335" />
         </AssociationConnector>
         <AssociationConnector Association="udcModel.SessionEnvironmentData">
-          <ConnectorPoint PointX="6.75" PointY="6.3748478190104167" />
-          <ConnectorPoint PointX="4.40625" PointY="6.3748478190104167" />
+          <ConnectorPoint PointX="6.75" PointY="6.8526822916666656" />
+          <ConnectorPoint PointX="4.40625" PointY="6.8526822916666656" />
           <ConnectorPoint PointX="4.40625" PointY="2.585348307291667" />
         </AssociationConnector>
         <AssociationConnector Association="udcModel.EnvironmentDataNameEnvironmentData">
@@ -554,12 +590,27 @@
           <ConnectorPoint PointX="2.5" PointY="2.4176741536458337" />
         </AssociationConnector>
         <AssociationConnector Association="udcModel.SessionFeatureUse">
-          <ConnectorPoint PointX="7.5312525" PointY="3.75" />
-          <ConnectorPoint PointX="7.5312525" PointY="2.835348307291667" />
+          <ConnectorPoint PointX="7.5" PointY="3.75" />
+          <ConnectorPoint PointX="7.5" PointY="2.835348307291667" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="udcModel.CommitRelation" Width="1.5" PointX="9.75" PointY="4.25" Height="1.2636116536458353" />
+        <EntityTypeShape EntityType="udcModel.CommitRelation" Width="1.5" PointX="9.75" PointY="4.375" Height="1.2636116536458353" />
         <EntityTypeShape EntityType="udcModel.Commit" Width="1.5" PointX="9.75" PointY="2.625" Height="1.4279589843750031" />
         <EntityTypeShape EntityType="udcModel.TaggedCommit" Width="1.5" PointX="9.75" PointY="0.75" Height="1.5923063151041674" />
+        <AssociationConnector Association="udcModel.CommitSession">
+          <ConnectorPoint PointX="9.75" PointY="3.9836531575520833" />
+          <ConnectorPoint PointX="8.25" PointY="3.9836531575520833" />
+        </AssociationConnector>
+        <AssociationConnector Association="udcModel.CommitExceptionGroup">
+          <ConnectorPoint PointX="9.75" PointY="3.2184456380208335" />
+          <ConnectorPoint PointX="7.583333333333333" PointY="3.2184456380208331" />
+          <ConnectorPoint PointX="7.416666666666667" PointY="3.2184456380208335" />
+          <ConnectorPoint PointX="6.552083333333333" PointY="3.2184456380208331" />
+          <ConnectorPoint PointX="6.385416666666667" PointY="3.2184456380208335" />
+          <ConnectorPoint PointX="4.614583333333333" PointY="3.2184456380208326" />
+          <ConnectorPoint PointX="4.322916666666667" PointY="3.2184456380208335" />
+          <ConnectorPoint PointX="3.67382525" PointY="3.2184456380208335" />
+          <ConnectorPoint PointX="3.67382525" PointY="3.75" />
+        </AssociationConnector>
       </Diagram>
     </Diagrams>
   </Designer>
