@@ -49,7 +49,7 @@
                 <%: item.Occurrences %>
             </td>
             <td>
-                <%: item.FirstSeenVersion %>
+                <a href="https://github.com/icsharpcode/SharpDevelop/commits/<%: item.FirstSeenVersionHash %>"><%: item.FirstSeenVersion %></a>
             </td>
             <td>
                 <%: item.LastSeenVersion %>
@@ -58,7 +58,7 @@
                 <%: item.RichUserComment %>
                 <% if (item.UserFixedInCommitHash != null)
                    { %>
-                   fixed in <a href="https://github.com/icsharpcode/SharpDevelop/commit/<%: item.UserFixedInCommitHash %>"><%: item.UserFixedInCommitHash.Length > 8 ? item.UserFixedInCommitHash.Substring(0, 8) : item.UserFixedInCommitHash %></a>
+                   fixed in <a href="https://github.com/icsharpcode/SharpDevelop/commit/<%: item.UserFixedInCommitHash %>"><%: item.UserFixedInCommit %></a>
                 <% } %>
             </td>
         </tr>

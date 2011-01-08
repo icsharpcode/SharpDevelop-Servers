@@ -8,10 +8,27 @@ namespace UsageDataAnalysisWebClient.Repositories
 {
 	public class SourceControlRepository
 	{
+		static readonly object lockObj = new object();
+		static SourceControlRepository cached;
+
+		public static SourceControlRepository GetCached()
+		{
+			lock (lockObj) {
+				if (cached != null && Math.Abs((cached.date - DateTime.UtcNow).TotalMinutes) < 3)
+					return cached;
+				using (udcEntities db = new udcEntities()) {
+					cached = new SourceControlRepository(db);
+				}
+				return cached;
+			}
+		}
+
+		DateTime date;
 		Dictionary<int, SourceControlCommit> commits;
 		
 		public SourceControlRepository(udcEntities db)
 		{
+			date = DateTime.UtcNow;
 			commits = (from c in db.Commits
 					   select new SourceControlCommit {
 						   Id = c.Id,

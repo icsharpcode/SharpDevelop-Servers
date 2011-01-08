@@ -26,13 +26,18 @@ namespace UsageDataAnalysisWebClient.Models
         public string ExceptionType { get; set; }
         public string ExceptionLocation { get; set; }
         public string UserComment { get; set; }
-		public int? UserFixedInCommitId { get; set; }
-        public string UserFixedInCommitHash { get; set; }
+		public int? UserFixedInCommitId { get; set; } // id
+		public string UserFixedInCommit { get; set; } // friendly name (from a session's AppVersion)
+        public string UserFixedInCommitHash { get; set; } // hash
 		public bool HasRepeatedAfterFixVersion { get; set; }
         public int AffectedUsers { get; set; }
         public int Occurrences { get; set; }
 
-        public string FirstSeenVersion { get; set; }
+		public int FirstSeenVersionCommitId { get; set; }
+		public int LastSeenVersionCommitId { get; set; }
+		public string FirstSeenVersionHash { get; set; }
+		public string LastSeenVersionHash { get; set; }
+		public string FirstSeenVersion { get; set; } // friendly name (from a session's AppVersion)
         public string LastSeenVersion { get; set; }
 
         public string ShortExceptionType
