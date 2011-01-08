@@ -29,9 +29,8 @@ namespace UsageDataAnalysisWebClient.Controllers
         public ActionResult Edit(int id, ExceptionGroupEditModel exceptionGroupEditModel)
         {
         	ExceptionGroupRepository exceptionGroupRepository = new ExceptionGroupRepository();
-            exceptionGroupRepository.Save(id, exceptionGroupEditModel.UserComment, exceptionGroupEditModel.UserFixedInCommit);
-			ViewData.Model = exceptionGroupRepository.GetExceptionGroupById(id);
-			return View();
+            exceptionGroupRepository.Save(id, exceptionGroupEditModel.UserComment, exceptionGroupEditModel.UserFixedInCommitHash);
+			return RedirectToAction("Edit", id);
         }
 
     }

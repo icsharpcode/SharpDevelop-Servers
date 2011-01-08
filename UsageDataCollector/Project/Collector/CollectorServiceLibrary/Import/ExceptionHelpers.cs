@@ -33,10 +33,13 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
             }
         }
 
-        public static bool IsUserCode(string cleaned)
-        {
-            return !(cleaned.StartsWith("Microsoft.") || cleaned.StartsWith("System.") || cleaned.StartsWith("--"));
-        }
+		public static bool IsUserCode(string cleaned)
+		{
+			return !(cleaned.StartsWith("Microsoft.", StringComparison.OrdinalIgnoreCase)
+				|| cleaned.StartsWith("System.", StringComparison.OrdinalIgnoreCase)
+				|| cleaned.StartsWith("MS.", StringComparison.OrdinalIgnoreCase)
+				|| cleaned.StartsWith("--", StringComparison.OrdinalIgnoreCase));
+		}
 
         static string CleanStackTraceLine(string text)
         {

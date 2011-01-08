@@ -58,7 +58,7 @@ namespace UsageDataAnalysisWebClient.Models
                 string html = HttpUtility.HtmlEncode(UserComment);
                 if (html == null)
                     return null;
-                html = Regex.Replace(html, @"SD-([0-9]+)", @"<a href=""http://bugtracker.sharpdevelop.net/Default.aspx?p=4&i=$1"">SD2-$1</a>");
+                html = Regex.Replace(html, @"SD-([0-9]+)", @"<a href=""http://bugtracker.sharpdevelop.net/Default.aspx?p=4&i=$1"">SD-$1</a>");
                 return new HtmlString(html);
             }
         }

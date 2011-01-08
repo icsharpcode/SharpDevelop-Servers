@@ -114,7 +114,7 @@ namespace UsageDataAnalysisWebClient.Repositories {
 				v.LastSeenVersion = commitIdToVersionMap.GetValueOrDefault(v.LastSeenVersionCommitId);
 				v.FirstSeenVersion = commitIdToVersionMap.GetValueOrDefault(v.FirstSeenVersionCommitId);
 				if (v.UserFixedInCommitId != null)
-					v.UserFixedInCommit = commitIdToVersionMap.GetValueOrDefault((int)v.UserFixedInCommitId);
+					v.UserFixedInCommit = commitIdToVersionMap.GetValueOrDefault((int)v.UserFixedInCommitId) ?? v.UserFixedInCommitHash.Truncate(8);
 			}
 
 			Debug.WriteLine("All together: " + w.ElapsedMilliseconds + "ms");
@@ -184,7 +184,7 @@ namespace UsageDataAnalysisWebClient.Repositories {
 
 			if (editModel.UserFixedInCommitId != null) {
 				editModel.UserFixedInCommitHash = scm.GetCommitById((int)editModel.UserFixedInCommitId).Hash;
-				editModel.UserFixedInCommit = map.GetValueOrDefault((int)editModel.UserFixedInCommitId);
+				editModel.UserFixedInCommit = map.GetValueOrDefault((int)editModel.UserFixedInCommitId) ?? editModel.UserFixedInCommitHash.Truncate(8);
 			}
 			
 			editModel.Exceptions = EvaluateQuery((
@@ -250,6 +250,14 @@ namespace UsageDataAnalysisWebClient.Repositories {
 				return val;
 			else
 				return default(TValue);
+		}
+
+		public static string Truncate(this string text, int length)
+		{
+			if (text == null || text.Length <= length)
+				return text;
+			else
+				return text.Substring(0, length);
 		}
 	}
 }

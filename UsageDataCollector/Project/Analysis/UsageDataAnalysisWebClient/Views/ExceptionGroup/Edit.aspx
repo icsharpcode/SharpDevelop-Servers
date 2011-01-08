@@ -14,8 +14,8 @@
             <legend>Fields</legend>
             
             <div class="editor-label">
-                <%= Html.LabelFor(model => model.ExceptionGroupId) %>
-				<%=Html.HiddenFor(model => model.ExceptionGroupId) %>
+                <%: Html.LabelFor(model => model.ExceptionGroupId) %>
+				<%: Html.HiddenFor(model => model.ExceptionGroupId) %>
             </div>
             <div class="editor-field">
                 <%: Model.ExceptionGroupId %>
@@ -29,7 +29,7 @@
             </div>
             
             <div class="editor-label">
-                <%= Html.LabelFor(model => model.ExceptionType) %>
+                <%: Html.LabelFor(model => model.ExceptionType) %>
             </div>
             <div class="editor-field">
                 <%: Model.ExceptionType %>
@@ -64,26 +64,28 @@
             </pre>
             
             <div class="editor-label">
-                <%= Html.LabelFor(model => model.UserComment) %>
+                <%: Html.LabelFor(model => model.UserComment) %>
             </div>
             <div class="editor-field">
-                <%= Html.TextBoxFor(model => model.UserComment) %>
-                <%= Html.ValidationMessageFor(model => model.UserComment) %>
+                <%: Html.TextBoxFor(model => model.UserComment) %>
+                <%: Html.ValidationMessageFor(model => model.UserComment) %>
             </div>
             
+            <% if (Model.UserFixedInCommit != null) { %>
             <div class="editor-label">
                 Fixed in Version:
             </div>
             <div class="editor-field">
-                <a href="https://github.com/icsharpcode/SharpDevelop/commit/<%: Model.UserFixedInCommitHash %>"><%: Model.UserFixedInCommit %></a>
+                <a href="https://github.com/icsharpcode/SharpDevelop/commit/<%: Model.UserFixedInCommitHash %>"><%: Model.UserFixedInCommit%></a>
             </div>
+            <% } %>
 
             <div class="editor-label">
-                <%= Html.LabelFor(model => model.UserFixedInCommitHash) %>
+                <%: Html.LabelFor(model => model.UserFixedInCommitHash) %>
             </div>
             <div class="editor-field">
-                <%= Html.TextBoxFor(model => model.UserFixedInCommitHash) %>
-                <%= Html.ValidationMessageFor(model => model.UserFixedInCommit) %>
+                <%: Html.TextBoxFor(model => model.UserFixedInCommitHash) %>
+                <%: Html.ValidationMessageFor(model => model.UserFixedInCommit) %>
             </div>
             
             <p>
@@ -94,7 +96,7 @@
     <% } %>
     
     <div>
-        <%=Html.ActionLink("Back to List", "Index") %>
+        <%:Html.ActionLink("Back to List", "Index") %>
     </div>
 
     <div>
