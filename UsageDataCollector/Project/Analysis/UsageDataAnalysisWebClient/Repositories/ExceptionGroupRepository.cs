@@ -107,7 +107,23 @@ namespace UsageDataAnalysisWebClient.Repositories {
 				.Union(from v in viewModels select v.LastSeenVersionCommitId)
 				.Union(from v in viewModels where v.UserFixedInCommitId != null select (int)v.UserFixedInCommitId)
 				.ToList();
-			var commitIdToVersionMap = EvaluateQuery((
+			var commitIdToVersionMap = CreateCommitIdToVersionMap(commitIds);
+
+			// Step 7: Map friendly names onto view models:
+			foreach (var v in viewModels) {
+				v.LastSeenVersion = commitIdToVersionMap.GetValueOrDefault(v.LastSeenVersionCommitId);
+				v.FirstSeenVersion = commitIdToVersionMap.GetValueOrDefault(v.FirstSeenVersionCommitId);
+				if (v.UserFixedInCommitId != null)
+					v.UserFixedInCommit = commitIdToVersionMap.GetValueOrDefault((int)v.UserFixedInCommitId);
+			}
+
+			Debug.WriteLine("All together: " + w.ElapsedMilliseconds + "ms");
+			return viewModels;
+		}
+
+		Dictionary<int, string> CreateCommitIdToVersionMap(List<int> commitIds)
+		{
+			return EvaluateQuery((
 				from s in _db.Sessions
 				where commitIds.Contains((int)s.CommitId)
 				select new {
@@ -118,18 +134,7 @@ namespace UsageDataAnalysisWebClient.Repositories {
 					s.AppVersionRevision
 				}).Distinct())
 				.GroupBy(x => x.CommitId, x => x.AppVersionMajor + "." + x.AppVersionMinor + "." + x.AppVersionBuild + "." + x.AppVersionRevision)
-				.ToDictionary(x => x.Key, x => x.FirstOrDefault());
-
-			// Step 7: Map friendly names onto view models:
-			foreach (var v in viewModels) {
-				v.LastSeenVersion = commitIdToVersionMap[v.LastSeenVersionCommitId];
-				v.FirstSeenVersion = commitIdToVersionMap[v.FirstSeenVersionCommitId];
-				if (v.UserFixedInCommitId != null)
-					v.UserFixedInCommit = commitIdToVersionMap[(int)v.UserFixedInCommitId];
-			}
-
-			Debug.WriteLine("All together: " + w.ElapsedMilliseconds + "ms");
-			return viewModels;
+				.ToDictionary(x => (int)x.Key, x => x.FirstOrDefault());
 		}
 
 		private List<T> EvaluateQuery<T>(IQueryable<T> query)
@@ -143,34 +148,73 @@ namespace UsageDataAnalysisWebClient.Repositories {
 
 		public ExceptionGroupEditModel GetExceptionGroupById(int id)
 		{
-			ExceptionGroup exceptionGroup = _db.ExceptionGroups.First(eg => eg.ExceptionGroupId == id);
-			ExceptionGroupEditModel editModel = new ExceptionGroupEditModel();
-			editModel.ExceptionFingerprint = exceptionGroup.ExceptionFingerprint;
-			editModel.ExceptionGroupId = exceptionGroup.ExceptionGroupId;
-			editModel.ExceptionLocation = exceptionGroup.ExceptionLocation;
-			editModel.ExceptionType = exceptionGroup.ExceptionType;
-			editModel.UserComment = exceptionGroup.UserComment;
-			if (exceptionGroup.UserFixedInCommit != null)
-				editModel.UserFixedInCommit = exceptionGroup.UserFixedInCommit.Hash;
-			List<ExceptionModel> exceptions = new List<ExceptionModel>();
-			foreach (Exception exception in exceptionGroup.Exceptions) {
-				ExceptionModel exceptionModel = new ExceptionModel();
-				exceptionModel.IsFirstInSession = exception.IsFirstInSession;
-				exceptionModel.Stacktrace = exception.Stacktrace;
-				exceptionModel.ThrownAt = exception.ThrownAt;
-				SessionModel sessionModel = new SessionModel();
-				List<EnvironmentDataModel> environmentData = new List<EnvironmentDataModel>();
-				foreach (EnvironmentData data in exception.Session.EnvironmentDatas) {
-					EnvironmentDataModel dataModel = new EnvironmentDataModel();
-					dataModel.EnvironmentDataName = data.EnvironmentDataName.EnvironmentDataName1;
-					dataModel.EnvironmentDataValue = data.EnvironmentDataValue.EnvironmentDataValue1;
-					environmentData.Add(dataModel);
-				}
-				sessionModel.EnvironmentDatas = environmentData;
-				exceptionModel.Session = sessionModel;
-				exceptions.Add(exceptionModel);
+			ExceptionGroupEditModel editModel = EvaluateQuery(
+				from ex in _db.ExceptionGroups
+				where ex.ExceptionGroupId == id
+				let commits = (
+					from e in ex.Exceptions
+					let s = e.Session
+					where s.CommitId != null
+					select s.Commit
+				)
+				select new ExceptionGroupEditModel {
+					ExceptionFingerprint = ex.ExceptionFingerprint,
+					ExceptionGroupId = ex.ExceptionGroupId,
+					ExceptionLocation = ex.ExceptionLocation,
+					ExceptionType = ex.ExceptionType,
+					UserComment = ex.UserComment,
+					UserFixedInCommitId = ex.UserFixedInCommitId,
+					FirstOccurranceCommitId = commits.OrderBy(c => c.CommitDate).FirstOrDefault().Id,
+					LastOccurranceCommitId = commits.OrderByDescending(c => c.CommitDate).FirstOrDefault().Id
+				}).Single();
+
+			List<int> interestingCommitIds = new List<int>();
+			interestingCommitIds.Add(editModel.FirstOccurranceCommitId);
+			interestingCommitIds.Add(editModel.LastOccurranceCommitId);
+			if (editModel.UserFixedInCommitId != null)
+				interestingCommitIds.Add((int)editModel.UserFixedInCommitId);
+
+			var scm = SourceControlRepository.GetCached();
+			var map = CreateCommitIdToVersionMap(interestingCommitIds);
+
+			editModel.FirstOccurranceCommitHash = scm.GetCommitById(editModel.FirstOccurranceCommitId).Hash;
+			editModel.FirstOccurranceCommit = map.GetValueOrDefault(editModel.FirstOccurranceCommitId);
+			editModel.LastOccurranceCommitHash = scm.GetCommitById(editModel.LastOccurranceCommitId).Hash;
+			editModel.LastOccurranceCommit = map.GetValueOrDefault(editModel.LastOccurranceCommitId);
+
+			if (editModel.UserFixedInCommitId != null) {
+				editModel.UserFixedInCommitHash = scm.GetCommitById((int)editModel.UserFixedInCommitId).Hash;
+				editModel.UserFixedInCommit = map.GetValueOrDefault((int)editModel.UserFixedInCommitId);
 			}
-			editModel.Exceptions = exceptions;
+			
+			editModel.Exceptions = EvaluateQuery((
+				from ex in _db.Exceptions
+				where ex.ExceptionGroupId == editModel.ExceptionGroupId && ex.IsFirstInSession
+				orderby ex.ThrownAt descending
+				let session = ex.Session
+				select new ExceptionModel {
+					ThrownAt = ex.ThrownAt,
+					Stacktrace = ex.Stacktrace,
+					UserId = session.UserId,
+					Environment =
+						from ed in session.EnvironmentDatas
+						select new EnvironmentDataModel {
+							Name = ed.EnvironmentDataName.EnvironmentDataName1,
+							Value = ed.EnvironmentDataValue.EnvironmentDataValue1
+						},
+					PreviousFeatureUses = (
+						from fu in session.FeatureUses
+						where fu.UseTime <= ex.ThrownAt
+						orderby fu.UseTime descending
+						select new ExceptionModelFeatureUse {
+							UseTime = fu.UseTime,
+							ActivationMethod = fu.ActivationMethod.ActivationMethodName,
+							FeatureName = fu.Feature.FeatureName
+						}
+					).Take(5)
+				}
+				).Take(20)
+			);
 			return editModel;
 		}
 
@@ -195,5 +239,17 @@ namespace UsageDataAnalysisWebClient.Repositories {
 			}
 			return null;
 		}	
+	}
+
+	static partial class ExtensionMethods
+	{
+		public static TValue GetValueOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> dict, TKey key)
+		{
+			TValue val;
+			if (dict.TryGetValue(key, out val))
+				return val;
+			else
+				return default(TValue);
+		}
 	}
 }

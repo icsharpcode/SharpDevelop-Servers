@@ -191,6 +191,14 @@
             <End Role="Commit" EntitySet="Commits" />
             <End Role="ExceptionGroup" EntitySet="ExceptionGroups" />
           </AssociationSet>
+          <AssociationSet Name="FeatureFeatureUse" Association="udcModel.FeatureFeatureUse">
+            <End Role="Feature" EntitySet="Features" />
+            <End Role="FeatureUse" EntitySet="FeatureUses" />
+          </AssociationSet>
+          <AssociationSet Name="ActivationMethodFeatureUse" Association="udcModel.ActivationMethodFeatureUse">
+            <End Role="ActivationMethod" EntitySet="ActivationMethods" />
+            <End Role="FeatureUse" EntitySet="FeatureUses" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="ActivationMethod">
           <Key>
@@ -198,6 +206,7 @@
           </Key>
           <Property Name="ActivationMethodId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ActivationMethodName" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="FeatureUses" Relationship="udcModel.ActivationMethodFeatureUse" FromRole="ActivationMethod" ToRole="FeatureUse" />
         </EntityType>
         <EntityType Name="EnvironmentData">
           <Key>
@@ -251,6 +260,7 @@
           </Key>
           <Property Name="FeatureId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FeatureName" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="FeatureUses" Relationship="udcModel.FeatureFeatureUse" FromRole="Feature" ToRole="FeatureUse" />
         </EntityType>
         <EntityType Name="FeatureUse">
           <Key>
@@ -263,6 +273,8 @@
           <Property Name="FeatureId" Type="Int32" Nullable="false" />
           <Property Name="ActivationMethodId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Session" Relationship="udcModel.SessionFeatureUse" FromRole="FeatureUse" ToRole="Session" />
+          <NavigationProperty Name="Feature" Relationship="udcModel.FeatureFeatureUse" FromRole="FeatureUse" ToRole="Feature" />
+          <NavigationProperty Name="ActivationMethod" Relationship="udcModel.ActivationMethodFeatureUse" FromRole="FeatureUse" ToRole="ActivationMethod" />
         </EntityType>
         <EntityType Name="Session">
           <Key>
@@ -423,6 +435,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FeatureFeatureUse">
+          <End Type="udcModel.Feature" Role="Feature" Multiplicity="1" />
+          <End Type="udcModel.FeatureUse" Role="FeatureUse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Feature">
+              <PropertyRef Name="FeatureId" />
+            </Principal>
+            <Dependent Role="FeatureUse">
+              <PropertyRef Name="FeatureId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ActivationMethodFeatureUse">
+          <End Type="udcModel.ActivationMethod" Role="ActivationMethod" Multiplicity="1" />
+          <End Type="udcModel.FeatureUse" Role="FeatureUse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ActivationMethod">
+              <PropertyRef Name="ActivationMethodId" />
+            </Principal>
+            <Dependent Role="FeatureUse">
+              <PropertyRef Name="ActivationMethodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -547,69 +583,62 @@
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="UsageDataAnalysis">
-        <EntityTypeShape EntityType="udcModel.ActivationMethod" Width="1.5" PointX="0.75" PointY="0.75" Height="1.4033821614583331" IsExpanded="true" />
+        <EntityTypeShape EntityType="udcModel.ActivationMethod" Width="1.5" PointX="8.625" PointY="7.875" Height="1.2636116536458335" IsExpanded="true" />
         <EntityTypeShape EntityType="udcModel.EnvironmentData" Width="2" PointX="2.5" PointY="0.5" Height="1.5923063151041665" IsExpanded="true" />
         <EntityTypeShape EntityType="udcModel.EnvironmentDataName" Width="1.5" PointX="0.75" PointY="3.75" Height="1.2636116536458326" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.ExceptionGroup" Width="1.5" PointX="2.75" PointY="3.75" Height="2.2496956380208335" IsExpanded="true" />
+        <EntityTypeShape EntityType="udcModel.ExceptionGroup" Width="1.5" PointX="6.5" PointY="0.75" Height="2.4140429687499996" IsExpanded="true" />
         <EntityTypeShape EntityType="udcModel.Exception" Width="1.5" PointX="4.75" PointY="0.75" Height="2.1725878906249996" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.Feature" Width="1.5" PointX="4.75" PointY="3.75" Height="1.4033821614583322" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.FeatureUse" Width="1.5" PointX="6.75" PointY="0.75" Height="2.1725878906249996" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.Session" Width="1.5" PointX="6.75" PointY="3.75" Height="1.9802864583333317" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.User" Width="1.5" PointX="9" PointY="6" Height="1.2636116536458335" IsExpanded="true" />
+        <EntityTypeShape EntityType="udcModel.Feature" Width="1.5" PointX="8.625" PointY="6.25" Height="1.4279589843749996" IsExpanded="true" />
+        <EntityTypeShape EntityType="udcModel.FeatureUse" Width="1.5" PointX="6.375" PointY="6" Height="2.2496956380208331" IsExpanded="true" />
+        <EntityTypeShape EntityType="udcModel.Session" Width="1.5" PointX="3.5" PointY="3.875" Height="3.7288216145833317" IsExpanded="true" />
+        <EntityTypeShape EntityType="udcModel.User" Width="1.5" PointX="0.625" PointY="5.75" Height="1.2636116536458335" IsExpanded="true" />
         <EntityTypeShape EntityType="udcModel.EnvironmentDataValue" Width="1.5" PointX="0.5" PointY="2.25" Height="1.2636116536458335" />
         <AssociationConnector Association="udcModel.SessionException">
-          <ConnectorPoint PointX="6.75" PointY="3.75" />
-          <ConnectorPoint PointX="6.375" PointY="3.375" />
-          <ConnectorPoint PointX="6.625" PointY="3.375" />
-          <ConnectorPoint PointX="6.625" PointY="3.3746956380208335" />
-          <ConnectorPoint PointX="6.25" PointY="2.9996956380208331" />
+          <ConnectorPoint PointX="5" PointY="5.89732671875" />
+          <ConnectorPoint PointX="5.6562525" PointY="5.89732671875" />
+          <ConnectorPoint PointX="5.6562525" PointY="2.9996956380208331" />
         </AssociationConnector>
         <AssociationConnector Association="udcModel.ExceptionGroupException">
-          <ConnectorPoint PointX="4.25" PointY="3.75" />
-          <ConnectorPoint PointX="4.3473244349011209" PointY="3.6526755650988787" />
-          <ConnectorPoint PointX="4.4651755650988791" PointY="3.5348244349011209" />
-          <ConnectorPoint PointX="4.625" PointY="3.375" />
-          <ConnectorPoint PointX="4.625" PointY="3.3746956380208335" />
-          <ConnectorPoint PointX="4.375" PointY="3.3746956380208335" />
-          <ConnectorPoint PointX="4.75" PointY="2.9996956380208335" />
+          <ConnectorPoint PointX="6.5" PointY="1.8748478190104168" />
+          <ConnectorPoint PointX="6.25" PointY="1.8748478190104168" />
         </AssociationConnector>
         <AssociationConnector Association="udcModel.SessionEnvironmentData">
-          <ConnectorPoint PointX="6.75" PointY="6.8526822916666656" />
-          <ConnectorPoint PointX="4.40625" PointY="6.8526822916666656" />
-          <ConnectorPoint PointX="4.40625" PointY="2.585348307291667" />
+          <ConnectorPoint PointX="4" PointY="3.875" />
+          <ConnectorPoint PointX="4" PointY="2.585348307291667" />
         </AssociationConnector>
         <AssociationConnector Association="udcModel.EnvironmentDataNameEnvironmentData">
-          <ConnectorPoint PointX="2.25" PointY="4.3818058268229159" />
-          <ConnectorPoint PointX="2.5" PointY="4.3818058268229159" />
-          <ConnectorPoint PointX="2.5" PointY="3.5" />
-          <ConnectorPoint PointX="3.421873" PointY="3.5" />
-          <ConnectorPoint PointX="3.421873" PointY="2.585348307291667" />
+          <ConnectorPoint PointX="2.25" PointY="3.7812499999999996" />
+          <ConnectorPoint PointX="2.96875" PointY="3.7812499999999996" />
+          <ConnectorPoint PointX="2.96875" PointY="2.585348307291667" />
         </AssociationConnector>
         <AssociationConnector Association="udcModel.EnvironmentDataValueEnvironmentData">
           <ConnectorPoint PointX="2" PointY="2.4176741536458337" />
           <ConnectorPoint PointX="2.5" PointY="2.4176741536458337" />
         </AssociationConnector>
         <AssociationConnector Association="udcModel.SessionFeatureUse">
-          <ConnectorPoint PointX="7.5" PointY="3.75" />
-          <ConnectorPoint PointX="7.5" PointY="2.835348307291667" />
+          <ConnectorPoint PointX="5" PointY="6.8019108072916659" />
+          <ConnectorPoint PointX="6.375" PointY="6.8019108072916659" />
         </AssociationConnector>
-        <EntityTypeShape EntityType="udcModel.CommitRelation" Width="1.5" PointX="9.75" PointY="4.375" Height="1.2636116536458353" />
-        <EntityTypeShape EntityType="udcModel.Commit" Width="1.5" PointX="9.75" PointY="2.625" Height="1.4279589843750031" />
-        <EntityTypeShape EntityType="udcModel.TaggedCommit" Width="1.5" PointX="9.75" PointY="0.75" Height="1.5923063151041674" />
+        <EntityTypeShape EntityType="udcModel.CommitRelation" Width="1.5" PointX="8.375" PointY="4.375" Height="1.2636116536458353" />
+        <EntityTypeShape EntityType="udcModel.Commit" Width="1.5" PointX="6.5" PointY="3.875" Height="1.7566536458333326" />
+        <EntityTypeShape EntityType="udcModel.TaggedCommit" Width="1.5" PointX="8.625" PointY="2.5" Height="1.5923063151041674" />
         <AssociationConnector Association="udcModel.CommitSession">
-          <ConnectorPoint PointX="9.75" PointY="3.9836531575520833" />
-          <ConnectorPoint PointX="8.25" PointY="3.9836531575520833" />
+          <ConnectorPoint PointX="6.5" PointY="4.7533268229166659" />
+          <ConnectorPoint PointX="5.7395858333333329" PointY="4.753326822916665" />
+          <ConnectorPoint PointX="5.5729191666666669" PointY="4.7533268229166659" />
+          <ConnectorPoint PointX="5" PointY="4.7533268229166659" />
         </AssociationConnector>
         <AssociationConnector Association="udcModel.CommitExceptionGroup">
-          <ConnectorPoint PointX="9.75" PointY="3.2184456380208335" />
-          <ConnectorPoint PointX="7.583333333333333" PointY="3.2184456380208331" />
-          <ConnectorPoint PointX="7.416666666666667" PointY="3.2184456380208335" />
-          <ConnectorPoint PointX="6.552083333333333" PointY="3.2184456380208331" />
-          <ConnectorPoint PointX="6.385416666666667" PointY="3.2184456380208335" />
-          <ConnectorPoint PointX="4.614583333333333" PointY="3.2184456380208326" />
-          <ConnectorPoint PointX="4.322916666666667" PointY="3.2184456380208335" />
-          <ConnectorPoint PointX="3.67382525" PointY="3.2184456380208335" />
-          <ConnectorPoint PointX="3.67382525" PointY="3.75" />
+          <ConnectorPoint PointX="7.25" PointY="3.875" />
+          <ConnectorPoint PointX="7.25" PointY="3.1640429687499996" />
+        </AssociationConnector>
+        <AssociationConnector Association="udcModel.FeatureFeatureUse">
+          <ConnectorPoint PointX="8.625" PointY="6.9639794921875" />
+          <ConnectorPoint PointX="7.875" PointY="6.9639794921875" />
+        </AssociationConnector>
+        <AssociationConnector Association="udcModel.ActivationMethodFeatureUse">
+          <ConnectorPoint PointX="8.625" PointY="8.144521484375" />
+          <ConnectorPoint PointX="7.875" PointY="8.144521484375" />
         </AssociationConnector>
       </Diagram>
     </Diagrams>

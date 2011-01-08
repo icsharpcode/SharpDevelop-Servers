@@ -43,6 +43,20 @@
             </div>
              
             <div class="editor-label">
+                First Occurrance:
+            </div>
+            <div class="editor-field">
+                <a href="https://github.com/icsharpcode/SharpDevelop/commits/<%: Model.FirstOccurranceCommitHash %>"><%: Model.FirstOccurranceCommit %></a>
+            </div>
+
+            <div class="editor-label">
+                Last Occurrance:
+            </div>
+            <div class="editor-field">
+                <%: Model.LastOccurranceCommit %>
+            </div>
+
+            <div class="editor-label">
                 <%= Html.LabelFor(model => model.ExceptionFingerprint) %>
             </div>
             <pre>
@@ -58,10 +72,17 @@
             </div>
             
             <div class="editor-label">
-                <%= Html.LabelFor(model => model.UserFixedInCommit) %>
+                Fixed in Version:
             </div>
             <div class="editor-field">
-                <%= Html.TextBoxFor(model => model.UserFixedInCommit) %>
+                <a href="https://github.com/icsharpcode/SharpDevelop/commit/<%: Model.UserFixedInCommitHash %>"><%: Model.UserFixedInCommit %></a>
+            </div>
+
+            <div class="editor-label">
+                <%= Html.LabelFor(model => model.UserFixedInCommitHash) %>
+            </div>
+            <div class="editor-field">
+                <%= Html.TextBoxFor(model => model.UserFixedInCommitHash) %>
                 <%= Html.ValidationMessageFor(model => model.UserFixedInCommit) %>
             </div>
             
@@ -78,13 +99,12 @@
 
     <div>
     <%
-        var instancesQuery = from ex in Model.Exceptions
-                             where ex.IsFirstInSession
-                             orderby ex.ThrownAt descending
-                             select ex;
-        foreach (var instance in instancesQuery.Take(10))
+        foreach (var instance in Model.Exceptions)
         { %>
+            <p>&nbsp;</p>
             <hr />
+            <p>&nbsp;</p>
+
             <table>
             <tr>
                 <th>Date</th>
@@ -92,16 +112,10 @@
             </tr>
             <tr>
                 <th>UserID</th>
-                <td><%: instance.Session.UserId%></td>
+                <td><%: instance.UserId%></td>
             </tr>
             <% 
-                var environmentDataQuery = from env in instance.Session.EnvironmentDatas
-                                           select new
-                                           {
-                                               Name = env.EnvironmentDataName,
-                                               Value = env.EnvironmentDataValue
-                                           };
-                foreach (var environmentData in environmentDataQuery.OrderBy(e => e.Name))
+                foreach (var environmentData in instance.Environment.OrderBy(e => e.Name))
                 {
                     %>
                     <tr>
@@ -113,6 +127,21 @@
             %>
             </table>
             <pre><%: instance.Stacktrace %></pre>
+            <p>Previous feature uses:</p>
+            <table>
+            <tr><th>Date</th><th>Name</th><th>Activation Method</th></tr>
+            <%
+                foreach (var featureUse in instance.PreviousFeatureUses) {
+                    %>
+                    <tr>
+                        <td><%: featureUse.UseTime %></td>
+                        <td><%: featureUse.FeatureName %></td>
+                        <td><%: featureUse.ActivationMethod %></td>
+                    </tr>
+                    <%
+                }
+            %>
+            </table>
     <% } %>
     </div>
 

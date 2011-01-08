@@ -87,7 +87,6 @@
     <Compile Include="Models\ExceptionGroupEditModel.cs" />
     <Compile Include="Models\ExceptionGroupIndexModel.cs" />
     <Compile Include="Models\ExceptionModel.cs" />
-    <Compile Include="Models\SessionModel.cs" />
     <Compile Include="Models\UsageModel.cs" />
     <Compile Include="Models\UsageDataAnalysis.Designer.cs">
       <AutoGen>True</AutoGen>

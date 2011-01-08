@@ -30,7 +30,8 @@ namespace UsageDataAnalysisWebClient.Controllers
         {
         	ExceptionGroupRepository exceptionGroupRepository = new ExceptionGroupRepository();
             exceptionGroupRepository.Save(id, exceptionGroupEditModel.UserComment, exceptionGroupEditModel.UserFixedInCommit);
-            return RedirectToAction("Index");
+			ViewData.Model = exceptionGroupRepository.GetExceptionGroupById(id);
+			return View();
         }
 
     }
