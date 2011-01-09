@@ -17,7 +17,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 		public ImportGitRepository()
 		{
 			this.Remote = "origin";
-			this.EarliestCommitDate = new DateTime(2010, 03, 01);
+			this.EarliestCommitDate = new DateTime(2009, 09, 01);
 		}
 
 		CollectorRepository db;
@@ -26,14 +26,31 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 		[Required]
 		public string ConnectionString { get; set; }
 
+		/// <summary>
+		/// Directory that contains the git repository to read from.
+		/// </summary>
 		[Required]
 		public string Directory { get; set; }
 
+		/// <summary>
+		/// Name of the git remote (default is "origin")
+		/// </summary>
 		public string Remote { get; set; }
 
+		/// <summary>
+		/// Minimum date for imported commits; all commits older than this limit are ignored.
+		/// </summary>
 		public DateTime EarliestCommitDate { get; set; }
 
+		/// <summary>
+		/// Whether to run "git fetch" in the repository.
+		/// </summary>
 		public bool Fetch { get; set; }
+
+		/// <summary>
+		/// Whether to look for 'git-svn' in messages; used to adjust sessions created by SharpDevelop versions prior to the git migration.
+		/// </summary>
+		public bool EnableGitSvnImport { get; set; }
 
 		public override bool Execute()
 		{
@@ -56,7 +73,21 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 						ImportTag(branch.Key, branch.Value.PeeledObjectId ?? branch.Value.ObjectId, false);
 					}
 				}
-				db.Context.SaveChanges();
+				if (EnableGitSvnImport && svnRevisionToCommitIdMapping.Count > 0) {
+					var map = svnRevisionToCommitIdMapping.OrderBy(p => p.Key).ToList();
+					for (int i = 0; i < map.Count - 1; i++) {
+						int minRev = map[i].Key;
+						int maxRev = map[i + 1].Key - 1;
+						foreach (var session in db.Context.Sessions.Where(s => s.AppVersionRevision >= minRev && s.AppVersionRevision <= maxRev)) {
+							session.CommitId = map[i].Value;
+						}
+					}
+					int lastRev = map.Last().Key;
+					foreach (var session in db.Context.Sessions.Where(s => s.AppVersionRevision == lastRev)) {
+						session.CommitId = map.Last().Value;
+					}
+					db.Context.SaveChanges();
+				}
 				db = null;
 			}
 			return true;
@@ -87,62 +118,140 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 		// import svn-revision numbers from trunk only (because we can't identify the branch reliably otherwise)
 		static readonly Regex gitSvnRegex = new Regex(@"^\s*git-svn-id: [a-z0-9.:/]+/trunk@(\d+) [0-9a-f-]+$");
 
+		Dictionary<int, int> svnRevisionToCommitIdMapping = new Dictionary<int, int>();
+
+		/* Recursive implementation - runs into StackOverflowException
 		private int? ImportCommit(ObjectId commitRef)
 		{
 			var gitCommit = repo.MapCommit(commitRef);
-			DateTime commitDate = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromMilliseconds(gitCommit.Committer.When);
-			if (commitDate < EarliestCommitDate)
-				return null;
 
-			string commitHash = commitRef.Name;
-			bool isSVN = false;
-			foreach (string messageLine in gitCommit.Message.Split('\n', '\r')) {
-				Match m = gitSvnRegex.Match(messageLine);
-				if (m.Success) {
-					// use SVN revision numbers for commits imported from SVN
-					commitHash = "r" + m.Groups[1].Value;
-					isSVN = true;
-					break;
-				}
-			}
-			var commit = db.GetCommitByHash(commitHash);
+		    // Test whether this commit is already imported
+		    var commit = db.GetCommitByHash(gitCommit.CommitId.Name);
 			if (commit != null)
 				return commit.Id;
 
+		    // Test whether the commit is too old to be imported
+			if (GetDate(gitCommit.Committer) < EarliestCommitDate)
+				return null;
+		    
 			List<int> parentCommits = new List<int>();
 			foreach (ObjectId parent in gitCommit.ParentIds) {
 				int? parentCommit = ImportCommit(parent);
 				if (parentCommit != null)
 					parentCommits.Add(parentCommit.Value);
 			}
+			return FinishImportCommit(gitCommit, parentCommits);
+		}*/
 
-			commit = new DataAccess.Collector.Commit();
+		class Frame
+		{
+			public readonly GitSharp.Core.Commit gitCommit;
+			public int state; // 0 = initial state; 1 = check loop condition; 2 = within loop
+			public int loopIndex;
+			public List<int> parentCommitIds;
+
+			public Frame(GitSharp.Core.Commit gitCommit)
+			{
+				this.gitCommit = gitCommit;
+			}
+		}
+
+		int? ImportCommit(ObjectId commitRef)
+		{
+			// Using an explicit stack, because we would run into StackOverflowException when writing this
+			// as a recursive method. See comment above "class Frame" for the recursive implementation.
+
+			int? result = null; // variable used to store the return value (passed from one stack frame to the calling frame)
+			Stack<Frame> stack = new Stack<Frame>();
+			stack.Push(new Frame(repo.MapCommit(commitRef)));
+			while (stack.Count > 0) {
+				Frame f = stack.Peek();
+				switch (f.state) {
+					case 0:
+						// Test whether this commit is already imported
+						var commit = db.GetCommitByHash(f.gitCommit.CommitId.Name);
+						if (commit != null) {
+							result = commit.Id;
+							stack.Pop();
+							break;
+						}
+						// Test whether the commit is too old to be imported
+						if (GetDate(f.gitCommit.Committer) < EarliestCommitDate) {
+							result = null;
+							stack.Pop();
+							break;
+						}
+						f.parentCommitIds = new List<int>();
+						f.loopIndex = 0;
+						goto case 1; // proceed to first loop iteration
+					case 1:
+						// check the loop condition (whether we have imported all necessary commits)
+						if (f.loopIndex < f.gitCommit.ParentIds.Length) {
+							// recursive invocation (to fetch the commit ID of the parent)
+							f.state = 2;
+							stack.Push(new Frame(repo.MapCommit(f.gitCommit.ParentIds[f.loopIndex])));
+							break;
+						} else {
+							// we are done with the loop; all parent commit IDs were collected
+							result = FinishImportCommit(f.gitCommit, f.parentCommitIds);
+							stack.Pop();
+							break;
+						}
+					case 2:
+						// store result from recursive invocation
+						if (result != null)
+							f.parentCommitIds.Add(result.Value);
+						f.loopIndex++;
+						goto case 1; // proceed to next loop iteration
+				}
+			}
+			return result;
+		}
+
+		DateTime GetDate(GitSharp.Core.PersonIdent personIdent)
+		{
+			return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromMilliseconds(personIdent.When);
+		}
+
+		int? FinishImportCommit(GitSharp.Core.Commit gitCommit, List<int> parentCommits)
+		{
+			string commitHash = gitCommit.CommitId.Name;
+			var commit = new DataAccess.Collector.Commit();
 			commit.Hash = commitHash;
-			commit.CommitDate = commitDate;
+			commit.CommitDate = GetDate(gitCommit.Committer);
 			db.Context.Commits.AddObject(commit);
 			db.Context.SaveChanges();
 			Debug.WriteLine("Imported commit " + commitHash + " as " + commit.Id);
 
 			// Fix existing sessions referencing this commit:
-			IQueryable<Session> sessionsThatNeedUpdate;
-			if (isSVN) {
-				int svnRevision = int.Parse(commitHash.Substring(1));
-				sessionsThatNeedUpdate = db.Context.Sessions.Where(s => s.AppVersionRevision == svnRevision);
+			int? svnRevision = null;
+			if (EnableGitSvnImport) {
+				foreach (string messageLine in gitCommit.Message.Split('\n', '\r')) {
+					Match m = gitSvnRegex.Match(messageLine);
+					if (m.Success) {
+						// determine SVN revision numbers for commits imported from SVN
+						svnRevision = int.Parse(m.Groups[1].Value);
+						break;
+					}
+				}
+			}
+			if (svnRevision != null) {
+				svnRevisionToCommitIdMapping[svnRevision.Value] = commit.Id;
 			} else {
-				sessionsThatNeedUpdate = from s in db.Context.Sessions
+				var sessionsThatNeedUpdate = from s in db.Context.Sessions
 										 join ed in db.Context.EnvironmentDatas on s.Id equals ed.SessionId
 										 join edn in db.Context.EnvironmentDataNames on ed.EnvironmentDataNameId equals edn.Id
 										 join edv in db.Context.EnvironmentDataValues on ed.EnvironmentDataValueId equals edv.Id
 										 where edn.Name == "commit" && edv.Name == commitHash
 										 select s;
+				int updatedSessionsCount = 0;
+				foreach (var session in sessionsThatNeedUpdate) {
+					session.CommitId = commit.Id;
+					updatedSessionsCount++;
+				}
+				if (updatedSessionsCount > 0)
+					Debug.WriteLine("Updated " + updatedSessionsCount + " sessions referencing this commit");
 			}
-			int updatedSessionsCount = 0;
-			foreach (var session in sessionsThatNeedUpdate) {
-				session.CommitId = commit.Id;
-				updatedSessionsCount++;
-			}
-			if (updatedSessionsCount > 0)
-				Debug.WriteLine("Updated " + updatedSessionsCount + " sessions referencing this commit");
 
 			// Now create the relation to the parent commits:
 			foreach (int parentCommit in parentCommits) {

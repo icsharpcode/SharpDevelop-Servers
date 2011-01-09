@@ -11,16 +11,11 @@
     <% } %>
     <%
         foreach (var chart in Model.Charts) {
-            chart.Width = 800;
-            chart.Height = 300;
-            chart.RenderType = System.Web.UI.DataVisualization.Charting.RenderType.ImageTag;
-
-            chart.ChartAreas.Add("Series 1");
-            chart.Legends.Add("Legend 1");
-
-            // Render chart control  
-            chart.Page = this;
-            chart.RenderControl(new HtmlTextWriter(Page.Response.Output));
+            %>
+                <img src="<%: Url.Action("Chart", new { startDate = Model.StartDate, endDate = Model.EndDate, title = chart.Title, id = chart.Id }) %>"
+                   alt="<%: chart.Title %>" width="<%: chart.Width %>" height="<%: chart.Height %>" />
+                <br />
+            <%
         }
    %>
 </asp:Content>

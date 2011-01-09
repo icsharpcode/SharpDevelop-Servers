@@ -43,17 +43,17 @@
             </div>
              
             <div class="editor-label">
-                First Occurrance:
+                First Occurrence:
             </div>
             <div class="editor-field">
-                <a href="https://github.com/icsharpcode/SharpDevelop/commits/<%: Model.FirstOccurranceCommitHash %>"><%: Model.FirstOccurranceCommit %></a>
+                <a href="https://github.com/icsharpcode/SharpDevelop/commits/<%: Model.FirstOccurrenceCommitHash %>"><%: Model.FirstOccurrenceCommit %></a>
             </div>
 
             <div class="editor-label">
-                Last Occurrance:
+                Last Occurrence:
             </div>
             <div class="editor-field">
-                <%: Model.LastOccurranceCommit %>
+                <%: Model.LastOccurrenceCommit %>
             </div>
 
             <div class="editor-label">
@@ -98,6 +98,20 @@
     <div>
         <%:Html.ActionLink("Back to List", "Index") %>
     </div>
+
+    <%
+        if (Model.CrashProbabilities.Count > 1) {
+           %>
+           <img src="<%: Url.Action("CrashProbabilityChart", new { Id = Model.ExceptionGroupId }) %>" width="800" height="300" />
+           <%
+        } else if (Model.CrashProbabilities.Count == 1) {
+            %>
+            <p>This exception occurred in only one release (<%: Model.CrashProbabilities[0].Item1%>)</p>
+            <%
+        } else {
+            %><p>This exception did not occur in any tagged release versions.</p><%
+        }
+   %>
 
     <div>
     <%

@@ -4,6 +4,7 @@ using System.Linq;
 using UsageDataAnalysisWebClient.Models;
 using Exception = UsageDataAnalysisWebClient.Models.Exception;
 using System.Diagnostics;
+using UsageDataAnalysisWebClient.Controllers;
 
 namespace UsageDataAnalysisWebClient.Repositories {
 	public class ExceptionGroupRepository : IExceptionGroupRepository {
@@ -148,6 +149,7 @@ namespace UsageDataAnalysisWebClient.Repositories {
 
 		public ExceptionGroupEditModel GetExceptionGroupById(int id)
 		{
+			// get details for the exception group
 			ExceptionGroupEditModel editModel = EvaluateQuery(
 				from ex in _db.ExceptionGroups
 				where ex.ExceptionGroupId == id
@@ -164,29 +166,34 @@ namespace UsageDataAnalysisWebClient.Repositories {
 					ExceptionType = ex.ExceptionType,
 					UserComment = ex.UserComment,
 					UserFixedInCommitId = ex.UserFixedInCommitId,
-					FirstOccurranceCommitId = commits.OrderBy(c => c.CommitDate).FirstOrDefault().Id,
-					LastOccurranceCommitId = commits.OrderByDescending(c => c.CommitDate).FirstOrDefault().Id
+					FirstOccurrenceCommitId = commits.OrderBy(c => c.CommitDate).FirstOrDefault().Id,
+					LastOccurrenceCommitId = commits.OrderByDescending(c => c.CommitDate).FirstOrDefault().Id
 				}).Single();
 
+			// get friendly names for the commits
 			List<int> interestingCommitIds = new List<int>();
-			interestingCommitIds.Add(editModel.FirstOccurranceCommitId);
-			interestingCommitIds.Add(editModel.LastOccurranceCommitId);
+			interestingCommitIds.Add(editModel.FirstOccurrenceCommitId);
+			interestingCommitIds.Add(editModel.LastOccurrenceCommitId);
 			if (editModel.UserFixedInCommitId != null)
 				interestingCommitIds.Add((int)editModel.UserFixedInCommitId);
 
 			var scm = SourceControlRepository.GetCached();
 			var map = CreateCommitIdToVersionMap(interestingCommitIds);
 
-			editModel.FirstOccurranceCommitHash = scm.GetCommitById(editModel.FirstOccurranceCommitId).Hash;
-			editModel.FirstOccurranceCommit = map.GetValueOrDefault(editModel.FirstOccurranceCommitId);
-			editModel.LastOccurranceCommitHash = scm.GetCommitById(editModel.LastOccurranceCommitId).Hash;
-			editModel.LastOccurranceCommit = map.GetValueOrDefault(editModel.LastOccurranceCommitId);
+			editModel.FirstOccurrenceCommitHash = scm.GetCommitById(editModel.FirstOccurrenceCommitId).Hash;
+			editModel.FirstOccurrenceCommit = map.GetValueOrDefault(editModel.FirstOccurrenceCommitId);
+			editModel.LastOccurrenceCommitHash = scm.GetCommitById(editModel.LastOccurrenceCommitId).Hash;
+			editModel.LastOccurrenceCommit = map.GetValueOrDefault(editModel.LastOccurrenceCommitId);
 
 			if (editModel.UserFixedInCommitId != null) {
 				editModel.UserFixedInCommitHash = scm.GetCommitById((int)editModel.UserFixedInCommitId).Hash;
 				editModel.UserFixedInCommit = map.GetValueOrDefault((int)editModel.UserFixedInCommitId) ?? editModel.UserFixedInCommitHash.Truncate(8);
 			}
 			
+			// get statistics about this exception
+			editModel.CrashProbabilities = StabilityController.GetCrashStatisticsForExceptionGroup(_db, id);
+
+			// get details about the exception instances
 			editModel.Exceptions = EvaluateQuery((
 				from ex in _db.Exceptions
 				where ex.ExceptionGroupId == editModel.ExceptionGroupId && ex.IsFirstInSession

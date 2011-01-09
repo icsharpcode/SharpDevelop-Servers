@@ -9,4 +9,8 @@ DELETE FROM EnvironmentDataValues
 DELETE FROM [Sessions]
 DELETE FROM [Users]
 
+DELETE FROM [Commits]
+DELETE FROM [CommitRelations]
+DELETE FROM [TaggedCommits]
+
 GO

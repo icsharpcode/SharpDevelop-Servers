@@ -13,7 +13,7 @@ namespace RepositoryImport
             ImportGitRepository task = new ImportGitRepository();
             task.ConnectionString = "name=UDCContext";
             task.Directory = "c:\\sharpdevelop";
-			task.Remote = "udc";
+			task.EnableGitSvnImport = true;
 			task.Fetch = false;
             task.Execute();
         }

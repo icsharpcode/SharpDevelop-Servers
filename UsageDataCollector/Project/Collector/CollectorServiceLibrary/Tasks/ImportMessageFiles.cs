@@ -17,6 +17,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
         private List<ITaskItem> messagesFailedToImport = new List<ITaskItem>();
         private ITaskItem[] messagesToImport;
         private ITaskItem connectionString;
+		bool ignoreSessionsTooFarFromFileDate = true;
 
         [Required]
         public ITaskItem ConnectionString
@@ -31,6 +32,12 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
             get { return messagesToImport; }
             set { messagesToImport = value; }
         }
+
+		public bool IgnoreSessionsTooFarFromFileDate
+		{
+			get { return ignoreSessionsTooFarFromFileDate; }
+			set { ignoreSessionsTooFarFromFileDate = value; }
+		}
 
         [Output]
         public ITaskItem[] FailedToImport
@@ -76,6 +83,13 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 
                         continue;
                     }
+
+					if (ignoreSessionsTooFarFromFileDate) {
+						// Acceptable sessions are between 1.5 months old and 3 days into the future.
+						// All other sessions indicate a horribly wrong system time on the user's machine and will be ignored.
+						DateTime fileDate = System.IO.File.GetLastWriteTimeUtc(msgFilename.ItemSpec);
+						message.Sessions.RemoveAll(s => s.StartTime < fileDate.AddDays(-45) || s.StartTime > fileDate.AddDays(3));
+					}
 
                     try
                     {

@@ -24,14 +24,16 @@ namespace UsageDataAnalysisWebClient.Models {
 
 		public string UserFixedInCommit { get; set; } // friendly name for the fixed in version
 
-		public int FirstOccurranceCommitId { get; set; }
-		public string FirstOccurranceCommit { get; set; }
-		public string FirstOccurranceCommitHash { get; set; }
+		public int FirstOccurrenceCommitId { get; set; }
+		public string FirstOccurrenceCommit { get; set; }
+		public string FirstOccurrenceCommitHash { get; set; }
 		
-		public int LastOccurranceCommitId { get; set; }
-		public string LastOccurranceCommit { get; set; }
-		public string LastOccurranceCommitHash { get; set; }
+		public int LastOccurrenceCommitId { get; set; }
+		public string LastOccurrenceCommit { get; set; }
+		public string LastOccurrenceCommitHash { get; set; }
 
 		public IEnumerable<ExceptionModel> Exceptions { get; set; }
+
+		public List<Tuple<string, double>> CrashProbabilities { get; set; }
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.UI.DataVisualization.Charting;
+using UsageDataAnalysisWebClient.Controllers;
 
 namespace UsageDataAnalysisWebClient.Models {
 	public class EnvironmentViewModel
@@ -19,7 +20,16 @@ namespace UsageDataAnalysisWebClient.Models {
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }
 
-		public List<Chart> Charts = new List<Chart>();
+		public List<EnvironmentViewChart> Charts;
+	}
+
+	public class EnvironmentViewChart
+	{
+		public string Title { get; set; }
+		public int Id { get; set; }
+
+		public int Width { get { return EnvironmentController.ChartWidth; } }
+		public int Height { get { return EnvironmentController.ChartHeight; } }
 	}
 	
 	public class EnvironmentDataModel {
