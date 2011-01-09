@@ -21,6 +21,8 @@ WHERE EXISTS (SELECT * FROM EnvironmentData
 			    AND EnvironmentData.SessionId = Sessions.SessionId
 			 );
 GO
+ALTER TABLE dbo.[Sessions] ALTER COLUMN IsDebug BIT NOT NULL;
+GO
 
 ALTER TABLE dbo.[Sessions] ADD FirstException datetime NULL;
 GO
@@ -144,6 +146,17 @@ BEGIN
 END
 GO
 
+/* Fix indices */
+
+DROP INDEX [IX_EnvironmentData] ON [dbo].[EnvironmentData];
+GO
+CREATE NONCLUSTERED INDEX [IX_EnvironmentData] ON [dbo].[EnvironmentData] 
+(
+	[SessionId] ASC,
+	[EnvironmentDataNameId] ASC,
+	[EnvironmentDataValueId] ASC
+)WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
+GO
 
 
 
