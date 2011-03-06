@@ -14,6 +14,7 @@
     <ConnectionString>metadata=res://*/Collector.CollectorModel.csdl|res://*/Collector.CollectorModel.ssdl|res://*/Collector.CollectorModel.msl%3Bprovider=System.Data.SqlClient%3Bprovider connection string=&quot;Data Source=localhost%3BInitial Catalog=UsageDataAnalysis%3BIntegrated Security=True%3BMultipleActiveResultSets=True&quot;</ConnectionString>
 
     <SharpDevelopRepository>D:\Path\To\SharpDevelopRepo</SharpDevelopRepository>
+    <GitBinPath>"C:\Program Files (x86)\Git\bin\git.exe"</GitBinPath>
   </PropertyGroup>
 
 </Project>

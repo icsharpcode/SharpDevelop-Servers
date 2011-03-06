@@ -41,32 +41,40 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
             foreach (ITaskItem msgFilename in messagesToScrub)
             {
                 string filename = msgFilename.ItemSpec;
-                UsageDataMessage message = ReadMessage(filename);
-
-                if (null == message)
+                try
                 {
-                    Log.LogWarning("Error reading {0}", filename);
-                    continue;
-                }
+                    UsageDataMessage message = ReadMessage(filename);
 
-                bool hasShownMessageForThisFile = false;
-                foreach (UsageDataException exception in message.Sessions.SelectMany(s => s.Exceptions))
-                {
-                    if (stacktraceRegex.IsMatch(exception.StackTrace))
+                    if (null == message)
                     {
-                        // Old SharpDevelop versions could upload stack trace information including full paths, which might
-                        // contain private data (e.g. C:\Users\USERNAME). We'll remove full paths from stack traces.
-                        // Newer UDC versions do not transmit paths anymore.
-                        exception.StackTrace = stacktraceRegex.Replace(exception.StackTrace, "");
-                        if (!hasShownMessageForThisFile)
+                        Log.LogWarning("Error reading {0}", filename);
+                        continue;
+                    }
+
+                    bool hasShownMessageForThisFile = false;
+                    foreach (UsageDataException exception in message.Sessions.SelectMany(s => s.Exceptions))
+                    {
+                        if (stacktraceRegex.IsMatch(exception.StackTrace))
                         {
-                            Log.LogMessage("Removing potentially private information from " + filename);
-                            hasShownMessageForThisFile = true;
+                            // Old SharpDevelop versions could upload stack trace information including full paths, which might
+                            // contain private data (e.g. C:\Users\USERNAME). We'll remove full paths from stack traces.
+                            // Newer UDC versions do not transmit paths anymore.
+                            exception.StackTrace = stacktraceRegex.Replace(exception.StackTrace, "");
+                            if (!hasShownMessageForThisFile)
+                            {
+                                Log.LogMessage("Removing potentially private information from " + filename);
+                                hasShownMessageForThisFile = true;
+                            }
                         }
                     }
-                }
 
-                SaveMessage(filename, message);
+                    SaveMessage(filename, message);
+                }
+                catch (Exception ex)
+                {
+                    Log.LogErrorFromException(ex);
+                    continue;
+                }
             }
 
             return result;

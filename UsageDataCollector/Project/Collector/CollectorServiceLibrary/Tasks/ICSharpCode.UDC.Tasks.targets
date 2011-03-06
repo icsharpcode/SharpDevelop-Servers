@@ -8,18 +8,23 @@
   <UsingTask AssemblyFile="$(MSBuildUDCTasksLib)" TaskName="ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks.ImportMessageFiles" />
   <UsingTask AssemblyFile="$(MSBuildUDCTasksLib)" TaskName="ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks.ScrubMessageFiles" />
   <UsingTask AssemblyFile="$(MSBuildUDCTasksLib)" TaskName="ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks.ImportGitRepository" />
-  
+
   <ItemGroup>
     <MessageFiles Include="$(SourceMessageLocation)\*.xml.gz" />
   </ItemGroup>
+
+  <Target Name="GitImportTarget">
+    <Exec Command="$(GitBinPath) fetch" WorkingDirectory="$(SharpDevelopRepository)"/>
+    <ImportGitRepository EnableGitSvnImport="true" ConnectionString="$(ConnectionString)" Directory="$(SharpDevelopRepository)" />
+  </Target>
 
   <Target Name="ImportTarget">
     <Copy SourceFiles="@(MessageFiles)" DestinationFolder="$(ImportMessageLocation)">
       <Output TaskParameter="CopiedFiles" ItemName="MessagesToImport"/>
     </Copy>
 
-    <Copy SourceFiles="@(MessageFiles)" 
-          DestinationFolder="$(AllImportedMessagesLocation)" 
+    <Copy SourceFiles="@(MessageFiles)"
+          DestinationFolder="$(AllImportedMessagesLocation)"
           Condition="'$(AllImportedMessagesLocation)'!=''" />
 
     <Delete Files="@(MessageFiles)" />
@@ -32,9 +37,6 @@
     <Copy SourceFiles="@(MessagesFailedToImport)" DestinationFolder="$(FailedMessageLocation)" />
 
     <Delete Files="@(MessagesToImport)" />
-
-    <Exec Command="git fetch" WorkingDirectory="$(SharpDevelopRepository)"/>
-    <ImportGitRepository EnableGitSvnImport="true" ConnectionString="$(ConnectionString)" Directory="$(SharpDevelopRepository)" />
   </Target>
 
 </Project>
