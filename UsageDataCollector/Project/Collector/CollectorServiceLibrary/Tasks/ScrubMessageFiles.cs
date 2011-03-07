@@ -43,7 +43,8 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
                 string filename = msgFilename.ItemSpec;
                 try
                 {
-                    UsageDataMessage message = ReadMessage(filename);
+					bool isModified;
+                    UsageDataMessage message = ReadMessage(filename, out isModified);
 
                     if (null == message)
                     {
@@ -60,6 +61,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
                             // contain private data (e.g. C:\Users\USERNAME). We'll remove full paths from stack traces.
                             // Newer UDC versions do not transmit paths anymore.
                             exception.StackTrace = stacktraceRegex.Replace(exception.StackTrace, "");
+							isModified = true;
                             if (!hasShownMessageForThisFile)
                             {
                                 Log.LogMessage("Removing potentially private information from " + filename);
@@ -68,7 +70,8 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
                         }
                     }
 
-                    SaveMessage(filename, message);
+					if (isModified)
+						SaveMessage(filename, message);
                 }
                 catch (Exception ex)
                 {
@@ -80,8 +83,9 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
             return result;
         }
 
-        private UsageDataMessage ReadMessage(string filename)
+        private UsageDataMessage ReadMessage(string filename, out bool isModified)
         {
+			isModified = false;
             string text;
 
             using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read))
@@ -97,8 +101,11 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 
             try
             {
-                text = text.Replace("http://schemas.datacontract.org/2004/07/ICSharpCode.UsageDataCollector.DataContract", 
-                                    "http://schemas.datacontract.org/2004/07/ICSharpCode.UsageDataCollector.Contracts");
+				if (text.Contains("http://schemas.datacontract.org/2004/07/ICSharpCode.UsageDataCollector.DataContract")) {
+					text = text.Replace("http://schemas.datacontract.org/2004/07/ICSharpCode.UsageDataCollector.DataContract",
+										"http://schemas.datacontract.org/2004/07/ICSharpCode.UsageDataCollector.Contracts");
+					isModified = true;
+				}
 
                 using (XmlTextReader tr = new XmlTextReader(new StringReader(text)))
                 {
@@ -113,6 +120,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 
         private void SaveMessage(string filename, UsageDataMessage message)
         {
+			DateTime fileDate = File.GetLastWriteTimeUtc(filename);
             using (FileStream fs = File.Open(filename, FileMode.Create, FileAccess.Write, FileShare.None))
             {
                 using (GZipStream zip = new GZipStream(fs, CompressionMode.Compress))
@@ -121,6 +129,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
                     serializer.WriteObject(zip, message);
                 }
             }
+			File.SetLastAccessTimeUtc(filename, fileDate);
         }
     }
 }
