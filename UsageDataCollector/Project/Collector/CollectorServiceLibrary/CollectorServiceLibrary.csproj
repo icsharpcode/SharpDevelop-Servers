@@ -34,8 +34,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GitSharp.Core">
-      <HintPath>..\lib\GitSharp.Core.dll</HintPath>
+    <Reference Include="LibGit2Sharp">
+      <HintPath>..\lib\LibGit2Sharp.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\..\..\SharpDevelop\src\Libraries\log4net\log4net.dll</HintPath>
@@ -77,6 +77,7 @@
     <None Include="App.config" />
     <None Include="Tasks\ICSharpCode.UDC.Tasks.targets">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="Tasks\Import.proj">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -97,6 +98,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\lib\git2.dll">
+      <Link>git2.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Import\DeleteImportTables.sql" />
     <Content Include="Readme.txt" />
   </ItemGroup>

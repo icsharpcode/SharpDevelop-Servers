@@ -14,7 +14,6 @@ namespace RepositoryImport
             task.ConnectionString = "name=UDCContext";
             task.Directory = "c:\\sharpdevelop";
 			task.EnableGitSvnImport = true;
-			task.Fetch = false;
             task.Execute();
         }
     }

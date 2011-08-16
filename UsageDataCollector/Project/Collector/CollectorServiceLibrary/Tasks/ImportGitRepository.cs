@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Build.Utilities;
-using GitSharp.Core.Transport;
 using Microsoft.Build.Framework;
-using GitSharp.Core;
 using System.Diagnostics;
 using ICSharpCode.UsageDataCollector.DataAccess.Collector;
 using System.Text.RegularExpressions;
+using LibGit2Sharp;
 
 namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 {
@@ -43,11 +42,6 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 		public DateTime EarliestCommitDate { get; set; }
 
 		/// <summary>
-		/// Whether to run "git fetch" in the repository.
-		/// </summary>
-		public bool Fetch { get; set; }
-
-		/// <summary>
 		/// Whether to look for 'git-svn' in messages; used to adjust sessions created by SharpDevelop versions prior to the git migration.
 		/// </summary>
 		public bool EnableGitSvnImport { get; set; }
@@ -58,19 +52,18 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 				db = new CollectorRepository();
 				db.Context = context;
 
-				using (repo = Repository.Open(this.Directory)) {
-					if (Fetch) {
-						using (Transport t = Transport.open(repo, this.Remote)) {
-							t.RemoveDeletedRefs = true;
-							t.fetch(NullProgressMonitor.Instance, null);
+				using (repo = new Repository(System.IO.Path.Combine(this.Directory, ".git"))) {
+					foreach (var tag in repo.Tags) {
+						ObjectId commitID = tag.IsAnnotated ? tag.Annotation.TargetId : tag.Target.Id;
+						ImportTag(tag.Name, (LibGit2Sharp.Commit)repo.Lookup(commitID, GitObjectType.Commit), true);
+					}
+					foreach (var branch in repo.Branches) {
+						if (branch.IsRemote && branch.Name.StartsWith(this.Remote + "/", StringComparison.Ordinal)) {
+							string branchName = branch.Name.Substring(this.Remote.Length + 1);
+							if (branchName != "HEAD") {
+								ImportTag(branchName, branch.Tip, false);
+							}
 						}
-					}
-					foreach (var tag in repo.getTags()) {
-						ImportTag(tag.Key, tag.Value.PeeledObjectId ?? tag.Value.ObjectId, true);
-					}
-					foreach (var branch in repo.RefDatabase.getRefs("refs/remotes/" + this.Remote + "/")) {
-						if (branch.Key == "HEAD") continue;
-						ImportTag(branch.Key, branch.Value.PeeledObjectId ?? branch.Value.ObjectId, false);
 					}
 				}
 				if (EnableGitSvnImport && svnRevisionToCommitIdMapping.Count > 0) {
@@ -93,8 +86,9 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 			return true;
 		}
 
-		private void ImportTag(string name, ObjectId commit, bool isRelease)
+		private void ImportTag(string name, LibGit2Sharp.Commit commit, bool isRelease)
 		{
+			Debug.WriteLine("ImportTag({0}, {1}, {2})", name, commit.Sha, isRelease);
 			int? commitId = ImportCommit(commit);
 			if (commitId == null)
 				return;
@@ -102,10 +96,10 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 			if (tag != null) {
 				if (tag.CommitId == commitId)
 					return;
-				Debug.WriteLine("Update " + (isRelease ? "tag" : "branch") + " " + name + " (commit " + commit + ")");
+				Debug.WriteLine("Update " + (isRelease ? "tag" : "branch") + " " + name + " (commit " + commit.Sha + ")");
 				tag.CommitId = commitId.Value;
 			} else {
-				Debug.WriteLine("Import " + (isRelease ? "tag" : "branch") + " " + name + " (commit " + commit + ")");
+				Debug.WriteLine("Import " + (isRelease ? "tag" : "branch") + " " + name + " (commit " + commit.Sha + ")");
 				tag = new TaggedCommit();
 				tag.CommitId = commitId.Value;
 				tag.Name = name;
@@ -121,21 +115,21 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 		Dictionary<int, int> svnRevisionToCommitIdMapping = new Dictionary<int, int>();
 
 		/* Recursive implementation - runs into StackOverflowException
-		private int? ImportCommit(ObjectId commitRef)
+		private int? ImportCommit(LibGit2Sharp.Commit gitCommit)
 		{
-			var gitCommit = repo.MapCommit(commitRef);
+			var gitCommit = (LibGit2Sharp.Commit)repo.Lookup(commitRef, GitObjectType.Commit);
 
 		    // Test whether this commit is already imported
-		    var commit = db.GetCommitByHash(gitCommit.CommitId.Name);
+		    var commit = db.GetCommitByHash(gitCommit.Sha);
 			if (commit != null)
 				return commit.Id;
 
 		    // Test whether the commit is too old to be imported
-			if (GetDate(gitCommit.Committer) < EarliestCommitDate)
+			if (gitCommit.Committer.When < EarliestCommitDate)
 				return null;
 		    
 			List<int> parentCommits = new List<int>();
-			foreach (ObjectId parent in gitCommit.ParentIds) {
+			foreach (LibGit2Sharp.Commit parent in gitCommit.Parents) {
 				int? parentCommit = ImportCommit(parent);
 				if (parentCommit != null)
 					parentCommits.Add(parentCommit.Value);
@@ -145,38 +139,38 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 
 		class Frame
 		{
-			public readonly GitSharp.Core.Commit gitCommit;
+			public readonly LibGit2Sharp.Commit gitCommit;
 			public int state; // 0 = initial state; 1 = check loop condition; 2 = within loop
 			public int loopIndex;
 			public List<int> parentCommitIds;
 
-			public Frame(GitSharp.Core.Commit gitCommit)
+			public Frame(LibGit2Sharp.Commit gitCommit)
 			{
 				this.gitCommit = gitCommit;
 			}
 		}
 
-		int? ImportCommit(ObjectId commitRef)
+		int? ImportCommit(LibGit2Sharp.Commit startingCommit)
 		{
 			// Using an explicit stack, because we would run into StackOverflowException when writing this
 			// as a recursive method. See comment above "class Frame" for the recursive implementation.
 
 			int? result = null; // variable used to store the return value (passed from one stack frame to the calling frame)
 			Stack<Frame> stack = new Stack<Frame>();
-			stack.Push(new Frame(repo.MapCommit(commitRef)));
+			stack.Push(new Frame(startingCommit));
 			while (stack.Count > 0) {
 				Frame f = stack.Peek();
 				switch (f.state) {
 					case 0:
 						// Test whether this commit is already imported
-						var commit = db.GetCommitByHash(f.gitCommit.CommitId.Name);
+						var commit = db.GetCommitByHash(f.gitCommit.Sha);
 						if (commit != null) {
 							result = commit.Id;
 							stack.Pop();
 							break;
 						}
 						// Test whether the commit is too old to be imported
-						if (GetDate(f.gitCommit.Committer) < EarliestCommitDate) {
+						if (f.gitCommit.Committer.When < EarliestCommitDate) {
 							result = null;
 							stack.Pop();
 							break;
@@ -186,10 +180,10 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 						goto case 1; // proceed to first loop iteration
 					case 1:
 						// check the loop condition (whether we have imported all necessary commits)
-						if (f.loopIndex < f.gitCommit.ParentIds.Length) {
+						if (f.loopIndex < f.gitCommit.Parents.Count()) {
 							// recursive invocation (to fetch the commit ID of the parent)
 							f.state = 2;
-							stack.Push(new Frame(repo.MapCommit(f.gitCommit.ParentIds[f.loopIndex])));
+							stack.Push(new Frame(f.gitCommit.Parents.ElementAt(f.loopIndex)));
 							break;
 						} else {
 							// we are done with the loop; all parent commit IDs were collected
@@ -208,17 +202,12 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Tasks
 			return result;
 		}
 
-		DateTime GetDate(GitSharp.Core.PersonIdent personIdent)
+		int? FinishImportCommit(LibGit2Sharp.Commit gitCommit, List<int> parentCommits)
 		{
-			return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc) + TimeSpan.FromMilliseconds(personIdent.When);
-		}
-
-		int? FinishImportCommit(GitSharp.Core.Commit gitCommit, List<int> parentCommits)
-		{
-			string commitHash = gitCommit.CommitId.Name;
+			string commitHash = gitCommit.Sha;
 			var commit = new DataAccess.Collector.Commit();
 			commit.Hash = commitHash;
-			commit.CommitDate = GetDate(gitCommit.Committer);
+			commit.CommitDate = gitCommit.Committer.When.UtcDateTime;
 			db.Context.Commits.AddObject(commit);
 			db.Context.SaveChanges();
 			Debug.WriteLine("Imported commit " + commitHash + " as " + commit.Id);
