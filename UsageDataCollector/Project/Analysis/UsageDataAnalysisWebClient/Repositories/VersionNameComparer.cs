@@ -34,7 +34,7 @@ namespace UsageDataAnalysisWebClient.Repositories
 					yield return new Token(TypeNumber, text.Substring(startPos, pos - startPos));
 				} else {
 					int startPos = pos;
-					while (pos < text.Length && !(text[pos] == '_' || char.IsDigit(text[pos])))
+					while (pos < text.Length && !(text[pos] == '-' || char.IsDigit(text[pos])))
 						pos++;
 					yield return new Token(TypeText, text.Substring(startPos, pos - startPos));
 				}
