@@ -5,6 +5,9 @@ using UsageDataAnalysisWebClient.Models;
 using Exception = UsageDataAnalysisWebClient.Models.Exception;
 using System.Diagnostics;
 using UsageDataAnalysisWebClient.Controllers;
+using System.Data.SqlClient;
+using System.Configuration;
+using System.Data;
 
 namespace UsageDataAnalysisWebClient.Repositories {
 	public class ExceptionGroupRepository : IExceptionGroupRepository {
@@ -191,7 +194,7 @@ namespace UsageDataAnalysisWebClient.Repositories {
 			}
 			
 			// get statistics about this exception
-			editModel.CrashProbabilities = StabilityController.GetCrashStatisticsForExceptionGroup(_db, id);
+			editModel.CrashProbabilities = GetCrashStatisticsForExceptionGroup(id);
 
 			// get details about the exception instances
 			editModel.Exceptions = EvaluateQuery((
@@ -245,7 +248,29 @@ namespace UsageDataAnalysisWebClient.Repositories {
 					return taggedCommit.CommitId;
 			}
 			return null;
-		}	
+		}
+
+		public List<Tuple<string, double>> GetCrashStatisticsForExceptionGroup(int exceptionGroupId)
+		{
+			var result = new List<Tuple<string,double>>();
+			using (var c = new SqlConnection(ConfigurationManager.ConnectionStrings["udcADO"].ConnectionString)) {
+				c.Open();
+				using (var command = c.CreateCommand()) {
+					command.CommandText = "[InstabilityForException]";
+					command.CommandType = CommandType.StoredProcedure;
+					command.Parameters.Add("@exceptionGroup", SqlDbType.Int).Value = exceptionGroupId;
+					using (var reader = command.ExecuteReader()) {
+						while (reader.Read()) {
+							string versionName = reader.GetString(0);
+							int totalUserDays = reader.GetInt32(1);
+							int crashedUserDays = reader.GetInt32(2);
+							result.Add(Tuple.Create(versionName, 100.0 * crashedUserDays / totalUserDays));
+						}
+					}
+				}
+			}
+			return result.OrderBy(g => g.Item1, new VersionNameComparer()).ToList();
+		}
 	}
 
 	static partial class ExtensionMethods

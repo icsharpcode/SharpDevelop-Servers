@@ -106,7 +106,8 @@
            <%
         } else if (Model.CrashProbabilities.Count == 1) {
             %>
-            <p>This exception occurred in only one release (<%: Model.CrashProbabilities[0].Item1%>)</p>
+            <p>This exception occurred in only one release (<%: Model.CrashProbabilities[0].Item1%>).
+            The instability in that release caused by this exception is <%: Model.CrashProbabilities[0].Item2.ToString("f2")%>%.</p>
             <%
         } else {
             %><p>This exception did not occur in any tagged release versions.</p><%

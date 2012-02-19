@@ -40,7 +40,8 @@ namespace UsageDataAnalysisWebClient.Controllers
 			var crashes = chart.Series.Add("Occurrences");
 			crashes.ChartType = System.Web.UI.DataVisualization.Charting.SeriesChartType.Line;
 
-			foreach (var pair in StabilityController.GetCrashStatisticsForExceptionGroup(new udcEntities(), id)) {
+			ExceptionGroupRepository exceptionGroupRepository = new ExceptionGroupRepository();
+			foreach (var pair in exceptionGroupRepository.GetCrashStatisticsForExceptionGroup(id)) {
 				crashes.Points.AddXY(pair.Item1, pair.Item2);
 			}
 

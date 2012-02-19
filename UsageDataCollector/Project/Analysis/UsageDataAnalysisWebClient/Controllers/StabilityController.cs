@@ -13,36 +13,6 @@ namespace UsageDataAnalysisWebClient.Controllers
 {
     public class StabilityController : Controller
     {
-		public static List<Tuple<string, double>> GetCrashStatisticsForExceptionGroup(udcEntities db, int exceptionGroupId)
-		{
-			var q =
-				from s in db.Sessions
-				where s.ClientSessionId != 0 // ignore welcome sessions
-				where !s.IsDebug // ignore debug builds
-				join tag in db.TaggedCommits on s.CommitId equals tag.CommitId
-				where tag.IsRelease // only use released versions, not branch
-				group new {
-					IsCrashed = s.Exceptions.Any(ex => ex.ExceptionGroupId == exceptionGroupId),
-					//IsKilled = s.EndTime == null,
-					s.StartTime
-				} by new { s.UserId, Date = EntityFunctions.TruncateTime(s.StartTime), tag.Name };
-
-			var resultList = (
-				from g in q.AsEnumerable()
-				group g by new { g.Key.Name } into g
-				let userDaysWithCrash = g.Count(g2 => g2.Any(s => s.IsCrashed))
-				let userDays = g.Count()
-				select Tuple.Create(
-					g.Key.Name, // TagName
-					100.0 * userDaysWithCrash / userDays
-				)
-			).OrderBy(g => g.Item1, new VersionNameComparer()).ToList();
-			// remove '0' entries at the ends
-			while (resultList.Count > 0 && resultList[0].Item2 == 0) resultList.RemoveAt(0);
-			while (resultList.Count > 0 && resultList.Last().Item2 == 0) resultList.RemoveAt(resultList.Count - 1);
-			return resultList;
-		}
-
         //
         // GET: /Stability/
 
