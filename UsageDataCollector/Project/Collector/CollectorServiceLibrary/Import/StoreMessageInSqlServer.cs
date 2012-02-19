@@ -124,7 +124,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
             var insertFeatureUse = (from s in message.Sessions
                                     from fu in s.FeatureUses
                                     join f in storedFeatures on fu.FeatureName equals f.Name
-                                    join am in storedActivationMethods on fu.ActivationMethod equals am.Name
+                                    join am in storedActivationMethods on fu.ActivationMethod ?? string.Empty equals am.Name
                                     join storedSession in newSessions on s.SessionID equals storedSession.ClientSessionId
                                     select new ICSharpCode.UsageDataCollector.DataAccess.Collector.FeatureUse()
                          {
@@ -236,7 +236,7 @@ namespace ICSharpCode.UsageDataCollector.ServiceLibrary.Import
         {
             List<string> distinctMsgActivationMethods = (from s in message.Sessions
                                                          from fu in s.FeatureUses
-                                                         select fu.ActivationMethod).Distinct().ToList();
+                                                         select fu.ActivationMethod ?? string.Empty).Distinct().ToList();
 
             if (distinctMsgActivationMethods.Count > 0)
             {
