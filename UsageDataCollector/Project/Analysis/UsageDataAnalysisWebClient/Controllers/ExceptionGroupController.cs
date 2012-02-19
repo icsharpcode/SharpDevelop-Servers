@@ -11,11 +11,11 @@ namespace UsageDataAnalysisWebClient.Controllers
     {
         public ActionResult Index(ExceptionGroupIndexModel model)
         {
-			ExceptionGroupRepository repo = new ExceptionGroupRepository();
 			if (model.StartCommitHash == null)
-				model.StartCommitHash = repo.GetLatestTagName();
+				model.StartCommitHash = SourceControlRepository.GetLatestTagName(14);
 			if (model.EndCommitHash == null)
 				model.EndCommitHash = "";
+			ExceptionGroupRepository repo = new ExceptionGroupRepository();
 			model.Entries = repo.GetExceptionGroups(model.StartCommitHash, model.EndCommitHash);
 			ViewData.Model = model;
             return View();

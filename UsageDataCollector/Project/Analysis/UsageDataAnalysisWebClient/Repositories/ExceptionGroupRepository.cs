@@ -14,26 +14,14 @@ namespace UsageDataAnalysisWebClient.Repositories {
 
 		private udcEntities _db = new udcEntities();
 
-		public string GetLatestTagName()
-		{
-			DateTime minimumCommitAge = DateTime.Now.AddDays(-14);
-			return (from tag in _db.TaggedCommits
-					where tag.IsRelease
-					join c in _db.Commits on tag.CommitId equals c.Id
-					where c.CommitDate < minimumCommitAge
-					orderby c.CommitDate descending
-					select tag.Name
-				   ).FirstOrDefault();
-		}
-
 		public List<ExceptionGroupIndexModelEntry> GetExceptionGroups(string startCommit, string endCommit)
 		{
 			Stopwatch w = Stopwatch.StartNew();
 			SourceControlRepository scm = SourceControlRepository.GetCached();
 
 			// Step 1: figure out the interesting commit IDs
-			int? startCommitId = FindCommitId(startCommit);
-			int? endCommitId = FindCommitId(endCommit);
+			int? startCommitId = SourceControlRepository.FindCommitId(startCommit);
+			int? endCommitId = SourceControlRepository.FindCommitId(endCommit);
 			var interestingCommitIds = new HashSet<int>(scm.GetCommitsBetween(startCommitId, endCommitId).Select(c => c.Id));
 
 			// Step 2: retrieve all exception instances from the database
@@ -231,23 +219,8 @@ namespace UsageDataAnalysisWebClient.Repositories {
 		public void Save(int exceptionGroupId, string userComment, string userFixedInCommitHash) {
 			ExceptionGroup exceptionGroup = _db.ExceptionGroups.First(eg => eg.ExceptionGroupId == exceptionGroupId);
 			exceptionGroup.UserComment = userComment;
-			exceptionGroup.UserFixedInCommitId = FindCommitId(userFixedInCommitHash);
+			exceptionGroup.UserFixedInCommitId = SourceControlRepository.FindCommitId(userFixedInCommitHash);
 			_db.SaveChanges();
-		}
-
-		public int? FindCommitId(string hashOrTagName)
-		{
-			if (string.IsNullOrEmpty(hashOrTagName))
-				return null;
-			Commit commit = _db.Commits.FirstOrDefault(c => c.Hash.StartsWith(hashOrTagName));
-			if (commit != null) {
-				return commit.Id;
-			} else {
-				var taggedCommit = _db.TaggedCommits.FirstOrDefault(c => c.Name == hashOrTagName);
-				if (taggedCommit != null)
-					return taggedCommit.CommitId;
-			}
-			return null;
 		}
 
 		public List<Tuple<string, double>> GetCrashStatisticsForExceptionGroup(int exceptionGroupId)

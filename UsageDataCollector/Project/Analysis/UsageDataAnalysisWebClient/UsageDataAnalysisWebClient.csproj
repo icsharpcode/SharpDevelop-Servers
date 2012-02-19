@@ -75,6 +75,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\EnvironmentController.cs" />
     <Compile Include="Controllers\ExceptionGroupController.cs" />
+    <Compile Include="Controllers\FeatureController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StabilityController.cs" />
     <Compile Include="Controllers\UsageController.cs" />
@@ -87,6 +88,7 @@
     <Compile Include="Models\ExceptionGroupEditModel.cs" />
     <Compile Include="Models\ExceptionGroupIndexModel.cs" />
     <Compile Include="Models\ExceptionModel.cs" />
+    <Compile Include="Models\FeatureIndexModel.cs" />
     <Compile Include="Models\UsageModel.cs" />
     <Compile Include="Models\UsageDataAnalysis.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -95,6 +97,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ExceptionGroupRepository.cs" />
+    <Compile Include="Repositories\FeatureRepository.cs" />
     <Compile Include="Repositories\IExceptionGroupRepository.cs" />
     <Compile Include="Repositories\SourceControlRepository.cs" />
     <Compile Include="Repositories\VersionNameComparer.cs" />
@@ -213,6 +216,7 @@
     <Content Include="Views\Environment\Index.aspx" />
     <Content Include="Views\ExceptionGroup\Edit.aspx" />
     <Content Include="Views\ExceptionGroup\Index.aspx" />
+    <Content Include="Views\Feature\Index.aspx" />
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Stability\Index.aspx" />
     <Content Include="Views\Usage\Index.aspx" />

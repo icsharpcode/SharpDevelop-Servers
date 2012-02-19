@@ -8,6 +8,35 @@ namespace UsageDataAnalysisWebClient.Repositories
 {
 	public class SourceControlRepository
 	{
+		public static string GetLatestTagName(int minimumAgeInDays)
+		{
+			using (udcEntities db = new udcEntities()) {
+				DateTime minimumCommitAge = DateTime.Now.AddDays(-minimumAgeInDays);
+				return (from tag in db.TaggedCommits
+						where tag.IsRelease
+						join c in db.Commits on tag.CommitId equals c.Id
+						where c.CommitDate < minimumCommitAge
+						orderby c.CommitDate descending
+						select tag.Name
+					   ).FirstOrDefault();
+			}
+		}
+
+		public static int? FindCommitId(string hashOrTagName)
+		{
+			if (string.IsNullOrEmpty(hashOrTagName))
+				return null;
+			using (udcEntities db = new udcEntities()) {
+				var taggedCommit = db.TaggedCommits.FirstOrDefault(c => c.Name == hashOrTagName);
+				if (taggedCommit != null)
+					return taggedCommit.CommitId;
+				Commit commit = db.Commits.FirstOrDefault(c => c.Hash.StartsWith(hashOrTagName));
+				if (commit != null)
+					return commit.Id;
+				return null;
+			}
+		}
+
 		static readonly object lockObj = new object();
 		static SourceControlRepository cached;
 
