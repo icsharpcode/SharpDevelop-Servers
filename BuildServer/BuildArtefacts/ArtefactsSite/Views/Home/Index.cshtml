@@ -1,0 +1,53 @@
+﻿@model ArtefactsSite.ViewModels.HomeIndexPageViewModel
+
+@{
+    ViewBag.Title = "SharpDevelop Build Server";
+}
+
+<h1>SharpDevelop Build Server</h1>
+
+<p>
+    Projects being built on this server:
+</p>
+
+<ul>
+    @foreach (var build in Model.Builds)
+    {
+        <li><a href="#@Html.Encode(build.Anchor)">@Html.DisplayFor(modelItem => build.Title)</a></li>
+    }
+</ul>
+
+@foreach (var build in Model.Builds)
+    {
+    <a name="@Html.Encode(build.Anchor)"></a>
+    <h2>@Html.DisplayFor(modelItem => build.Title)</h2>
+        
+    if (build.Artefacts.Count > 0) {
+             <table class="table table-hover table-condensed">
+                 <thead>
+                     <th>File Name</th>
+                     <th>Build Time</th>
+                     <th></th>
+                 </thead>
+                 <tbody>
+                     @foreach (var artefact in build.Artefacts)
+                     {
+                         <tr>
+                             <td>@Html.DisplayFor(modelItem => artefact.FileName)</td>
+                             <td>@Html.DisplayFor(modelItem => artefact.CreationDate)</td>
+                             <td><a href="@Html.Encode(artefact.FileName)">Download</a></td>
+                         </tr>
+                     } 
+                 </tbody>
+             </table>
+    }
+    else 
+    {
+    <p>No current build artefacts found</p>
+    }
+}
+
+<p>
+    @Html.DisplayFor(model => model.RenderInformation)
+</p>
+

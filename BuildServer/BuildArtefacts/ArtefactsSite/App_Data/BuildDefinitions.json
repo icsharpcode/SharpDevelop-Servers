@@ -1,0 +1,7 @@
+﻿{
+"buildDefinitions": [
+{ "artefactQuery":"ILSpy_Master_*" , "title":"ILSpy", "anchor":"ILSpyMaster" },
+{ "artefactQuery":"SharpDevelop_4.3.*" , "title":"SharpDevelop 4.3 (master branch)", "anchor":"SDMaster" },
+{ "artefactQuery":"SharpDevelop_5.*" , "title":"SharpDevelop 5 (newNR branch)", "anchor":"SD5" }
+]
+}
