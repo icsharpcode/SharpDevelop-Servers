@@ -26,7 +26,11 @@ namespace ArtefactsSite.Data
                 string artefactDirectoryAbsolute = HttpContext.Current.Request.MapPath("~/");
 
                 var diQuery = from fn in Directory.EnumerateFiles(artefactDirectoryAbsolute, artefactQuery)
-                              select new ArtefactViewModel() { FileName = Path.GetFileName(fn), InternalCreationDate = File.GetCreationTime(fn) };
+                              select new ArtefactViewModel()
+                                  {
+                                      FileName = Path.GetFileName(fn), 
+                                      InternalCreationDate = File.GetCreationTime(fn)
+                                  };
 
                 files = diQuery.OrderByDescending(f => f.InternalCreationDate).ToList();
 

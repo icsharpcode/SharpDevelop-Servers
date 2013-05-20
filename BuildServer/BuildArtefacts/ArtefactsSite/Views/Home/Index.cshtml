@@ -46,7 +46,7 @@
                          <tr>
                              <td>@Html.DisplayFor(modelItem => artefact.FileName)</td>
                              <td>@Html.DisplayFor(modelItem => artefact.CreationDate)</td>
-                             <td><a href="@Html.Encode(artefact.FileName)">Download</a></td>
+                             <td><a href="@Url.Content("~/" + artefact.FileName)">Download</a></td>
                          </tr>
                      } 
                  </tbody>

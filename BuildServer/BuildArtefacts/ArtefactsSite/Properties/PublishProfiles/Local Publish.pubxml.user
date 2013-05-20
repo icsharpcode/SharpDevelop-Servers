@@ -6,6 +6,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>D:\Temp\DeployArtefactsSite</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="App_Data/BuildDefinitions.json">
@@ -15,13 +16,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/12/2013 13:16:02</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>02/12/2013 14:33:28</publishTime>
+      <publishTime>05/20/2013 17:22:35</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>02/12/2013 14:33:28</publishTime>
+      <publishTime>05/20/2013 17:22:35</publishTime>
     </File>
     <File Include="bin/ArtefactsSite.dll">
-      <publishTime>02/12/2013 14:33:23</publishTime>
+      <publishTime>05/20/2013 17:22:31</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>02/12/2013 13:15:35</publishTime>
@@ -282,7 +283,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/12/2013 13:53:26</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>02/12/2013 14:33:24</publishTime>
+      <publishTime>05/20/2013 17:22:33</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
       <publishTime>02/12/2013 13:53:04</publishTime>
@@ -333,7 +334,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/12/2013 13:15:57</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>02/12/2013 14:18:45</publishTime>
+      <publishTime>05/20/2013 17:20:58</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>02/12/2013 13:15:13</publishTime>
@@ -348,7 +349,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/12/2013 13:15:13</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>02/12/2013 14:20:14</publishTime>
+      <publishTime>05/20/2013 17:03:31</publishTime>
     </File>
   </ItemGroup>
 </Project>

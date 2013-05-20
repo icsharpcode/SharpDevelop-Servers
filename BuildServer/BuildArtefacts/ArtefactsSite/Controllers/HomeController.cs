@@ -18,8 +18,12 @@ namespace ArtefactsSite.Controllers
 
             foreach (var buildDefinition in defs)
             {
-                var build = new BuildDefinitionViewModel(buildDefinition.Title, buildDefinition.Anchor);
-                build.Artefacts = ArtefactRepository.GetFileListing(buildDefinition.ArtefactQuery);
+                var artefacts = ArtefactRepository.GetFileListing(buildDefinition.ArtefactQuery);
+
+                var build = new BuildDefinitionViewModel(buildDefinition.Title, buildDefinition.Anchor)
+                    {
+                        Artefacts = artefacts
+                    };
 
                 vm.Builds.Add(build);
             }
