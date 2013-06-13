@@ -16,13 +16,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/12/2013 13:16:02</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>05/20/2013 17:22:35</publishTime>
+      <publishTime>06/13/2013 12:51:38</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>05/20/2013 17:22:35</publishTime>
+      <publishTime>06/13/2013 12:51:38</publishTime>
     </File>
     <File Include="bin/ArtefactsSite.dll">
-      <publishTime>05/20/2013 17:22:31</publishTime>
+      <publishTime>06/13/2013 12:51:35</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>02/12/2013 13:15:35</publishTime>
@@ -283,7 +283,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/12/2013 13:53:26</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>05/20/2013 17:22:33</publishTime>
+      <publishTime>06/13/2013 12:51:36</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
       <publishTime>02/12/2013 13:53:04</publishTime>
