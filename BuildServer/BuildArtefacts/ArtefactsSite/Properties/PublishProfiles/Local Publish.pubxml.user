@@ -16,13 +16,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/12/2013 13:16:02</publishTime>
     </File>
     <File Include="bin/App_global.asax.compiled">
-      <publishTime>06/13/2013 12:51:38</publishTime>
+      <publishTime>06/13/2013 17:53:26</publishTime>
     </File>
     <File Include="bin/App_global.asax.dll">
-      <publishTime>06/13/2013 12:51:38</publishTime>
+      <publishTime>06/13/2013 17:53:26</publishTime>
     </File>
     <File Include="bin/ArtefactsSite.dll">
-      <publishTime>06/13/2013 12:51:35</publishTime>
+      <publishTime>06/13/2013 17:51:14</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>02/12/2013 13:15:35</publishTime>
@@ -95,6 +95,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Content/images/glyphicons-halflings.png">
       <publishTime>02/12/2013 13:53:05</publishTime>
+    </File>
+    <File Include="Content/rss.png">
+      <publishTime>06/13/2013 17:46:37</publishTime>
     </File>
     <File Include="Content/Site.css">
       <publishTime>02/12/2013 13:15:13</publishTime>
@@ -283,7 +286,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/12/2013 13:53:26</publishTime>
     </File>
     <File Include="PrecompiledApp.config">
-      <publishTime>06/13/2013 12:51:36</publishTime>
+      <publishTime>06/13/2013 17:53:24</publishTime>
     </File>
     <File Include="Scripts/bootstrap.js">
       <publishTime>02/12/2013 13:53:04</publishTime>
@@ -334,7 +337,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/12/2013 13:15:57</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>05/20/2013 17:20:58</publishTime>
+      <publishTime>06/13/2013 17:53:15</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>02/12/2013 13:15:13</publishTime>
