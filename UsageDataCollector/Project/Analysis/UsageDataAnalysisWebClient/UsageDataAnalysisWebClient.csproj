@@ -138,11 +138,6 @@
     <Compile Include="Models\ExceptionModel.cs" />
     <Compile Include="Models\FeatureIndexModel.cs" />
     <Compile Include="Models\UsageDataAnalysis.Designer.cs" />
-    <Compile Include="Models\UsageDataAnalysis1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>UsageDataAnalysis.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Models\UsageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ExceptionGroupRepository.cs" />
@@ -271,7 +266,9 @@
     <Content Include="Views\Home\Index.aspx" />
     <Content Include="Views\Stability\Index.aspx" />
     <Content Include="Views\Usage\Index.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
