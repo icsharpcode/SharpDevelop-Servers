@@ -1,24 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="udcModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="udcModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="udcModelStoreContainer">
-          <EntitySet Name="ActivationMethods" EntityType="udcModel.Store.ActivationMethods" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="CommitRelations" EntityType="udcModel.Store.CommitRelations" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Commits" EntityType="udcModel.Store.Commits" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="EnvironmentData" EntityType="udcModel.Store.EnvironmentData" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="EnvironmentDataNames" EntityType="udcModel.Store.EnvironmentDataNames" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="EnvironmentDataValues" EntityType="udcModel.Store.EnvironmentDataValues" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="ExceptionGroups" EntityType="udcModel.Store.ExceptionGroups" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Exceptions" EntityType="udcModel.Store.Exceptions" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Features" EntityType="udcModel.Store.Features" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="FeatureUse" EntityType="udcModel.Store.FeatureUse" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Sessions" EntityType="udcModel.Store.Sessions" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="TaggedCommits" EntityType="udcModel.Store.TaggedCommits" store:Type="Tables" Schema="dbo" />
-          <EntitySet Name="Users" EntityType="udcModel.Store.Users" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ActivationMethods" EntityType="udcModel.Store.ActivationMethods" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="CommitRelations" EntityType="udcModel.Store.CommitRelations" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Commits" EntityType="udcModel.Store.Commits" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="EnvironmentData" EntityType="udcModel.Store.EnvironmentData" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="EnvironmentDataNames" EntityType="udcModel.Store.EnvironmentDataNames" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="EnvironmentDataValues" EntityType="udcModel.Store.EnvironmentDataValues" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="ExceptionGroups" EntityType="udcModel.Store.ExceptionGroups" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Exceptions" EntityType="udcModel.Store.Exceptions" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Features" EntityType="udcModel.Store.Features" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="FeatureUse" EntityType="udcModel.Store.FeatureUse" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Sessions" EntityType="udcModel.Store.Sessions" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="TaggedCommits" EntityType="udcModel.Store.TaggedCommits" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
+          <EntitySet Name="Users" EntityType="udcModel.Store.Users" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
         </EntityContainer>
         <EntityType Name="ActivationMethods">
           <Key>
@@ -144,8 +144,8 @@
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="udcModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
-        <EntityContainer Name="udcEntities" annotation:LazyLoadingEnabled="true">
+      <Schema Namespace="udcModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="udcEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
           <EntitySet Name="ActivationMethods" EntityType="udcModel.ActivationMethod" />
           <EntitySet Name="EnvironmentDatas" EntityType="udcModel.EnvironmentData" />
           <EntitySet Name="EnvironmentDataNames" EntityType="udcModel.EnvironmentDataName" />
@@ -204,7 +204,7 @@
           <Key>
             <PropertyRef Name="ActivationMethodId" />
           </Key>
-          <Property Name="ActivationMethodId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ActivationMethodId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="ActivationMethodName" Type="String" MaxLength="255" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="FeatureUses" Relationship="udcModel.ActivationMethodFeatureUse" FromRole="ActivationMethod" ToRole="FeatureUse" />
         </EntityType>
@@ -212,7 +212,7 @@
           <Key>
             <PropertyRef Name="EnvironmentDataId" />
           </Key>
-          <Property Name="EnvironmentDataId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EnvironmentDataId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="SessionId" Type="Int32" Nullable="false" />
           <Property Name="EnvironmentDataNameId" Type="Int32" Nullable="false" />
           <Property Type="Int32" Name="EnvironmentDataValueId" Nullable="false" />
@@ -224,14 +224,14 @@
           <Key>
             <PropertyRef Name="EnvironmentDataNameId" />
           </Key>
-          <Property Name="EnvironmentDataNameId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EnvironmentDataNameId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="EnvironmentDataName1" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
         </EntityType>
         <EntityType Name="ExceptionGroup">
           <Key>
             <PropertyRef Name="ExceptionGroupId" />
           </Key>
-          <Property Name="ExceptionGroupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExceptionGroupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="TypeFingerprintSha256Hash" Type="String" Nullable="false" MaxLength="128" Unicode="true" FixedLength="false" />
           <Property Name="ExceptionType" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
           <Property Name="ExceptionFingerprint" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
@@ -245,7 +245,7 @@
           <Key>
             <PropertyRef Name="ExceptionId" />
           </Key>
-          <Property Name="ExceptionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExceptionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="SessionId" Type="Int32" Nullable="false" />
           <Property Name="ExceptionGroupId" Type="Int32" Nullable="false" />
           <Property Name="ThrownAt" Type="DateTime" Nullable="false" />
@@ -258,7 +258,7 @@
           <Key>
             <PropertyRef Name="FeatureId" />
           </Key>
-          <Property Name="FeatureId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FeatureId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="FeatureName" Type="String" Nullable="false" MaxLength="255" Unicode="true" FixedLength="false" />
           <NavigationProperty Name="FeatureUses" Relationship="udcModel.FeatureFeatureUse" FromRole="Feature" ToRole="FeatureUse" />
         </EntityType>
@@ -266,7 +266,7 @@
           <Key>
             <PropertyRef Name="FeatureUseId" />
           </Key>
-          <Property Name="FeatureUseId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FeatureUseId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="SessionId" Type="Int32" Nullable="false" />
           <Property Name="UseTime" Type="DateTime" Nullable="false" />
           <Property Name="EndTime" Type="DateTime" />
@@ -280,7 +280,7 @@
           <Key>
             <PropertyRef Name="SessionId" />
           </Key>
-          <Property Name="SessionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SessionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="ClientSessionId" Type="Int64" Nullable="false" />
           <Property Name="StartTime" Type="DateTime" Nullable="false" />
           <Property Name="EndTime" Type="DateTime" />
@@ -302,14 +302,14 @@
           <Key>
             <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Name="AssociatedGuid" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
         </EntityType>
         <EntityType Name="EnvironmentDataValue">
           <Key>
             <PropertyRef Name="EnvironmentDataValueId" />
           </Key>
-          <Property Type="Int32" Name="EnvironmentDataValueId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="EnvironmentDataValueId" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="EnvironmentDataValue1" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="SessionException">
@@ -396,7 +396,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="String" Name="Hash" Nullable="false" MaxLength="40" FixedLength="true" Unicode="true" />
           <Property Type="DateTime" Name="CommitDate" Nullable="false" />
           <NavigationProperty Name="Sessions" Relationship="udcModel.CommitSession" FromRole="Commit" ToRole="Session" />
@@ -406,7 +406,7 @@
           <Key>
             <PropertyRef Name="TagId" />
           </Key>
-          <Property Type="Int32" Name="TagId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="TagId" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
           <Property Type="Int32" Name="CommitId" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="20" FixedLength="true" Unicode="true" />
           <Property Type="Boolean" Name="IsRelease" Nullable="false" />
@@ -463,7 +463,7 @@
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
-      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="udcModelStoreContainer" CdmEntityContainer="udcEntities">
           <EntitySetMapping Name="ActivationMethods"><EntityTypeMapping TypeName="udcModel.ActivationMethod"><MappingFragment StoreEntitySet="ActivationMethods">
             <ScalarProperty Name="ActivationMethodId" ColumnName="ActivationMethodId" />
@@ -567,80 +567,80 @@
     </edmx:Mappings>
   </edmx:Runtime>
   <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
-  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
-    <Connection>
-      <DesignerInfoPropertySet>
-        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
-      </DesignerInfoPropertySet>
-    </Connection>
-    <Options>
-      <DesignerInfoPropertySet>
-        <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="True" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
-      </DesignerInfoPropertySet>
-    </Options>
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="EnablePluralization" Value="True" />
+        <edmx:DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
     <!-- Diagram content (shape and connector positions) -->
-    <Diagrams>
-      <Diagram Name="UsageDataAnalysis">
-        <EntityTypeShape EntityType="udcModel.ActivationMethod" Width="1.5" PointX="8.625" PointY="7.875" Height="1.2636116536458335" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.EnvironmentData" Width="2" PointX="2.5" PointY="0.5" Height="1.5923063151041665" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.EnvironmentDataName" Width="1.5" PointX="0.75" PointY="3.75" Height="1.2636116536458326" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.ExceptionGroup" Width="1.5" PointX="6.5" PointY="0.75" Height="2.4140429687499996" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.Exception" Width="1.5" PointX="4.75" PointY="0.75" Height="2.1725878906249996" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.Feature" Width="1.5" PointX="8.625" PointY="6.25" Height="1.4279589843749996" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.FeatureUse" Width="1.5" PointX="6.375" PointY="6" Height="2.2496956380208331" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.Session" Width="1.5" PointX="3.5" PointY="3.875" Height="3.7288216145833317" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.User" Width="1.5" PointX="0.625" PointY="5.75" Height="1.2636116536458335" IsExpanded="true" />
-        <EntityTypeShape EntityType="udcModel.EnvironmentDataValue" Width="1.5" PointX="0.5" PointY="2.25" Height="1.2636116536458335" />
-        <AssociationConnector Association="udcModel.SessionException">
-          <ConnectorPoint PointX="5" PointY="5.89732671875" />
-          <ConnectorPoint PointX="5.6562525" PointY="5.89732671875" />
-          <ConnectorPoint PointX="5.6562525" PointY="2.9996956380208331" />
-        </AssociationConnector>
-        <AssociationConnector Association="udcModel.ExceptionGroupException">
-          <ConnectorPoint PointX="6.5" PointY="1.8748478190104168" />
-          <ConnectorPoint PointX="6.25" PointY="1.8748478190104168" />
-        </AssociationConnector>
-        <AssociationConnector Association="udcModel.SessionEnvironmentData">
-          <ConnectorPoint PointX="4" PointY="3.875" />
-          <ConnectorPoint PointX="4" PointY="2.585348307291667" />
-        </AssociationConnector>
-        <AssociationConnector Association="udcModel.EnvironmentDataNameEnvironmentData">
-          <ConnectorPoint PointX="2.25" PointY="3.7812499999999996" />
-          <ConnectorPoint PointX="2.96875" PointY="3.7812499999999996" />
-          <ConnectorPoint PointX="2.96875" PointY="2.585348307291667" />
-        </AssociationConnector>
-        <AssociationConnector Association="udcModel.EnvironmentDataValueEnvironmentData">
-          <ConnectorPoint PointX="2" PointY="2.4176741536458337" />
-          <ConnectorPoint PointX="2.5" PointY="2.4176741536458337" />
-        </AssociationConnector>
-        <AssociationConnector Association="udcModel.SessionFeatureUse">
-          <ConnectorPoint PointX="5" PointY="6.8019108072916659" />
-          <ConnectorPoint PointX="6.375" PointY="6.8019108072916659" />
-        </AssociationConnector>
-        <EntityTypeShape EntityType="udcModel.CommitRelation" Width="1.5" PointX="8.375" PointY="4.375" Height="1.2636116536458353" />
-        <EntityTypeShape EntityType="udcModel.Commit" Width="1.5" PointX="6.5" PointY="3.875" Height="1.7566536458333326" />
-        <EntityTypeShape EntityType="udcModel.TaggedCommit" Width="1.5" PointX="8.625" PointY="2.5" Height="1.5923063151041674" />
-        <AssociationConnector Association="udcModel.CommitSession">
-          <ConnectorPoint PointX="6.5" PointY="4.7533268229166659" />
-          <ConnectorPoint PointX="5.7395858333333329" PointY="4.753326822916665" />
-          <ConnectorPoint PointX="5.5729191666666669" PointY="4.7533268229166659" />
-          <ConnectorPoint PointX="5" PointY="4.7533268229166659" />
-        </AssociationConnector>
-        <AssociationConnector Association="udcModel.CommitExceptionGroup">
-          <ConnectorPoint PointX="7.25" PointY="3.875" />
-          <ConnectorPoint PointX="7.25" PointY="3.1640429687499996" />
-        </AssociationConnector>
-        <AssociationConnector Association="udcModel.FeatureFeatureUse">
-          <ConnectorPoint PointX="8.625" PointY="6.9639794921875" />
-          <ConnectorPoint PointX="7.875" PointY="6.9639794921875" />
-        </AssociationConnector>
-        <AssociationConnector Association="udcModel.ActivationMethodFeatureUse">
-          <ConnectorPoint PointX="8.625" PointY="8.144521484375" />
-          <ConnectorPoint PointX="7.875" PointY="8.144521484375" />
-        </AssociationConnector>
-      </Diagram>
-    </Diagrams>
-  </Designer>
+    <edmx:Diagrams>
+      <edmx:Diagram Name="UsageDataAnalysis">
+        <edmx:EntityTypeShape EntityType="udcModel.ActivationMethod" Width="1.5" PointX="8.625" PointY="7.875" Height="1.2636116536458335" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="udcModel.EnvironmentData" Width="2" PointX="2.5" PointY="0.5" Height="1.5923063151041665" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="udcModel.EnvironmentDataName" Width="1.5" PointX="0.75" PointY="3.75" Height="1.2636116536458326" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="udcModel.ExceptionGroup" Width="1.5" PointX="6.5" PointY="0.75" Height="2.4140429687499996" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="udcModel.Exception" Width="1.5" PointX="4.75" PointY="0.75" Height="2.1725878906249996" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="udcModel.Feature" Width="1.5" PointX="8.625" PointY="6.25" Height="1.4279589843749996" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="udcModel.FeatureUse" Width="1.5" PointX="6.375" PointY="6" Height="2.2496956380208331" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="udcModel.Session" Width="1.5" PointX="3.5" PointY="3.875" Height="3.7288216145833317" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="udcModel.User" Width="1.5" PointX="0.625" PointY="5.75" Height="1.2636116536458335" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="udcModel.EnvironmentDataValue" Width="1.5" PointX="0.5" PointY="2.25" Height="1.2636116536458335" />
+        <edmx:AssociationConnector Association="udcModel.SessionException">
+          <edmx:ConnectorPoint PointX="5" PointY="5.89732671875" />
+          <edmx:ConnectorPoint PointX="5.6562525" PointY="5.89732671875" />
+          <edmx:ConnectorPoint PointX="5.6562525" PointY="2.9996956380208331" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="udcModel.ExceptionGroupException">
+          <edmx:ConnectorPoint PointX="6.5" PointY="1.8748478190104168" />
+          <edmx:ConnectorPoint PointX="6.25" PointY="1.8748478190104168" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="udcModel.SessionEnvironmentData">
+          <edmx:ConnectorPoint PointX="4" PointY="3.875" />
+          <edmx:ConnectorPoint PointX="4" PointY="2.585348307291667" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="udcModel.EnvironmentDataNameEnvironmentData">
+          <edmx:ConnectorPoint PointX="2.25" PointY="3.7812499999999996" />
+          <edmx:ConnectorPoint PointX="2.96875" PointY="3.7812499999999996" />
+          <edmx:ConnectorPoint PointX="2.96875" PointY="2.585348307291667" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="udcModel.EnvironmentDataValueEnvironmentData">
+          <edmx:ConnectorPoint PointX="2" PointY="2.4176741536458337" />
+          <edmx:ConnectorPoint PointX="2.5" PointY="2.4176741536458337" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="udcModel.SessionFeatureUse">
+          <edmx:ConnectorPoint PointX="5" PointY="6.8019108072916659" />
+          <edmx:ConnectorPoint PointX="6.375" PointY="6.8019108072916659" />
+        </edmx:AssociationConnector>
+        <edmx:EntityTypeShape EntityType="udcModel.CommitRelation" Width="1.5" PointX="8.375" PointY="4.375" Height="1.2636116536458353" />
+        <edmx:EntityTypeShape EntityType="udcModel.Commit" Width="1.5" PointX="6.5" PointY="3.875" Height="1.7566536458333326" />
+        <edmx:EntityTypeShape EntityType="udcModel.TaggedCommit" Width="1.5" PointX="8.625" PointY="2.5" Height="1.5923063151041674" />
+        <edmx:AssociationConnector Association="udcModel.CommitSession">
+          <edmx:ConnectorPoint PointX="6.5" PointY="4.7533268229166659" />
+          <edmx:ConnectorPoint PointX="5.7395858333333329" PointY="4.753326822916665" />
+          <edmx:ConnectorPoint PointX="5.5729191666666669" PointY="4.7533268229166659" />
+          <edmx:ConnectorPoint PointX="5" PointY="4.7533268229166659" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="udcModel.CommitExceptionGroup">
+          <edmx:ConnectorPoint PointX="7.25" PointY="3.875" />
+          <edmx:ConnectorPoint PointX="7.25" PointY="3.1640429687499996" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="udcModel.FeatureFeatureUse">
+          <edmx:ConnectorPoint PointX="8.625" PointY="6.9639794921875" />
+          <edmx:ConnectorPoint PointX="7.875" PointY="6.9639794921875" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="udcModel.ActivationMethodFeatureUse">
+          <edmx:ConnectorPoint PointX="8.625" PointY="8.144521484375" />
+          <edmx:ConnectorPoint PointX="7.875" PointY="8.144521484375" />
+        </edmx:AssociationConnector>
+      </edmx:Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
 </edmx:Edmx>
