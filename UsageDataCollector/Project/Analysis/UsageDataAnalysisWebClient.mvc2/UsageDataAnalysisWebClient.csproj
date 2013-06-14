@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{63F7336F-D21F-403B-A9C4-22E3338F08D0}</ProjectGuid>
+    <ProjectTypeGuids>{F85E285D-A4E0-4152-9332-AB1D724D3325};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>UsageDataAnalysisWebClient</RootNamespace>
+    <AssemblyName>UsageDataAnalysisWebClient</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>true</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Elmah">
+      <HintPath>..\packages\elmah.corelibrary.1.2.1\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DataVisualization" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 2\Assemblies\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\ElmahController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\EnvironmentController.cs" />
+    <Compile Include="Controllers\ExceptionGroupController.cs" />
+    <Compile Include="Controllers\FeatureController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\StabilityController.cs" />
+    <Compile Include="Controllers\UsageController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Membership\WebConfigMembershipProvider.cs" />
+    <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\EnvironmentDataModel.cs" />
+    <Compile Include="Models\ExceptionGroupEditModel.cs" />
+    <Compile Include="Models\ExceptionGroupIndexModel.cs" />
+    <Compile Include="Models\ExceptionModel.cs" />
+    <Compile Include="Models\FeatureIndexModel.cs" />
+    <Compile Include="Models\UsageModel.cs" />
+    <Compile Include="Models\UsageDataAnalysis.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UsageDataAnalysis.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\ExceptionGroupRepository.cs" />
+    <Compile Include="Repositories\FeatureRepository.cs" />
+    <Compile Include="Repositories\IExceptionGroupRepository.cs" />
+    <Compile Include="Repositories\SourceControlRepository.cs" />
+    <Compile Include="Repositories\VersionNameComparer.cs" />
+    <Compile Include="Services\ExceptionGroupService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="css\js\ftod.js" />
+    <Content Include="css\js\lib\jquery-1.3.2.js" />
+    <Content Include="css\js\lib\jquery-1.3.2.min.js" />
+    <Content Include="css\js\minmax.js" />
+    <Content Include="css\layout_2col_left_31.css" />
+    <Content Include="css\patches\patch_2col_left_13.css" />
+    <Content Include="css\patches\patch_2col_left_31.css" />
+    <Content Include="css\patches\patch_2col_right_13.css" />
+    <Content Include="css\patches\patch_2col_right_31.css" />
+    <Content Include="css\screen\basemod.css" />
+    <Content Include="css\screen\basemod_2col_left_13.css" />
+    <Content Include="css\screen\basemod_2col_left_31.css" />
+    <Content Include="css\screen\basemod_2col_right_13.css" />
+    <Content Include="css\screen\basemod_2col_right_31.css" />
+    <Content Include="css\screen\content.css" />
+    <Content Include="css\yaml\add-ons\accessible-tabs\jquery.tabs.js" />
+    <Content Include="css\yaml\add-ons\accessible-tabs\tabs.css" />
+    <Content Include="css\yaml\add-ons\microformats\images\external_link.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\hcalendar.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\hcard.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\icon-geo.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\icon-hatom.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\icon-haudio.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\icon-hcalendar-add.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\icon-hcalendar-download.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\icon-hcalendar.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\icon-hcard-add.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\icon-hcard-download.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\icon-hcard.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\icon-hresume.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\icon-rel-tag.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\icon-xfn.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\xfn\xfn-child.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\xfn\xfn-colleague-met.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\xfn\xfn-colleague.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\xfn\xfn-friend-met.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\xfn\xfn-friend.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\xfn\xfn-me.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\xfn\xfn-parent.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\xfn\xfn-small.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\xfn\xfn-spouse.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\xfn\xfn-sweetheart-met.png" />
+    <Content Include="css\yaml\add-ons\microformats\images\xfn\xfn-sweetheart.png" />
+    <Content Include="css\yaml\add-ons\microformats\microformats.css" />
+    <Content Include="css\yaml\add-ons\rtl-support\core\base-rtl.css" />
+    <Content Include="css\yaml\add-ons\rtl-support\core\iehacks-rtl.css" />
+    <Content Include="css\yaml\add-ons\rtl-support\core\slim_base-rtl.css" />
+    <Content Include="css\yaml\add-ons\rtl-support\core\slim_iehacks-rtl.css" />
+    <Content Include="css\yaml\add-ons\rtl-support\navigation\nav_shinybuttons-rtl.css" />
+    <Content Include="css\yaml\add-ons\rtl-support\navigation\nav_slidingdoor-rtl.css" />
+    <Content Include="css\yaml\add-ons\rtl-support\navigation\nav_vlist-rtl.css" />
+    <Content Include="css\yaml\add-ons\syncheight\jquery.syncheight.js" />
+    <Content Include="css\yaml\central_draft.css" />
+    <Content Include="css\yaml\core\base.css" />
+    <Content Include="css\yaml\core\iehacks.css" />
+    <Content Include="css\yaml\core\js\yaml-focusfix.js" />
+    <Content Include="css\yaml\core\slim_base.css" />
+    <Content Include="css\yaml\core\slim_iehacks.css" />
+    <Content Include="css\yaml\markup_draft.html" />
+    <Content Include="css\yaml\navigation\images\shiny_buttons\background.png" />
+    <Content Include="css\yaml\navigation\images\shiny_buttons\background_active.png" />
+    <Content Include="css\yaml\navigation\images\sliding_door\round\bg.gif" />
+    <Content Include="css\yaml\navigation\images\sliding_door\round\left.png" />
+    <Content Include="css\yaml\navigation\images\sliding_door\round\left_on.png" />
+    <Content Include="css\yaml\navigation\images\sliding_door\round\right.png" />
+    <Content Include="css\yaml\navigation\images\sliding_door\round\right_on.png" />
+    <Content Include="css\yaml\navigation\images\vlist\square\node.gif" />
+    <Content Include="css\yaml\navigation\images\vlist\square\node_minus.gif" />
+    <Content Include="css\yaml\navigation\images\vlist\square\node_plus.gif" />
+    <Content Include="css\yaml\navigation\images\vlist\square\subnode.gif" />
+    <Content Include="css\yaml\navigation\images\vlist\square\subnode_minus.gif" />
+    <Content Include="css\yaml\navigation\images\vlist\square\subnode_plus.gif" />
+    <Content Include="css\yaml\navigation\nav_shinybuttons.css" />
+    <Content Include="css\yaml\navigation\nav_slidingdoor.css" />
+    <Content Include="css\yaml\navigation\nav_vlist.css" />
+    <Content Include="css\yaml\patches\patch_layout_draft.css" />
+    <Content Include="css\yaml\patches\patch_nav_vlist.css" />
+    <Content Include="css\yaml\print\print_003_draft.css" />
+    <Content Include="css\yaml\print\print_020_draft.css" />
+    <Content Include="css\yaml\print\print_023_draft.css" />
+    <Content Include="css\yaml\print\print_100_draft.css" />
+    <Content Include="css\yaml\print\print_103_draft.css" />
+    <Content Include="css\yaml\print\print_120_draft.css" />
+    <Content Include="css\yaml\print\print_123_draft.css" />
+    <Content Include="css\yaml\print\print_draft.css" />
+    <Content Include="css\yaml\screen\basemod_draft.css" />
+    <Content Include="css\yaml\screen\content_default.css" />
+    <Content Include="css\yaml\screen\forms.css" />
+    <Content Include="css\yaml\screen\images\button_gray.png" />
+    <Content Include="css\yaml\screen\images\button_red.png" />
+    <Content Include="css\yaml\screen\images\button_yellow.png" />
+    <Content Include="Global.asax" />
+    <Content Include="images\bg_blue.png" />
+    <Content Include="Scripts\jquery-1.3.2-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.3.2.js" />
+    <Content Include="Scripts\jquery-1.3.2.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Views\Account\ChangePassword.aspx" />
+    <Content Include="Views\Account\ChangePasswordSuccess.aspx" />
+    <Content Include="Views\Account\LogOn.aspx" />
+    <Content Include="Views\Account\Register.aspx" />
+    <Content Include="Views\Environment\Index.aspx" />
+    <Content Include="Views\ExceptionGroup\Edit.aspx" />
+    <Content Include="Views\ExceptionGroup\Index.aspx" />
+    <Content Include="Views\Feature\Index.aspx" />
+    <Content Include="Views\Home\Index.aspx" />
+    <Content Include="Views\Stability\Index.aspx" />
+    <Content Include="Views\Usage\Index.aspx" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\UsageDataAnalysis.Master" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="Models\UsageDataAnalysis.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>UsageDataAnalysis.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target> -->
+  <Target Name="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(ProjectDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>1398</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
