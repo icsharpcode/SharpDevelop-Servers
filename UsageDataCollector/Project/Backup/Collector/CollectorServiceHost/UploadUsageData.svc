@@ -1,4 +1,0 @@
-﻿<%@ ServiceHost 
-    Language="C#" 
-    Service="ICSharpCode.UsageDataCollector.ServiceLibrary.UsageDataCollectorService" 
-    %>
